@@ -76,13 +76,18 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-white">
 
       {/* ── HERO ── */}
-      <section className="relative h-screen min-h-[600px] max-h-[900px] flex flex-col">
-        <Navbar transparent />
+      <section className="relative min-h-screen flex flex-col">
+        {/* Background image */}
         <div className="absolute inset-0 z-0">
           <Image src="/images/hero-bg.jpg" alt="Luxury home" fill className="object-cover" priority />
-          <div className="absolute inset-0 bg-black/55" />
+          <div className="absolute inset-0 bg-black/50" />
         </div>
-        <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-white px-6 text-center pt-16">
+
+        {/* Floating navbar */}
+        <Navbar transparent />
+
+        {/* Hero content — pushed below navbar */}
+        <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-white px-6 text-center pt-32 pb-16">
           <h1 className="text-4xl lg:text-6xl font-semibold leading-tight max-w-3xl mb-4">
             Find Your Perfect Home in Nigeria
           </h1>
@@ -91,18 +96,23 @@ export default function HomePage() {
             and listings. Discover thousands of verified properties to rent, buy, or book for
             short stays — from Abuja to Lagos and beyond.
           </p>
-          <div className="w-full max-w-4xl mb-8">
-            <SearchBar />
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            {stats.map((s) => (
+
+          {/* Stats row */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
+            {stats.map((s, i) => (
               <div key={s.label} className="flex items-center gap-2 text-sm">
-                <CheckCircle size={15} className="text-[#14ae5c]" />
+                <CheckCircle size={15} className="text-[#ffae00]" />
                 <span className="font-semibold">{s.value}</span>
                 <span className="text-white/70">{s.label}</span>
+                {i < stats.length - 1 && <span className="text-white/30 ml-4">•</span>}
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Search bar — sits at bottom of hero, overlapping into next section */}
+        <div className="relative z-20 px-6 pb-0 max-w-5xl mx-auto w-full">
+          <SearchBar />
         </div>
       </section>
 

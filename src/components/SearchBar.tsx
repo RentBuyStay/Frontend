@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 
 const tabs = ["Rent", "Buy", "Shortlet"] as const;
 type Tab = (typeof tabs)[number];
@@ -25,6 +25,7 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   const [bedrooms, setBedrooms] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [furnished, setFurnished] = useState("");
 
   function handleSearch() {
     const params = new URLSearchParams();
@@ -37,51 +38,54 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-4xl">
-      {/* Tabs */}
-      <div className="flex border-b border-[#ededed]">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`flex-1 py-3 text-sm font-medium transition-colors ${
-              activeTab === tab
-                ? "text-[#305e82] border-b-2 border-[#305e82]"
-                : "text-[#7f7e7e] hover:text-[#121212]"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+    <div className="bg-white rounded-2xl shadow-2xl w-full overflow-hidden">
 
-      {/* Main search row */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[#ededed]">
-        <Search size={18} className="text-[#7f7e7e] shrink-0" />
-        <input
-          type="text"
-          placeholder="Enter location, area or keyword..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          className="flex-1 text-sm outline-none placeholder:text-[#7f7e7e]"
-        />
+      {/* Top row: tab selector + search input + button */}
+      <div className="flex items-center gap-0 px-4 py-3 border-b border-[#f0f0f0]">
+        {/* Tab dropdown (Rent / Buy / Shortlet) */}
+        <div className="relative shrink-0">
+          <select
+            value={activeTab}
+            onChange={(e) => setActiveTab(e.target.value as Tab)}
+            className="appearance-none text-sm font-semibold text-[#121212] bg-transparent outline-none pr-6 pl-1 cursor-pointer"
+          >
+            {tabs.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+          <ChevronDown size={14} className="absolute right-0 top-1/2 -translate-y-1/2 text-[#7f7e7e] pointer-events-none" />
+        </div>
+
+        <div className="w-px h-5 bg-[#ededed] mx-3 shrink-0" />
+
+        {/* Search input */}
+        <div className="flex items-center gap-2 flex-1">
+          <Search size={16} className="text-[#7f7e7e] shrink-0" />
+          <input
+            type="text"
+            placeholder="Enter location, area or keyword..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            className="flex-1 text-sm outline-none placeholder:text-[#7f7e7e] text-[#121212]"
+          />
+        </div>
+
+        {/* Search button */}
         <button
           onClick={handleSearch}
-          className="bg-[#305e82] text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-[#254d6b] transition-colors"
+          className="ml-3 shrink-0 bg-[#305e82] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#254d6b] transition-colors"
         >
           Search
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#ededed]">
-        <div className="bg-white px-4 py-3">
-          <p className="text-xs font-medium text-[#121212] mb-1">Property Type</p>
+      {/* Filter row */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 divide-x divide-[#f0f0f0]">
+        <div className="px-4 py-3">
+          <p className="text-xs text-[#7f7e7e] mb-1">Property Type</p>
           <select
             value={propertyType}
             onChange={(e) => setPropertyType(e.target.value)}
-            className="text-sm text-[#7f7e7e] outline-none w-full bg-transparent"
+            className="text-sm font-medium text-[#121212] outline-none w-full bg-transparent cursor-pointer"
           >
             <option value="">All types</option>
             <option value="house">House</option>
@@ -90,12 +94,13 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
             <option value="commercial">Commercial</option>
           </select>
         </div>
-        <div className="bg-white px-4 py-3">
-          <p className="text-xs font-medium text-[#121212] mb-1">Bedrooms</p>
+
+        <div className="px-4 py-3">
+          <p className="text-xs text-[#7f7e7e] mb-1">Bedrooms</p>
           <select
             value={bedrooms}
             onChange={(e) => setBedrooms(e.target.value)}
-            className="text-sm text-[#7f7e7e] outline-none w-full bg-transparent"
+            className="text-sm font-medium text-[#121212] outline-none w-full bg-transparent cursor-pointer"
           >
             <option value="">Any</option>
             {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -103,25 +108,40 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
             ))}
           </select>
         </div>
-        <div className="bg-white px-4 py-3">
-          <p className="text-xs font-medium text-[#121212] mb-1">Min. Price</p>
+
+        <div className="px-4 py-3">
+          <p className="text-xs text-[#7f7e7e] mb-1">Min. Price</p>
           <input
-            type="number"
+            type="text"
             placeholder="No min"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
-            className="text-sm text-[#7f7e7e] outline-none w-full bg-transparent placeholder:text-[#7f7e7e]"
+            className="text-sm font-medium text-[#121212] outline-none w-full bg-transparent placeholder:text-[#b0b0b0]"
           />
         </div>
-        <div className="bg-white px-4 py-3">
-          <p className="text-xs font-medium text-[#121212] mb-1">Max Price</p>
+
+        <div className="px-4 py-3">
+          <p className="text-xs text-[#7f7e7e] mb-1">Max Price</p>
           <input
-            type="number"
+            type="text"
             placeholder="No max"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
-            className="text-sm text-[#7f7e7e] outline-none w-full bg-transparent placeholder:text-[#7f7e7e]"
+            className="text-sm font-medium text-[#121212] outline-none w-full bg-transparent placeholder:text-[#b0b0b0]"
           />
+        </div>
+
+        <div className="px-4 py-3">
+          <p className="text-xs text-[#7f7e7e] mb-1">Furnished</p>
+          <select
+            value={furnished}
+            onChange={(e) => setFurnished(e.target.value)}
+            className="text-sm font-medium text-[#121212] outline-none w-full bg-transparent cursor-pointer"
+          >
+            <option value="">Any</option>
+            <option value="furnished">Furnished</option>
+            <option value="unfurnished">Unfurnished</option>
+          </select>
         </div>
       </div>
     </div>
