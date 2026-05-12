@@ -50,23 +50,34 @@
 
 :root {
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.08 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.08 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.08 0 0);
+  --primary: #305e82;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --muted: #f6f6f6;
+  --muted-foreground: #7f7e7e;
+  --accent: #f3fefe;
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: #ededed;
+  --input: #ededed;
+  --ring: #305e82;
+
+  /* RBS brand tokens */
+  --rbs-blue: #305e82;
+  --rbs-orange: #ff5a00;
+  --rbs-dark: #121212;
+  --rbs-light: #f3fefe;
+  --rbs-gray: #7f7e7e;
+  --rbs-green: #14ae5c;
+  --rbs-cyan: #00beff;
+  --rbs-purple: #8a38f5;
+  --rbs-yellow: #ffae00;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
