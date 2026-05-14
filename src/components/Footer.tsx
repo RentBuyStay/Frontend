@@ -1,118 +1,159 @@
 import Link from "next/link";
+import Image from "next/image";
+
+const company = [
+  { label: "About Us", href: "/about" },
+  { label: "Blog", href: "/blogs" },
+  { label: "Contact", href: "/contact" },
+];
+
+const legal = [
+  { label: "Terms of Service", href: "/tos" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Subscription Agreement", href: "/tos" },
+  { label: "Cookie Policy", href: "/privacy" },
+  { label: "Sitemap", href: "/" },
+];
+
+const reachUs = [
+  { icon: "/icons/location-white.svg", text: "Lagos, Nigeria", href: "#" },
+  { icon: "/icons/call-white.svg", text: "+234 800 RENT BUY", href: "tel:+2348000000000" },
+  { icon: "/icons/sms.svg", text: "info@rentbuystay.com", href: "mailto:info@rentbuystay.com" },
+];
+
+const socials = [
+  { icon: "/icons/facebook.svg", href: "#", label: "Facebook" },
+  { icon: "/icons/instagram.svg", href: "#", label: "Instagram" },
+  { icon: "/icons/linkedin.svg", href: "#", label: "LinkedIn" },
+  { icon: "/icons/twitter.svg", href: "#", label: "X" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-[#121212] text-white overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 pt-14 pb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 mb-10">
+    <footer
+      className="relative text-white overflow-hidden"
+      style={{ background: "#305E82" }}
+    >
+      {/* Main content - top section */}
+      <div className="max-w-[1440px] mx-auto px-[120px] pt-20 relative z-10">
+        {/* Top layout — Figma: Brand left (282), Group of 3 right with justify-between */}
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-y-10">
 
-          {/* Brand */}
-          <div>
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-[#ff5a00] flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                  <path d="M3 9.5L12 3l9 6.5V21H3V9.5z" />
-                </svg>
+          {/* Brand column — 282 wide */}
+          <div className="flex flex-col gap-8 w-full lg:w-[282px] shrink-0">
+            <div className="flex flex-col gap-4">
+              <Image src="/images/logo-footer.svg" alt="RentBuyStay" width={212} height={64} className="h-16 w-auto" />
+              <p style={{ fontSize: "12px", lineHeight: "24px", color: "#ffffff" }}>
+                Nigeria&apos;s trusted digital real estate marketplace — connecting property
+                seekers, owners, and agents across all 36 states.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <p style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
+                Connect With Us
+              </p>
+              <div className="flex items-center gap-4">
+                {socials.map((s) => (
+                  <a key={s.label} href={s.href} aria-label={s.label} className="opacity-90 hover:opacity-100 transition-opacity">
+                    <Image src={s.icon} alt={s.label} width={24} height={24} />
+                  </a>
+                ))}
               </div>
-              <span className="font-semibold text-white">RENTBUYSTAY</span>
-            </Link>
-            <p className="text-sm text-[#7f7e7e] leading-relaxed mb-5 max-w-[220px]">
-              Nigeria&apos;s most reliable real estate marketplace — connecting property seekers,
-              agents and developers across all 36 states.
-            </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-3">
-              {[
-                { label: "Facebook", d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" },
-                { label: "Twitter", d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" },
-                { label: "Instagram", d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" },
-                { label: "LinkedIn", d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" },
-              ].map((s) => (
-                <a key={s.label} href="#" aria-label={s.label} className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#305e82] transition-colors">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="white"><path d={s.d} /></svg>
-                </a>
-              ))}
             </div>
           </div>
 
-          {/* Company */}
-          <div>
-            <h4 className="text-sm font-semibold mb-5">COMPANY</h4>
-            <ul className="flex flex-col gap-3">
-              {[
-                { label: "About Us", href: "/about" },
-                { label: "Blog", href: "/blogs" },
-                { label: "Contact", href: "/contact" },
-              ].map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-[#7f7e7e] hover:text-white transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Right group: Company + Legal + Reach Us */}
+          <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
+            <div className="flex flex-col gap-4 w-full sm:w-[180px] shrink-0">
+              <h4 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
+                COMPANY
+              </h4>
+              <ul className="flex flex-col">
+                {company.map((l) => (
+                  <li key={l.href} style={{ height: "35px" }}>
+                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "#ffffff" }}>
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Legal */}
-          <div>
-            <h4 className="text-sm font-semibold mb-5">LEGAL</h4>
-            <ul className="flex flex-col gap-3">
-              {[
-                { label: "Terms of Service", href: "/tos" },
-                { label: "Privacy Policy", href: "/privacy" },
-                { label: "Subscription Agreement", href: "/tos" },
-                { label: "Cookie Policy", href: "/privacy" },
-              ].map((l) => (
-                <li key={l.label}>
-                  <Link href={l.href} className="text-sm text-[#7f7e7e] hover:text-white transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div className="flex flex-col gap-4 w-full sm:w-[180px] shrink-0">
+              <h4 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
+                LEGAL
+              </h4>
+              <ul className="flex flex-col">
+                {legal.map((l) => (
+                  <li key={l.label} style={{ height: "35px" }}>
+                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "#ffffff" }}>
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Reach Us */}
-          <div>
-            <h4 className="text-sm font-semibold mb-5">REACH US</h4>
-            <ul className="flex flex-col gap-3">
-              <li className="text-sm text-[#7f7e7e]">Lagos, Nigeria</li>
-              <li>
-                <a href="tel:+2348000000000" className="text-sm text-[#7f7e7e] hover:text-white transition-colors">
-                  +234 800 RENT BUY
-                </a>
-              </li>
-              <li>
-                <a href="mailto:info@rentbuystay.com" className="text-sm text-[#7f7e7e] hover:text-white transition-colors">
-                  info@rentbuystay.com
-                </a>
-              </li>
-            </ul>
+            <div className="flex flex-col gap-4 w-full sm:w-[282px] shrink-0">
+              <h4 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
+                REACH US
+              </h4>
+              <ul className="flex flex-col gap-0">
+                {reachUs.map((r) => (
+                  <li key={r.text} className="flex items-center gap-3" style={{ height: "35px" }}>
+                    <Image src={r.icon} alt="" width={24} height={24} />
+                    <a href={r.href} className="hover:underline" style={{ fontSize: "16px", color: "#ffffff" }}>
+                      {r.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Divider + disclaimer */}
-        <div className="border-t border-white/10 pt-5">
-          <p className="text-xs text-[#7f7e7e] leading-relaxed max-w-4xl">
-            By using this site you agree to our{" "}
-            <Link href="/tos" className="underline hover:text-white">Terms of service</Link>,{" "}
-            <Link href="/privacy" className="underline hover:text-white">Privacy policy</Link>,
-            Subscription Agreement and Cookies. Recommendations may use your activity to personalize
-            results. Listings, availability and prices may change; restrictions may apply.
-            Verification and inspections are informational only and not guarantees. RentBuyStay is
-            not a broker or party to transactions.
-          </p>
-          <p className="text-xs text-[#7f7e7e] mt-3">
-            Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
-          </p>
-        </div>
+        {/* Disclaimer */}
+        <p className="mt-12 max-w-[1200px]" style={{ fontSize: "12px", lineHeight: "24px", color: "#ffffff" }}>
+          By using this site you agree to our{" "}
+          <Link href="/tos" className="underline">Terms of service</Link>,{" "}
+          <Link href="/privacy" className="underline">Privacy policy</Link>,{" "}
+          <Link href="/tos" className="underline">Subscription Agreement</Link> and{" "}
+          <Link href="/privacy" className="underline">Cookies</Link>.
+          Recommendations may use your activity to personalize results. Listings, availability and
+          prices may change; restrictions may apply. Verification and inspections are informational
+          only and not guarantees. RentBuyStay is not a broker or party to transactions. External
+          links are third-party; we&apos;re not responsible for their content. Payments are
+          processed by third-party providers; review their terms/fees.
+        </p>
       </div>
 
-      {/* Big RENTBUYSTAY watermark */}
-      <div className="text-center overflow-hidden select-none pointer-events-none pb-2">
-        <p className="text-[clamp(3rem,12vw,10rem)] font-black `` leading-none tracking-tight whitespace-nowrap">
-          RENTBUYSTAY
-        </p>
+      {/* Bottom section — watermark BG with divider+copyright OVERLAID */}
+      <div className="relative mt-12">
+        {/* Huge RENTBUYSTAY watermark — Figma 215px, gradient fade */}
+        <div className="pointer-events-none select-none text-center overflow-hidden">
+          <p
+            className="font-black tracking-tight whitespace-nowrap leading-none"
+            style={{
+              fontSize: "clamp(80px, 15vw, 215px)",
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.20) 2%, rgba(255,255,255,0) 94%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            RENTBUYSTAY
+          </p>
+        </div>
+
+        {/* Copyright + divider — absolute overlay on top of watermark */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-[120px]">
+          <div className="border-t border-white/30 pt-4">
+            <p style={{ fontSize: "14px", lineHeight: "35px", fontWeight: 300, color: "#ffffff", textAlign: "center" }}>
+              Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
+            </p>
+          </div>
+        </div>
       </div>
     </footer>
   );

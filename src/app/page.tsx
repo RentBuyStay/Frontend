@@ -611,13 +611,19 @@ export default function HomePage() {
                   <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                     {q}
                   </span>
-                  <Image
-                    src="/icons/plus.svg"
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="group-open:rotate-45 transition-transform shrink-0 ml-4"
-                  />
+                  {/* Plus when closed, Minus when open */}
+                  <span className="shrink-0 ml-4 w-6 h-6 flex items-center justify-center text-[#121212]">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                      {/* Horizontal line — always visible */}
+                      <line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      {/* Vertical line — hidden when open */}
+                      <line
+                        x1="7" y1="0" x2="7" y2="14"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                        className="group-open:opacity-0 transition-opacity"
+                      />
+                    </svg>
+                  </span>
                 </summary>
                 <div className="px-6 pb-6 pt-0">
                   <p style={{ fontSize: "14px", lineHeight: "24px", color: "#2e2e2e" }}>
