@@ -31,40 +31,50 @@ export default function Navbar({ transparent = false }: NavbarProps) {
           className="nav-gradient-border flex items-center justify-between px-6 h-[72px] rounded-[20px] overflow-hidden"
           style={{ background: "rgba(255,255,255,0.50)" }}
         >
-          {/* Logo */}
+          {/* Logo — Figma: 166x48 */}
           <Link href="/" className="shrink-0">
             <Image
               src="/images/logo.svg"
               alt="RentBuyStay"
-              width={140}
-              height={40}
-              className="h-10 w-auto"
+              width={166}
+              height={48}
+              className="h-12 w-auto"
               priority
             />
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-6">
+          {/* Desktop links — Figma: gap 16px, item padding 4px 12px, gap 4px between text and arrow */}
+          <div className="hidden lg:flex items-center gap-4">
             {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm text-[#121212] hover:text-[#305e82] transition-colors flex items-center gap-0.5 whitespace-nowrap font-medium"
+                className="flex items-center justify-center gap-1 px-3 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
+                style={{ letterSpacing: "-0.02em" }}
               >
                 {l.label}
-                {l.dropdown && <ChevronDown size={14} />}
+                {l.dropdown && <ChevronDown size={16} strokeWidth={1.5} />}
               </Link>
             ))}
           </div>
 
-          {/* Auth */}
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            <Link href="/login" className="text-sm font-medium text-[#121212] hover:text-[#305e82] transition-colors">
+          {/* Auth — gap 16px to match figma */}
+          <div className="hidden lg:flex items-center gap-4 shrink-0">
+            <Link
+              href="/login"
+              className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               Log in
             </Link>
             <Link
               href="/post-property"
-              className="text-sm font-semibold bg-[#305e82] text-white px-5 py-2 rounded-xl hover:bg-[#254d6b] transition-colors"
+              className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity"
+              style={{
+                background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+                border: "1px solid rgba(120,158,187,0.5)",
+                letterSpacing: "-0.02em",
+              }}
             >
               Post Property
             </Link>

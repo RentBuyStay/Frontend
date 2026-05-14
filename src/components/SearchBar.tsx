@@ -38,26 +38,24 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl w-full overflow-hidden">
+    <div className="bg-white rounded-[12px] shadow-2xl w-full p-6 flex flex-col gap-4">
 
-      {/* Top row: tab selector + search input + button */}
-      <div className="flex items-center gap-0 px-4 py-3 border-b border-[#f0f0f0]">
-        {/* Tab dropdown (Rent / Buy / Shortlet) */}
-        <div className="relative shrink-0">
+      {/* Top row: tab dropdown | search input | search button */}
+      <div className="flex items-center gap-4">
+        {/* Tab dropdown — pill with #F6F6F6 bg, rounded-12, h-48 */}
+        <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
           <select
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value as Tab)}
-            className="appearance-none text-sm font-semibold text-[#121212] bg-transparent outline-none pr-6 pl-1 cursor-pointer"
+            className="appearance-none text-sm font-semibold text-[#121212] bg-transparent outline-none pr-6 cursor-pointer"
           >
             {tabs.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
-          <ChevronDown size={14} className="absolute right-0 top-1/2 -translate-y-1/2 text-[#7f7e7e] pointer-events-none" />
+          <ChevronDown size={14} className="absolute right-3 text-[#7f7e7e] pointer-events-none" />
         </div>
 
-        <div className="w-px h-5 bg-[#ededed] mx-3 shrink-0" />
-
-        {/* Search input */}
-        <div className="flex items-center gap-2 flex-1">
+        {/* Search input — flex-1, #F6F6F6, rounded-12 */}
+        <div className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
           <Search size={16} className="text-[#7f7e7e] shrink-0" />
           <input
             type="text"
@@ -65,14 +63,19 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="flex-1 text-sm outline-none placeholder:text-[#7f7e7e] text-[#121212]"
+            className="flex-1 text-sm outline-none placeholder:text-[#7f7e7e] text-[#121212] bg-transparent"
           />
         </div>
 
-        {/* Search button */}
+        {/* Search button — gradient, w-160, h-48, rounded-12 */}
         <button
           onClick={handleSearch}
-          className="ml-3 shrink-0 bg-[#305e82] text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-[#254d6b] transition-colors"
+          className="shrink-0 text-white text-sm font-semibold w-[160px] h-12 rounded-[12px] hover:opacity-90 transition-opacity"
+          style={{
+            background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+            border: "1px solid",
+            borderImage: "linear-gradient(159deg, rgba(120,158,187,0.5) 0%, rgba(48,94,130,1) 100%) 1",
+          }}
         >
           Search
         </button>

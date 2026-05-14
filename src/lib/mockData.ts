@@ -12,6 +12,7 @@ export const mockProperties: Property[] = [
     tag: "For Sale",
     agentName: "Chioma Okeke",
     agentInitials: "CO",
+    image: "/images/prop4.jpg",
   },
   {
     id: "2",
@@ -24,6 +25,7 @@ export const mockProperties: Property[] = [
     tag: "For Sale",
     agentName: "Emeka Nwosu",
     agentInitials: "EN",
+    image: "/images/prop2.jpg",
   },
   {
     id: "3",
@@ -36,6 +38,7 @@ export const mockProperties: Property[] = [
     tag: "For Sale",
     agentName: "Amaka Obi",
     agentInitials: "AO",
+    image: "/images/prop5.jpg",
   },
   {
     id: "4",
@@ -48,6 +51,7 @@ export const mockProperties: Property[] = [
     tag: "For Rent",
     agentName: "Tunde Bello",
     agentInitials: "TB",
+    image: "/images/prop1.jpg",
   },
   {
     id: "5",
@@ -60,6 +64,7 @@ export const mockProperties: Property[] = [
     tag: "For Rent",
     agentName: "Ngozi Eze",
     agentInitials: "NE",
+    image: "/images/prop3.jpg",
   },
   {
     id: "6",
@@ -72,6 +77,7 @@ export const mockProperties: Property[] = [
     tag: "Shortlet",
     agentName: "Kola Adeyemi",
     agentInitials: "KA",
+    image: "/images/interior.jpg",
   },
   {
     id: "7",
@@ -84,6 +90,7 @@ export const mockProperties: Property[] = [
     tag: "For Sale",
     agentName: "Sade Okonkwo",
     agentInitials: "SO",
+    image: "/images/commercial.jpg",
   },
   {
     id: "8",
@@ -96,6 +103,7 @@ export const mockProperties: Property[] = [
     tag: "For Rent",
     agentName: "Ibrahim Musa",
     agentInitials: "IM",
+    image: "/images/land.jpg",
   },
 ];
 

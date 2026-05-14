@@ -110,7 +110,7 @@ export default function Footer() {
 
       {/* Big RENTBUYSTAY watermark */}
       <div className="text-center overflow-hidden select-none pointer-events-none pb-2">
-        <p className="text-[clamp(3rem,12vw,10rem)] font-black text-white/4 leading-none tracking-tight whitespace-nowrap">
+        <p className="text-[clamp(3rem,12vw,10rem)] font-black `` leading-none tracking-tight whitespace-nowrap">
           RENTBUYSTAY
         </p>
       </div>
