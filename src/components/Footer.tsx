@@ -39,10 +39,12 @@ export default function Footer() {
         {/* Top layout — Figma: Brand left (282), Group of 3 right with justify-between */}
         <div className="flex flex-col lg:flex-row lg:justify-between gap-y-10">
 
-          {/* Brand column — 282 wide */}
+          {/* Brand column — 282 wide, left-aligned */}
           <div className="flex flex-col gap-8 w-full lg:w-[282px] shrink-0">
             <div className="flex flex-col gap-4">
-              <Image src="/images/logo-footer.svg" alt="RentBuyStay" width={212} height={64} className="h-16 w-auto" />
+              {/* Use plain img to avoid Next.js Image wrapper issues */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/logo-footer.svg" alt="RentBuyStay" width={212} height={64} style={{ display: "block", marginLeft: 0 }} />
               <p style={{ fontSize: "12px", lineHeight: "24px", color: "#ffffff" }}>
                 Nigeria&apos;s trusted digital real estate marketplace — connecting property
                 seekers, owners, and agents across all 36 states.
@@ -112,19 +114,23 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Disclaimer */}
-        <p className="mt-12 max-w-[1200px]" style={{ fontSize: "12px", lineHeight: "24px", color: "#ffffff" }}>
-          By using this site you agree to our{" "}
-          <Link href="/tos" className="underline">Terms of service</Link>,{" "}
-          <Link href="/privacy" className="underline">Privacy policy</Link>,{" "}
-          <Link href="/tos" className="underline">Subscription Agreement</Link> and{" "}
-          <Link href="/privacy" className="underline">Cookies</Link>.
-          Recommendations may use your activity to personalize results. Listings, availability and
-          prices may change; restrictions may apply. Verification and inspections are informational
-          only and not guarantees. RentBuyStay is not a broker or party to transactions. External
-          links are third-party; we&apos;re not responsible for their content. Payments are
-          processed by third-party providers; review their terms/fees.
-        </p>
+        {/* Disclaimer — 2 lines: first sentence with links, second sentence below */}
+        <div className="mt-12 max-w-[1200px] flex flex-col" style={{ fontSize: "12px", lineHeight: "24px", color: "#ffffff" }}>
+          <p>
+            By using this site you agree to our{" "}
+            <Link href="/tos" className="underline">Terms of service</Link>,{" "}
+            <Link href="/privacy" className="underline">Privacy policy</Link>,{" "}
+            <Link href="/tos" className="underline">Subscription Agreement</Link> and{" "}
+            <Link href="/privacy" className="underline">Cookies</Link>.
+          </p>
+          <p>
+            Recommendations may use your activity to personalize results. Listings, availability and
+            prices may change; restrictions may apply. Verification and inspections are informational
+            only and not guarantees. RentBuyStay is not a broker or party to transactions. External
+            links are third-party; we&apos;re not responsible for their content. Payments are
+            processed by third-party providers; review their terms/fees.
+          </p>
+        </div>
       </div>
 
       {/* Bottom section — watermark BG with divider+copyright OVERLAID */}
