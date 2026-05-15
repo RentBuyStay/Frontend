@@ -152,13 +152,11 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Copyright + divider — absolute overlay on top of watermark */}
+        {/* Copyright — absolute overlay on top of watermark, NO divider line */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-[120px]">
-          <div className="border-t border-white/30 pt-4">
-            <p style={{ fontSize: "14px", lineHeight: "35px", fontWeight: 300, color: "#ffffff", textAlign: "center" }}>
-              Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
-            </p>
-          </div>
+          <p style={{ fontSize: "14px", lineHeight: "35px", fontWeight: 300, color: "#ffffff", textAlign: "center" }}>
+            Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
+          </p>
         </div>
       </div>
     </footer>

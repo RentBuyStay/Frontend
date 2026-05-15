@@ -143,6 +143,20 @@
   border-radius: 0 0 20px 20px;
 }
 
+/* Plain navbar gradient horizontal line below (for white pages) — has 80px padding from page edges */
+.nav-gradient-border-bottom {
+  position: relative;
+}
+.nav-gradient-border-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 80px;
+  right: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(48,94,130,0) 0%, rgba(48,94,130,0.5) 49.5%, rgba(48,94,130,0) 100%);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

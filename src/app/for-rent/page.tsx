@@ -1,131 +1,397 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
-import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, BedDouble, Bath, Maximize2, Heart } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle } from "lucide-react";
 
 export const metadata = {
   title: "Properties for Rent in Nigeria | RentBuyStay",
   description: "Browse verified rental properties across Nigeria.",
 };
 
-const forRent = mockProperties.filter((p) => p.tag === "For Rent");
+const listings = [
+  { id: "1", title: "Furnished 2 Bedroom Flat", price: "₦800,000/yr", location: "Wuse 2, Abuja", date: "Listed on 27 Mar 2026", image: "/images/prop1.jpg", desc: "Beautifully furnished 2 bedroom flat in a serene Wuse 2 neighbourhood with 24/7 power and parking space.", agent: "Tunde Bello", agentInitials: "TB", tags: ["Furnished", "Newly Built", "24/7 Power"], beds: 2, baths: 2, area: "1,200 sqft" },
+  { id: "2", title: "Executive 3 Bedroom Terrace", price: "₦1,200,000/yr", location: "Ikeja GRA, Lagos", date: "Listed on 27 Mar 2026", image: "/images/prop3.jpg", desc: "Modern 3 bedroom terrace with fitted kitchen, en-suite bedrooms, and dedicated parking in Ikeja GRA.", agent: "Ngozi Eze", agentInitials: "NE", tags: ["Newly Built", "BIQ", "Gated Estate"], beds: 3, baths: 3, area: "1,800 sqft" },
+  { id: "3", title: "Brand New 2 Bedroom Flat", price: "₦600,000/yr", location: "Surulere, Lagos", date: "Listed on 22 Apr 2026", image: "/images/prop1.jpg", desc: "Brand new 2 bedroom flat with modern fittings, located in a quiet street with easy access to public transport.", agent: "Ibrahim Musa", agentInitials: "IM", tags: ["Brand New", "Pop Ceiling", "Tiled Floors"], beds: 2, baths: 2, area: "900 sqft" },
+  { id: "4", title: "Spacious 4 Bedroom Duplex", price: "₦4,500,000/yr", location: "Lekki Phase 1, Lagos", date: "Listed on 15 Apr 2026", image: "/images/prop4.jpg", desc: "Stunning 4 bedroom duplex with private compound, BQ, and modern finishes throughout.", agent: "Aisha Bello", agentInitials: "AB", tags: ["Newly Built", "BIQ", "24/7 Security"], beds: 4, baths: 5, area: "3,500 sqft" },
+  { id: "5", title: "Modern 1 Bedroom Studio", price: "₦450,000/yr", location: "Yaba, Lagos", date: "Listed on 10 May 2026", image: "/images/prop1.jpg", desc: "Compact studio apartment perfect for young professionals, close to tech hubs and entertainment.", agent: "Chinaza Okafor", agentInitials: "CO", tags: ["Furnished", "24/7 Power", "Wi-Fi Included"], beds: 1, baths: 1, area: "550 sqft" },
+  { id: "6", title: "Family 4 Bedroom Bungalow", price: "₦2,800,000/yr", location: "Magodo, Lagos", date: "Listed on 03 May 2026", image: "/images/prop4.jpg", desc: "Family-friendly bungalow with large compound, ideal for families with children, in a secure neighbourhood.", agent: "Kemi Adeyemi", agentInitials: "KA", tags: ["Family Home", "Gated Estate", "Parking"], beds: 4, baths: 3, area: "2,800 sqft" },
+  { id: "7", title: "Luxurious 5 Bedroom Mansion", price: "₦8,000,000/yr", location: "Maitama, Abuja", date: "Listed on 02 May 2026", image: "/images/prop5.jpg", desc: "Magnificent mansion with smart-home features, swimming pool, and private gym for the discerning tenant.", agent: "Olumide Fashola", agentInitials: "OF", tags: ["Luxury", "Pool", "Smart Home"], beds: 5, baths: 6, area: "5,500 sqft" },
+  { id: "8", title: "Affordable 3 Bedroom Flat", price: "₦950,000/yr", location: "Egbeda, Lagos", date: "Listed on 01 May 2026", image: "/images/prop2.jpg", desc: "Cost-effective 3 bedroom flat in a developing area with all standard amenities and easy commute.", agent: "Funmi Adebayo", agentInitials: "FA", tags: ["Spacious", "Tiled Floors", "0-3 Years"], beds: 3, baths: 2, area: "1,500 sqft" },
+  { id: "9", title: "Contemporary 2 Bedroom Apartment", price: "₦1,500,000/yr", location: "Victoria Island, Lagos", date: "Listed on 29 Apr 2026", image: "/images/prop2.jpg", desc: "Modern apartment with stunning views, fitted kitchen, and access to building amenities like gym and pool.", agent: "Emeka Nwosu", agentInitials: "EN", tags: ["Furnished", "Sea View", "24/7 Concierge"], beds: 2, baths: 2, area: "1,400 sqft" },
+  { id: "10", title: "Cozy 3 Bedroom Penthouse", price: "₦5,500,000/yr", location: "Ikoyi, Lagos", date: "Listed on 26 Apr 2026", image: "/images/prop3.jpg", desc: "Top-floor penthouse with panoramic city views, modern interiors, and rooftop access for entertainment.", agent: "Ngozi Okoro", agentInitials: "NO", tags: ["Furnished", "Penthouse", "Rooftop"], beds: 3, baths: 3, area: "2,200 sqft" },
+];
+
+const propertyTypes = [
+  { name: "Flats/Apartments", count: 5032 },
+  { name: "House", count: 5032 },
+  { name: "Commercial Property", count: 5032 },
+  { name: "Co-working Space", count: 5032 },
+  { name: "Land", count: 5032 },
+];
+
+const bedroomTable = {
+  cols: ["Type", "1 Bed", "2 Bed", "3 Bed", "4 Bed", "5 Bed"],
+  rows: [
+    ["Flats", "406", "307", "228", "96", "386"],
+    ["Houses", "192", "2081", "3872", "13181", "2059"],
+  ],
+};
+
+const states = ["Lagos", "Abuja", "Oyo", "Ogun", "Enugu", "Edo", "Rivers", "Delta", "Akwa Ibom", "Ondo", "Imo", "Kaduna", "Anambra", "Osun", "Abia", "Nassarawa", "Kwara", "Plateau", "Ebonyi", "Bayelsa", "Benue", "Cross River", "Ekiti", "Bauchi", "Kogi", "Adamawa", "Niger"];
+
+const otherCategories = [
+  "Serviced Properties for rent",
+  "Furnished Properties for rent",
+  "Newly Built Properties for rent",
+  "Cheap Properties for rent",
+  "Luxury Properties for rent",
+  "Property for rent between 500k and 1milion",
+  "Property for rent between 1milion and 2milion",
+  "Property for rent between 2milion and 5milion",
+  "Property for rent between 5milion and 10milion",
+  "Property for rent between 10milion and 20milion",
+  "Property for rent above 20milion",
+];
+
+const verifiedAgents = [
+  { name: "Olaitan Badejo", initials: "OB", agency: "Prime Realty & Co.", location: "Lagos", listings: 13, rating: 4.6 },
+  { name: "Lade Oyetola", initials: "LO", agency: "Propex", location: "Lagos", listings: 8, rating: 4.3, avatar: "/images/agent-6.png" },
+];
 
 export default function ForRentPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <section className="relative h-64 lg:h-80 flex flex-col">
-        <Navbar transparent />
-        <div className="absolute inset-0 z-0">
-          <Image src="/images/prop1.jpg" alt="Properties for Rent" fill className="object-cover" />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-        <div className="relative z-10 flex flex-col justify-center flex-1 px-6 lg:px-12 max-w-[1440px] mx-auto w-full pt-16">
-          <h1 className="text-3xl lg:text-5xl font-semibold text-white mb-2">Properties for Rent in Nigeria</h1>
-          <p className="text-white/70 text-sm max-w-xl">Find your perfect rental home across Nigeria.</p>
+    <div className="min-h-screen flex flex-col bg-white">
+
+      {/* HERO */}
+      <section className="bg-white p-6">
+        <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[852px]">
+          <div className="absolute inset-0 z-0">
+            <Image src="/images/for-rent-hero.png" alt="Properties for Rent" fill className="object-cover" priority />
+            <div className="absolute inset-0 bg-black/55" />
+          </div>
+
+          <Navbar transparent />
+
+          <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
+            <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
+              Properties for Rent in Nigeria
+            </h1>
+            <p className="text-white" style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 400 }}>
+              The properties have been listed by verified estate agents who can be contacted using
+              the contact information provided for each property listing. We have 25,141 available
+              flats, houses, and commercial property for rent in Nigeria. Refine your property
+              search by price, number of beds and type of property, etc.
+            </p>
+          </div>
+
+          <div className="absolute bottom-6 left-6 right-6 z-10">
+            <SearchBar defaultTab="Rent" />
+          </div>
         </div>
       </section>
 
-      <div className="bg-white border-b border-[#ededed] py-4 px-6 lg:px-12">
-        <div className="max-w-[1440px] mx-auto">
-          <SearchBar defaultTab="Rent" />
-        </div>
-      </div>
+      {/* LISTINGS + SIDEBAR */}
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-[80px] py-[60px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
 
-      <section className="flex-1 bg-[#f6f6f6] py-10">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          <div className="flex gap-6">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-5">
-                <p className="text-sm text-[#7f7e7e]">
-                  <span className="font-semibold text-[#121212]">{forRent.length}</span> Rental Properties in Nigeria
-                </p>
-                <select className="text-sm border border-[#ededed] rounded-lg px-3 py-2 outline-none bg-white">
-                  <option>Newest First</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                </select>
+            {/* LEFT */}
+            <div className="flex flex-col gap-6 min-w-0">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+                    All Properties for Rent in Nigeria
+                  </h2>
+                  <p style={{ fontSize: "14px", color: "#7f7e7e", marginTop: "4px" }}>
+                    Showing 1 - 10 of 27
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: "14px", color: "#7f7e7e" }}>Sort</span>
+                  <select className="px-4 py-2 border border-[#ededed] rounded-[8px] text-sm bg-white">
+                    <option>Newest</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="flex flex-col gap-4">
-                {forRent.map((p) => (
-                  <Link key={p.id} href={`/properties/${p.id}`} className="group bg-white rounded-2xl overflow-hidden flex hover:shadow-lg transition-shadow">
-                    <div className="relative w-48 lg:w-64 shrink-0 bg-[#f6f6f6]">
-                      {p.image ? (
+              <div className="flex flex-col gap-6">
+                {listings.map((p) => (
+                  <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
+
+                    <div className="flex gap-5">
+                      <div className="relative w-[184px] h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
                         <Image src={p.image} alt={p.title} fill className="object-cover" />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d7d7d7" strokeWidth="1.5"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z" /></svg>
+                        <span className="absolute top-3 left-3 bg-[#14ae5c] text-white px-3 py-1 rounded-md uppercase" style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.05em" }}>
+                          For Rent
+                        </span>
+                        <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white" style={{ fontSize: "12px" }}>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                          </svg>
+                          <span>3</span>
                         </div>
-                      )}
-                      <span className="absolute top-3 left-3 bg-[#14ae5c] text-white text-xs font-semibold px-2 py-0.5 rounded">For Rent</span>
-                      <button className="absolute top-3 right-3 bg-white/90 p-1.5 rounded-lg"><Heart size={14} className="text-[#7f7e7e]" /></button>
-                    </div>
-                    <div className="flex-1 p-5">
-                      <p className="text-xl font-bold text-[#121212]">{p.price}</p>
-                      <p className="text-base font-medium text-[#121212] mt-1 group-hover:text-[#305e82] transition-colors">{p.title}</p>
-                      <div className="flex items-center gap-1 text-sm text-[#7f7e7e] mt-1"><MapPin size={13} /> {p.location}</div>
-                      <div className="flex items-center gap-5 mt-3 text-sm text-[#7f7e7e]">
-                        <span className="flex items-center gap-1"><BedDouble size={14} /> {p.beds} Beds</span>
-                        <span className="flex items-center gap-1"><Bath size={14} /> {p.baths} Baths</span>
-                        <span className="flex items-center gap-1"><Maximize2 size={14} /> {p.sqft}</span>
+                        <div className="absolute bottom-2 right-2 flex items-center gap-1 text-white">
+                          <button className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">‹</button>
+                          <button className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">›</button>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-4 pt-3 border-t border-[#ededed]">
-                        <div className="w-7 h-7 rounded-full bg-[#305e82] flex items-center justify-center text-white text-xs font-bold">{p.agentInitials}</div>
-                        <span className="text-xs text-[#7f7e7e]">{p.agentName}</span>
+
+                      <div className="flex-1 min-w-0 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <p style={{ fontSize: "20px", fontWeight: 600, color: "#121212", lineHeight: "28px" }} className="truncate flex-1">
+                            {p.title}
+                          </p>
+                          <p style={{ fontSize: "20px", fontWeight: 700, color: "#305e82" }} className="shrink-0">
+                            {p.price}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-3" style={{ fontSize: "13px" }}>
+                          <span className="flex items-center gap-1.5" style={{ color: "#305e82" }}>
+                            <Image src="/icons/location.svg" alt="" width={16} height={16} />
+                            {p.location}
+                          </span>
+                          <span className="w-px h-3 bg-[#ededed]" />
+                          <span style={{ color: "#807e7e", fontWeight: 500 }}>{p.date}</span>
+                        </div>
+
+                        <p style={{ fontSize: "14px", color: "#807e7e", lineHeight: "24px" }} className="line-clamp-2 mt-1">
+                          {p.desc}
+                        </p>
+
+                        <div className="flex items-center gap-2 flex-wrap mt-1">
+                          {p.tags.map((tag) => (
+                            <span key={tag} className="bg-[#f3fefe] px-3 py-1.5 rounded-[8px] whitespace-nowrap" style={{ fontSize: "12px", fontWeight: 500, color: "#305e82" }}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-[#ededed] pt-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
+                          {p.agentInitials}
+                        </div>
+                        <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
+                        <Image src="/icons/verify.svg" alt="" width={16} height={16} />
+                      </div>
+                      <div className="flex items-center gap-4" style={{ fontSize: "13px", color: "#807e7e" }}>
+                        <span className="flex items-center gap-1.5">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8V3h5M21 8V3h-5M3 16v5h5M21 16v5h-5"/></svg>
+                          {p.area}
+                        </span>
+                        <span className="w-px h-3 bg-[#ededed]" />
+                        <span className="flex items-center gap-1.5">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 22V8.5h20V22M2 13h20M6 13V8.5M2 18h20"/></svg>
+                          {p.beds} Beds
+                        </span>
+                        <span className="w-px h-3 bg-[#ededed]" />
+                        <span className="flex items-center gap-1.5">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3M3 11h18v6a4 4 0 01-4 4H7a4 4 0 01-4-4v-6z"/></svg>
+                          {p.baths} Baths
+                        </span>
                       </div>
                     </div>
                   </Link>
                 ))}
               </div>
+
+              <div className="flex items-center justify-center gap-2 mt-6">
+                {[1, 2, 3].map((n) => (
+                  <button key={n} className={`w-9 h-9 rounded-[8px] text-sm font-medium ${n === 1 ? "bg-[#305e82] text-white" : "bg-white border border-[#ededed] text-[#121212] hover:bg-[#f6f6f6]"}`}>
+                    {n}
+                  </button>
+                ))}
+                <span className="px-2 text-[#7f7e7e]">...</span>
+                <button className="flex items-center gap-1 px-3 h-9 rounded-[8px] border border-[#ededed] text-sm font-medium text-[#121212] hover:bg-[#f6f6f6]">
+                  Next <ArrowRight size={14} />
+                </button>
+              </div>
             </div>
 
-            <aside className="hidden lg:block w-72 shrink-0">
-              <div className="bg-white rounded-2xl p-5 sticky top-20">
-                <h3 className="font-semibold text-[#121212] mb-4">Filter Properties</h3>
-                <div className="flex flex-col gap-4">
-                  <div>
-                    <label className="text-xs font-medium text-[#121212] block mb-1.5">Property Type</label>
-                    <select className="w-full border border-[#ededed] rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#305e82] bg-white">
-                      <option>All Types</option><option>House</option><option>Apartment</option><option>Land</option>
-                    </select>
+            {/* SIDEBAR */}
+            <aside className="flex flex-col gap-6 min-w-0">
+              {/* Available Properties */}
+              <div className="border border-[#ededed] rounded-[16px] p-6">
+                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+                  Available Properties
+                </h3>
+                <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
+                  Currently available properties for Rent
+                </p>
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-between py-1.5 border-b border-[#ededed]" style={{ fontSize: "14px", color: "#305e82", fontWeight: 600 }}>
+                    <span>Property Type</span>
+                    <span>Property Count</span>
                   </div>
-                  <div>
-                    <label className="text-xs font-medium text-[#121212] block mb-1.5">Bedrooms</label>
-                    <select className="w-full border border-[#ededed] rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#305e82] bg-white">
-                      <option>Any</option>{[1,2,3,4,5].map(n => <option key={n}>{n}+</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-[#121212] block mb-1.5">Min Price (₦/yr)</label>
-                    <input type="number" placeholder="No minimum" className="w-full border border-[#ededed] rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#305e82]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-[#121212] block mb-1.5">Max Price (₦/yr)</label>
-                    <input type="number" placeholder="No maximum" className="w-full border border-[#ededed] rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#305e82]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-[#121212] block mb-1.5">Location</label>
-                    <input type="text" placeholder="e.g. Surulere, Lagos" className="w-full border border-[#ededed] rounded-lg px-3 py-2.5 text-sm outline-none focus:border-[#305e82]" />
-                  </div>
-                  <button className="w-full bg-[#305e82] text-white py-2.5 rounded-xl text-sm font-medium hover:bg-[#254d6b] transition-colors">Apply Filters</button>
-                  <button className="w-full border border-[#ededed] text-[#7f7e7e] py-2.5 rounded-xl text-sm hover:border-[#305e82] transition-colors">Clear All</button>
+                  {propertyTypes.map((t) => (
+                    <div key={t.name} className="flex items-center justify-between py-1.5" style={{ fontSize: "14px", color: "#305e82" }}>
+                      <span>{t.name}</span>
+                      <span>{t.count}</span>
+                    </div>
+                  ))}
                 </div>
+
+                <div className="border-t border-[#ededed] my-4" />
+
+                <div className="flex flex-col">
+                  <div className="grid grid-cols-6 gap-2 py-1.5 border-b border-[#ededed]" style={{ fontSize: "12px", color: "#305e82", fontWeight: 600 }}>
+                    {bedroomTable.cols.map((c) => (
+                      <span key={c} className={c === "Type" ? "" : "text-right"}>{c}</span>
+                    ))}
+                  </div>
+                  {bedroomTable.rows.map((row) => (
+                    <div key={row[0]} className="grid grid-cols-6 gap-2 py-1.5" style={{ fontSize: "12px", color: "#305e82" }}>
+                      {row.map((cell, i) => (
+                        <span key={i} className={i === 0 ? "" : "text-right"}>{cell}</span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Explore States */}
+              <div className="border border-[#ededed] rounded-[16px] p-6">
+                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+                  Explore States
+                </h3>
+                <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
+                  Find available properties by states
+                </p>
+                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ fontSize: "14px", lineHeight: "32px", color: "#305e82" }}>
+                  {states.map((s) => (
+                    <Link key={s} href={`/search?state=${s.toLowerCase()}`} className="hover:underline whitespace-nowrap">
+                      {s}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Other Related */}
+              <div className="border border-[#ededed] rounded-[16px] p-6">
+                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="mb-4">
+                  Other Related Properties
+                </h3>
+                <ul className="flex flex-col gap-1">
+                  {otherCategories.map((c) => (
+                    <li key={c} className="flex items-start gap-2 min-w-0" style={{ fontSize: "14px", lineHeight: "24px", color: "#305e82" }}>
+                      <span className="shrink-0">•</span>
+                      <Link href="#" className="hover:underline break-words min-w-0">
+                        {c}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Receive Alerts */}
+              <div className="rounded-[16px] p-6 text-white relative overflow-hidden" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
+                <Image src="/icons/bell-alert.svg" alt="" width={34} height={36} className="mb-4" />
+                <h3 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600 }} className="mb-2">
+                  Receive alerts for<br />new properties
+                </h3>
+                <p style={{ fontSize: "14px", lineHeight: "24px" }} className="mb-5 text-white/90">
+                  Get instant notifications for recent listings
+                </p>
+                <button className="text-white rounded-[8px] hover:opacity-90 transition-opacity" style={{ fontSize: "14px", fontWeight: 600, background: "#ff9c00", width: "147px", height: "48px" }}>
+                  Subscribe Now
+                </button>
+              </div>
+
+              {/* Verified Agents */}
+              <div className="flex flex-col gap-4">
+                <div>
+                  <h3 style={{ fontSize: "20px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+                    Verified Agents
+                  </h3>
+                  <p style={{ fontSize: "16px", lineHeight: "24px", color: "#807e7e" }}>
+                    Connect with with verified agents and specialists in this area.
+                  </p>
+                </div>
+
+                {verifiedAgents.map((a) => (
+                  <div key={a.name} className="bg-white rounded-[20px] p-5 flex flex-col gap-4" style={{ border: "1px solid #f6f6f6" }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-14 h-14 rounded-full bg-[#f3fefe] border border-[#ededed] overflow-hidden flex items-center justify-center shrink-0">
+                        {a.avatar ? (
+                          <Image src={a.avatar} alt={a.name} width={56} height={56} className="object-cover w-full h-full" />
+                        ) : (
+                          <span style={{ fontSize: "16px", fontWeight: 600, color: "#305e82" }}>{a.initials}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="truncate">
+                            {a.name}
+                          </p>
+                          <Image src="/icons/verify.svg" alt="" width={18} height={18} className="shrink-0" />
+                        </div>
+                        <p style={{ fontSize: "12px", color: "#807e7e" }} className="truncate">{a.agency}</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Image src="/icons/location.svg" alt="" width={16} height={16} />
+                          <span style={{ fontSize: "12px", color: "#305e82" }}>{a.location}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="h-px bg-[#f6f6f6]" />
+
+                    <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
+                      <div className="flex items-center gap-1.5">
+                        <Image src="/icons/star.svg" alt="" width={20} height={20} />
+                        <span>{a.rating.toFixed(1)}</span>
+                      </div>
+                      <div className="w-px h-4 bg-[#807e7e]/40" />
+                      <div className="flex items-center gap-1.5">
+                        <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
+                        <span>{a.listings} listings</span>
+                      </div>
+                    </div>
+
+                    <div className="h-px bg-[#f6f6f6]" />
+
+                    <div className="flex gap-3">
+                      <button className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
+                        <Phone size={18} strokeWidth={1.5} /> Call
+                      </button>
+                      <button className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity" style={{ height: "48px", padding: "8px 24px", fontSize: "14px", fontWeight: 500, background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
+                        <MessageCircle size={18} strokeWidth={1.5} /> Message
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </aside>
           </div>
         </div>
       </section>
 
-      <section className="py-14 bg-[#305e82] text-white">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-2xl font-semibold mb-1">Ready to List Your Property?</h2>
-            <p className="text-white/70 text-sm">Reach thousands of verified tenants on RentBuyStay.</p>
+      {/* CTA */}
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-6">
+          <div className="rounded-[20px] h-[464px] flex flex-col items-center justify-center text-white text-center px-6" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
+            <h2 className="font-semibold mb-4 max-w-[500px]" style={{ fontSize: "48px", lineHeight: "60px", letterSpacing: "-0.02em" }}>
+              Ready to<br />List Your Property?
+            </h2>
+            <p className="mb-8 max-w-[600px] text-white/85" style={{ fontSize: "16px", lineHeight: "150%" }}>
+              Join thousands of owners and agents on Nigeria&apos;s fastest-growing property
+              platform. Get verified, list your property, and reach millions of seekers.
+            </p>
+            <div className="flex items-center gap-6">
+              <Link href="/post-property" className="bg-[#ff9c00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#e08800] transition-colors" style={{ fontSize: "14px" }}>
+                Get Started Free
+              </Link>
+              <Link href="/login" className="text-white hover:underline" style={{ fontSize: "14px" }}>
+                Log in
+              </Link>
+            </div>
           </div>
-          <Link href="/post-property" className="shrink-0 bg-[#ff5a00] text-white font-semibold px-8 py-3 rounded-xl hover:bg-[#e04f00] transition-colors">Post a Property</Link>
         </div>
       </section>
 

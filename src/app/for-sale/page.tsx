@@ -3,20 +3,25 @@ import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle } from "lucide-react";
 
 export const metadata = {
   title: "Properties for Sale in Nigeria | RentBuyStay",
   description: "Browse thousands of verified properties for sale across Nigeria.",
 };
 
-// Mock listings — Figma: 845x304 cards, 184x184 square image left
+// Mock listings — Figma shows ~10 cards in main column
 const listings = [
-  { id: "1", title: "Luxury 4 Bedroom Detached Duplex", price: "₦87,000,000", location: "Lekki Phase 1, Lagos", date: "Listed on 27 Mar 2026", image: "/images/prop4.jpg", desc: "A very beautiful 4 bedroom duplex with state-of-the-earth facilities located in a serene estate in Lekki Phase 1, Lagos for Sale at a reasonable price.", agent: "Chioma Okeke", agentInitials: "CO", tags: ["Newly Built", "C of O", "Fitted Wardrobes/BIQ"], beds: 4, baths: 5, area: "3,500 sqft" },
+  { id: "1", title: "Luxury 4 Bedroom Detached Duplex", price: "₦87,000,000", location: "Lekki Phase 1, Lagos", date: "Listed on 27 Mar 2026", image: "/images/prop4.jpg", desc: "A very beautiful 4 bedroom duplex with state-of-the-earth facilities located in a serene estate in Lekki Phase 1, Lagos for Sale at a reasonable price.", agent: "Chioma Okeke", agentInitials: "CO", tags: ["Newly Built", "C of O", "Only on RentBuyStay"], beds: 4, baths: 5, area: "3,500 sqft" },
   { id: "2", title: "Modern 3 Bedroom Penthouse Suite", price: "₦120,000,000", location: "Ikoyi, Lagos", date: "Listed on 27 Mar 2026", image: "/images/prop2.jpg", desc: "Elegant penthouse with panoramic views, premium finishes, and top-tier amenities in the heart of Ikoyi, ideal for luxury living or investment.", agent: "Emeka Nwosu", agentInitials: "EN", tags: ["Brand New", "Deed of Assignment", "24/7 Security"], beds: 3, baths: 4, area: "2,800 sqft" },
   { id: "3", title: "Cozy 2 Bedroom Apartment", price: "₦18,000,000", location: "Yaba, Lagos", date: "Listed on 22 Apr 2026", image: "/images/prop1.jpg", desc: "Comfortable 2 bedroom apartment perfect for small families or professionals, located near public transport and shopping centers.", agent: "Tunde Bello", agentInitials: "TB", tags: ["Governor's Consent", "24/7 Security", "0-3 Years"], beds: 2, baths: 2, area: "950 sqft" },
   { id: "4", title: "Spacious 5 Bedroom Mansion", price: "₦350,000,000", location: "Banana Island, Lagos", date: "Listed on 15 Apr 2026", image: "/images/prop5.jpg", desc: "Magnificent 5 bedroom mansion with a private pool, gym, and landscaped garden in the exclusive Banana Island community.", agent: "Aisha Bello", agentInitials: "AB", tags: ["Newly Renovated", "Certificate of Occupancy", "Gated Community"], beds: 5, baths: 6, area: "5,200 sqft" },
   { id: "5", title: "Elegant 3 Bedroom Townhouse", price: "₦90,000,000", location: "Victoria Island, Lagos", date: "Listed on 10 May 2026", image: "/images/prop3.jpg", desc: "Stylish townhouse with modern interiors, fitted kitchen, and spacious living areas near business districts.", agent: "Chinaza Okafor", agentInitials: "CO", tags: ["Newly Built", "Deed of Assignment", "24/7 Security"], beds: 3, baths: 3, area: "2,100 sqft" },
+  { id: "6", title: "Charming 1 Bedroom Studio", price: "₦7,500,000", location: "Surulere, Lagos", date: "Listed on 03 May 2026", image: "/images/prop1.jpg", desc: "Perfectly sized studio apartment with simple design for singles or students, close to amenities and transport.", agent: "Kemi Adeyemi", agentInitials: "KA", tags: ["Well Maintained", "Security Post", "4-7 Years"], beds: 1, baths: 1, area: "650 sqft" },
+  { id: "7", title: "Luxurious 6 Bedroom Villa", price: "₦430,000,000", location: "Asokoro, Abuja", date: "Listed on 02 May 2026", image: "/images/prop5.jpg", desc: "Expansive villa featuring smart-home technology, indoor and outdoor entertainment spaces, and a private pool.", agent: "Olumide Fashola", agentInitials: "OF", tags: ["Newly Built", "Certificate of Occupancy", "Gated Community"], beds: 6, baths: 7, area: "6,500 sqft" },
+  { id: "8", title: "Affordable 2 Bedroom Flat", price: "₦15,000,000", location: "Kubwa, Abuja", date: "Listed on 01 May 2026", image: "/images/prop1.jpg", desc: "Practical and affordable flat ideal for first-time buyers or investors, situated in a thriving residential area.", agent: "Funmi Adebayo", agentInitials: "FA", tags: ["Well Maintained", "Governor's Consent", "4-5 Years"], beds: 2, baths: 2, area: "850 sqft" },
+  { id: "9", title: "Contemporary 3 Bedroom Flat", price: "₦55,000,000", location: "Ajah, Lagos", date: "Listed on 29 Apr 2026", image: "/images/prop2.jpg", desc: "Modern flat with open-plan living, balconies, and views and access to swimming pool and gym facilities.", agent: "Ibrahim Musa", agentInitials: "IM", tags: ["Brand New", "Deed of Assignment", "24/7 Security"], beds: 3, baths: 3, area: "1,800 sqft" },
+  { id: "10", title: "Family 4 Bedroom Semi-Detached", price: "₦95,000,000", location: "Magodo, Lagos", date: "Listed on 26 Apr 2026", image: "/images/prop4.jpg", desc: "Spacious family home in serene neighbourhood with attached BQ, parking for 4 cars, and large compound.", agent: "Ngozi Okoro", agentInitials: "NO", tags: ["Newly Built", "C of O", "Gated Estate"], beds: 4, baths: 4, area: "3,200 sqft" },
 ];
 
 // Sidebar data — Figma exact text
@@ -317,54 +322,114 @@ export default function ForSalePage() {
                 </ul>
               </div>
 
-              {/* Receive alerts card */}
-              <div className="rounded-[16px] p-6 text-white" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
-                {/* Bell icon */}
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="white" className="mb-3">
-                  <path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zM18 16v-5a6 6 0 10-12 0v5l-2 2v1h16v-1l-2-2z"/>
-                </svg>
-                <h3 style={{ fontSize: "18px", lineHeight: "24px", fontWeight: 600 }} className="mb-2">
-                  Receive alerts for new properties
+              {/* Receive alerts card — Figma: bell icon top, 24px title, 14px subtitle, orange button */}
+              <div className="rounded-[16px] p-6 text-white relative overflow-hidden" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
+                {/* Real Figma bell icon */}
+                <Image src="/icons/bell-alert.svg" alt="" width={34} height={36} className="mb-4" />
+                <h3 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600 }} className="mb-2">
+                  Receive alerts for<br />new properties
                 </h3>
-                <p style={{ fontSize: "12px", lineHeight: "20px" }} className="mb-4 text-white/85">
+                <p style={{ fontSize: "14px", lineHeight: "24px" }} className="mb-5 text-white/90">
                   Get instant notifications for recent listings
                 </p>
-                <button className="bg-[#ff9c00] text-white px-4 py-2 rounded-[8px] hover:bg-[#e08800] transition-colors" style={{ fontSize: "13px", fontWeight: 600 }}>
+                <button
+                  className="text-white rounded-[8px] hover:opacity-90 transition-opacity"
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    background: "#ff9c00",
+                    width: "147px",
+                    height: "48px",
+                  }}
+                >
                   Subscribe Now
                 </button>
               </div>
 
-              {/* Verified Agents mini */}
-              <div className="border border-[#ededed] rounded-[16px] p-5">
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#121212" }} className="mb-1">
-                  Verified Agents
-                </h3>
-                <p style={{ fontSize: "12px", color: "#7f7e7e" }} className="mb-4">
-                  Connect with verified agents and specialists in this area
-                </p>
-                <div className="flex flex-col gap-3">
-                  {verifiedAgents.map((a) => (
-                    <div key={a.name} className="flex items-center gap-3 p-3 border border-[#ededed] rounded-[12px]">
-                      <div className="w-10 h-10 rounded-full bg-[#f3fefe] border border-[#ededed] overflow-hidden flex items-center justify-center shrink-0">
+              {/* Verified Agents — Figma: title 20px + subtitle 16px, then full agent cards */}
+              <div className="flex flex-col gap-4">
+                <div>
+                  <h3 style={{ fontSize: "20px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+                    Verified Agents
+                  </h3>
+                  <p style={{ fontSize: "16px", lineHeight: "24px", color: "#807e7e" }}>
+                    Connect with with verified agents and specialists in this area.
+                  </p>
+                </div>
+
+                {/* Full agent cards (same layout as Top Verified Agents on homepage) */}
+                {verifiedAgents.map((a) => (
+                  <div
+                    key={a.name}
+                    className="bg-white rounded-[20px] p-5 flex flex-col gap-4"
+                    style={{ border: "1px solid #f6f6f6" }}
+                  >
+                    {/* Avatar + name + agency + location */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-14 h-14 rounded-full bg-[#f3fefe] border border-[#ededed] overflow-hidden flex items-center justify-center shrink-0">
                         {a.avatar ? (
-                          <Image src={a.avatar} alt={a.name} width={40} height={40} className="object-cover w-full h-full" />
+                          <Image src={a.avatar} alt={a.name} width={56} height={56} className="object-cover w-full h-full" />
                         ) : (
-                          <span style={{ fontSize: "12px", fontWeight: 600, color: "#305e82" }}>{a.initials}</span>
+                          <span style={{ fontSize: "16px", fontWeight: 600, color: "#305e82" }}>{a.initials}</span>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1">
-                          <p style={{ fontSize: "13px", fontWeight: 600, color: "#121212" }} className="truncate">{a.name}</p>
-                          <Image src="/icons/verify.svg" alt="" width={14} height={14} />
+                        <div className="flex items-center gap-1.5">
+                          <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="truncate">
+                            {a.name}
+                          </p>
+                          <Image src="/icons/verify.svg" alt="" width={18} height={18} className="shrink-0" />
                         </div>
-                        <p style={{ fontSize: "11px", color: "#7f7e7e" }}>{a.location}</p>
+                        <p style={{ fontSize: "12px", color: "#807e7e" }} className="truncate">{a.agency}</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <Image src="/icons/location.svg" alt="" width={16} height={16} />
+                          <span style={{ fontSize: "12px", color: "#305e82" }}>{a.location}</span>
+                        </div>
                       </div>
-                      <button className="px-3 py-1.5 text-white rounded-[8px]" style={{ fontSize: "12px", fontWeight: 500, background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)" }}>
-                        Message
+                    </div>
+
+                    {/* Divider */}
+                    <div className="h-px bg-[#f6f6f6]" />
+
+                    {/* Rating + listings */}
+                    <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
+                      <div className="flex items-center gap-1.5">
+                        <Image src="/icons/star.svg" alt="" width={20} height={20} />
+                        <span>{(4.6).toFixed(1)}</span>
+                      </div>
+                      <div className="w-px h-4 bg-[#807e7e]/40" />
+                      <div className="flex items-center gap-1.5">
+                        <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
+                        <span>{a.listings} listings</span>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="h-px bg-[#f6f6f6]" />
+
+                    {/* Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors"
+                        style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}
+                      >
+                        <Phone size={18} strokeWidth={1.5} /> Call
+                      </button>
+                      <button
+                        className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity"
+                        style={{
+                          height: "48px",
+                          padding: "8px 24px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+                        }}
+                      >
+                        <MessageCircle size={18} strokeWidth={1.5} /> Message
                       </button>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </aside>
           </div>
