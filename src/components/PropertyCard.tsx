@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, BedDouble, Bath, Maximize, BadgeCheck } from "lucide-react";
+import { MapPin, BadgeCheck } from "lucide-react";
 
 export interface Property {
   id: string;
@@ -72,20 +72,20 @@ export default function PropertyCard({ property }: { property: Property }) {
           <span>{property.location}</span>
         </div>
 
-        {/* Stats row with dividers */}
+        {/* Stats row — Figma icons: maximize (36:1764), ion:bed-outline (46:1803), solar:bath-linear (46:1811) at 20px */}
         <div className="flex items-center gap-3 mt-2 pt-3 border-t border-[#ededed] text-sm text-[#7f7e7e]">
           <span className="flex items-center gap-1.5">
-            <Maximize size={14} strokeWidth={1.5} />
+            <Image src="/icons/prop-maximize.svg" alt="" width={20} height={20} />
             {property.sqft}
           </span>
           <span className="text-[#ededed]">|</span>
           <span className="flex items-center gap-1.5">
-            <BedDouble size={14} strokeWidth={1.5} />
+            <Image src="/icons/prop-bed.svg" alt="" width={20} height={20} />
             {property.beds} Beds
           </span>
           <span className="text-[#ededed]">|</span>
           <span className="flex items-center gap-1.5">
-            <Bath size={14} strokeWidth={1.5} />
+            <Image src="/icons/prop-bath.svg" alt="" width={20} height={20} />
             {property.baths} Baths
           </span>
         </div>
