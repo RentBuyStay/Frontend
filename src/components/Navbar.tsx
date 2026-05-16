@@ -4,18 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import LoginModal from "./LoginModal";
 
-type DropdownItem = { label: string; href: string };
+type DropdownItem = { label: string; href: string; action?: "login" };
 type NavLink = { label: string; href: string; dropdown?: DropdownItem[] };
 
 // Exact items from Figma
 const requestsDropdown: DropdownItem[] = [
-  { label: "Post a Request", href: "/property-requests/new" },
+  { label: "Post a Request", href: "/property-requests/new", action: "login" },
   { label: "View Property Requests", href: "/property-requests" },
 ];
 
 const servicesDropdown: DropdownItem[] = [
-  { label: "Property Verification", href: "/services/verification" },
   { label: "Place Banner Ad", href: "/services/banner-ad" },
 ];
 
@@ -36,9 +36,31 @@ interface NavbarProps {
 
 export default function Navbar({ transparent = false }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+
+  const renderDropdown = (link: NavLink) =>
+    link.dropdown ? (
+      <DropdownMenu
+        key={link.href}
+        link={link}
+        dropdown={link.dropdown}
+        onLogin={() => setShowLogin(true)}
+      />
+    ) : (
+      <Link
+        key={link.href}
+        href={link.href}
+        className="flex items-center justify-center px-3 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
+        style={{ letterSpacing: "-0.02em" }}
+      >
+        {link.label}
+      </Link>
+    );
 
   if (transparent) {
     return (
+      <>
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
       <div className="absolute top-0 left-0 right-0 z-50 px-6 pt-6">
         {/* Floating glass card */}
         <nav
@@ -59,20 +81,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
           {/* Desktop links — Figma: gap 16px, item padding 4px 12px, gap 4px between text and arrow */}
           <div className="hidden lg:flex items-center gap-4">
-            {navLinks.map((l) =>
-              l.dropdown ? (
-                <DropdownMenu key={l.href} link={l} dropdown={l.dropdown} />
-              ) : (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="flex items-center justify-center px-3 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
-                  style={{ letterSpacing: "-0.02em" }}
-                >
-                  {l.label}
-                </Link>
-              )
-            )}
+            {navLinks.map(renderDropdown)}
           </div>
 
           {/* Auth — gap 16px to match figma */}
@@ -120,11 +129,14 @@ export default function Navbar({ transparent = false }: NavbarProps) {
           </div>
         )}
       </div>
+      </>
     );
   }
 
   /* Plain navbar for white-bg pages — Figma: full-width with gradient bottom line, no rounded card */
   return (
+    <>
+    <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
     <header className="bg-white nav-gradient-border-bottom relative">
       <div className="max-w-[1440px] mx-auto px-[80px] flex items-center justify-between h-[96px]">
         {/* Logo — same 166x48 */}
@@ -134,20 +146,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
         {/* Desktop links — same as transparent */}
         <div className="hidden lg:flex items-center gap-4">
-          {navLinks.map((l) =>
-            l.dropdown ? (
-              <DropdownMenu key={l.href} link={l} dropdown={l.dropdown} />
-            ) : (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="flex items-center justify-center px-3 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                {l.label}
-              </Link>
-            )
-          )}
+          {navLinks.map(renderDropdown)}
         </div>
 
         {/* Auth */}
@@ -188,11 +187,20 @@ export default function Navbar({ transparent = false }: NavbarProps) {
         </div>
       )}
     </header>
+    </>
   );
 }
 
 /* DropdownMenu — opens on CLICK, closes on click-outside or item click. Fixed pos escapes overflow:hidden. */
-function DropdownMenu({ link, dropdown }: { link: NavLink; dropdown: DropdownItem[] }) {
+function DropdownMenu({
+  link,
+  dropdown,
+  onLogin,
+}: {
+  link: NavLink;
+  dropdown: DropdownItem[];
+  onLogin?: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -256,17 +264,32 @@ function DropdownMenu({ link, dropdown }: { link: NavLink; dropdown: DropdownIte
             boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
           }}
         >
-          {dropdown.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-              className="block px-6 py-3 hover:bg-[#f6f6f6] transition-colors whitespace-nowrap"
-              style={{ fontSize: "14px", color: "#121212" }}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {dropdown.map((item) =>
+            item.action === "login" && onLogin ? (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  onLogin();
+                }}
+                className="block w-full text-left px-6 py-3 hover:bg-[#f6f6f6] transition-colors whitespace-nowrap"
+                style={{ fontSize: "14px", color: "#121212" }}
+              >
+                {item.label}
+              </button>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="block px-6 py-3 hover:bg-[#f6f6f6] transition-colors whitespace-nowrap"
+                style={{ fontSize: "14px", color: "#121212" }}
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </div>
       )}
     </>

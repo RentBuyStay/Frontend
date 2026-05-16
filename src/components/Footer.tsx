@@ -10,9 +10,8 @@ const company = [
 const legal = [
   { label: "Terms of Service", href: "/tos" },
   { label: "Privacy Policy", href: "/privacy" },
-  { label: "Subscription Agreement", href: "/tos" },
-  { label: "Cookie Policy", href: "/privacy" },
-  { label: "Sitemap", href: "/" },
+  { label: "Subscription Agreement", href: "/subscription-agreement" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
 ];
 
 const reachUs = [
@@ -120,8 +119,8 @@ export default function Footer() {
             By using this site you agree to our{" "}
             <Link href="/tos" className="underline">Terms of service</Link>,{" "}
             <Link href="/privacy" className="underline">Privacy policy</Link>,{" "}
-            <Link href="/tos" className="underline">Subscription Agreement</Link> and{" "}
-            <Link href="/privacy" className="underline">Cookies</Link>.
+            <Link href="/subscription-agreement" className="underline">Subscription Agreement</Link> and{" "}
+            <Link href="/cookie-policy" className="underline">Cookies</Link>.
           </p>
           <p>
             Recommendations may use your activity to personalize results. Listings, availability and

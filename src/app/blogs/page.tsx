@@ -1,102 +1,297 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Newsletter from "@/components/Newsletter";
+import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Blog | RentBuyStay",
-  description: "Real estate tips, guides and market insights for Nigeria.",
+  description: "Real estate insights, guides and market reports across Nigeria.",
 };
 
-const posts = [
-  { slug: "how-to-buy-your-first-home-in-nigeria", title: "How to Buy Your First Home in Nigeria", excerpt: "A step-by-step guide to navigating the Nigerian real estate market as a first-time buyer, from financing to final handover.", category: "Buying Guide", date: "May 5, 2026", readTime: "6 min read" },
-  { slug: "best-areas-to-rent-in-lagos-2026", title: "Best Areas to Rent in Lagos in 2026", excerpt: "From Lekki to Surulere, we break down the most popular rental neighbourhoods in Lagos and what to expect.", category: "Area Guide", date: "Apr 28, 2026", readTime: "5 min read" },
-  { slug: "shortlet-vs-long-term-rental", title: "Shortlet vs Long-Term Rental: Which is Right for You?", excerpt: "Understanding the pros and cons of short-stay apartments versus traditional annual leases in Nigerian cities.", category: "Shortlet", date: "Apr 18, 2026", readTime: "4 min read" },
-  { slug: "abuja-real-estate-market-2026", title: "Abuja Real Estate Market Report 2026", excerpt: "An in-depth look at property prices, demand trends and investment opportunities in the FCT this year.", category: "Market Report", date: "Apr 10, 2026", readTime: "8 min read" },
-  { slug: "tips-for-verified-property-agents", title: "5 Tips for Choosing a Verified Property Agent", excerpt: "How to vet real estate agents in Nigeria and avoid common pitfalls when working with intermediaries.", category: "Tips", date: "Mar 30, 2026", readTime: "4 min read" },
-  { slug: "property-documentation-in-nigeria", title: "Understanding Property Documentation in Nigeria", excerpt: "C of O, Governor's Consent, Deed of Assignment — we explain every property document you need to know.", category: "Legal", date: "Mar 15, 2026", readTime: "7 min read" },
+type Post = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  date: string;
+};
+
+const featured: Post = {
+  slug: "navigating-lagos-property-titles",
+  title: "Navigating Lagos Property Titles: What You Need to Know",
+  excerpt:
+    "Understanding property titles in Lagos can be complex. We've simplified the essential information on C of O, Governor's Consent, and other vital documents to ensure your property transactions are secure and stress-free.",
+  image: "/images/blog-featured.png",
+  date: "June 6, 2025",
+};
+
+const posts: Post[] = [
+  {
+    slug: "is-now-the-right-time-to-invest-in-lagos-real-estate",
+    title: "Is Now the Right Time to Invest in Lagos Real Estate?",
+    excerpt:
+      "Lagos's real estate market continues to evolve. Our experts weigh in on current trends, emerging hot spots, and whether 2025 is the ideal year for you to make a strategic investment in the city's vibrant property landscape.",
+    image: "/images/blog-1.png",
+    date: "June 6, 2025",
+  },
+  {
+    slug: "rise-of-eco-friendly-developments-in-abuja",
+    title: "The Rise of Eco-Friendly Developments in Abuja Real Estate Sector",
+    excerpt:
+      "Discover how sustainability is shaping Abuja's property market, with new green-certified developments setting the standard for the future of urban living.",
+    image: "/images/blog-2.png",
+    date: "July 12, 2025",
+  },
+  {
+    slug: "navigating-lagos-financing-options",
+    title: "Navigating Lagos Real Estate Financing Options in 2025",
+    excerpt:
+      "A comprehensive guide to the latest financing products, interest rates, and mortgage tips that can help you secure your dream home or investment property in Lagos.",
+    image: "/images/blog-3.png",
+    date: "August 20, 2025",
+  },
+  {
+    slug: "is-now-the-right-time-to-invest-in-lagos-real-estate-2",
+    title: "Is Now the Right Time to Invest in Lagos Real Estate?",
+    excerpt:
+      "Lagos's real estate market continues to evolve. Our experts weigh in on current trends, emerging hot spots, and whether 2025 is the ideal year for you to make a strategic investment in the city's vibrant property landscape.",
+    image: "/images/blog-1.png",
+    date: "June 6, 2025",
+  },
+  {
+    slug: "rise-of-eco-friendly-developments-in-abuja-2",
+    title: "The Rise of Eco-Friendly Developments in Abuja Real Estate Sector",
+    excerpt:
+      "Discover how sustainability is shaping Abuja's property market, with new green-certified developments setting the standard for the future of urban living.",
+    image: "/images/blog-2.png",
+    date: "July 12, 2025",
+  },
+  {
+    slug: "navigating-lagos-financing-options-2",
+    title: "Navigating Lagos Real Estate Financing Options in 2025",
+    excerpt:
+      "A comprehensive guide to the latest financing products, interest rates, and mortgage tips that can help you secure your dream home or investment property in Lagos.",
+    image: "/images/blog-3.png",
+    date: "August 20, 2025",
+  },
 ];
 
-const categoryColors: Record<string, string> = {
-  "Buying Guide": "bg-[#305e82]/10 text-[#305e82]",
-  "Area Guide": "bg-[#14ae5c]/10 text-[#14ae5c]",
-  "Shortlet": "bg-[#8a38f5]/10 text-[#8a38f5]",
-  "Market Report": "bg-[#ff5a00]/10 text-[#ff5a00]",
-  "Tips": "bg-[#00beff]/10 text-[#00beff]",
-  "Legal": "bg-[#ffae00]/10 text-[#ffae00]",
-};
-
-export default function BlogsPage() {
-  const [featured, ...rest] = posts;
-
+// Featured article date — just the date, no "RBS" prefix or divider line
+function FeaturedDateBadge({ date }: { date: string }) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#FFFFFF" }}>
+      {date}
+    </span>
+  );
+}
 
-      <section className="bg-[#121212] text-white py-16">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          <h1 className="text-3xl lg:text-5xl font-semibold mb-3">Blog & Insights</h1>
-          <p className="text-[#7f7e7e] text-base">
-            Real estate tips, area guides and market reports to help you make smarter decisions.
+function PostCard({ p }: { p: Post }) {
+  return (
+    <Link
+      href={`/blogs/${p.slug}`}
+      className="bg-white overflow-hidden flex flex-col group hover:shadow-md transition-shadow"
+      style={{
+        width: "411px",
+        height: "500px",
+        borderRadius: "20px",
+      }}
+    >
+      <div className="relative shrink-0" style={{ width: "411px", height: "260px" }}>
+        <Image src={p.image} alt={p.title} fill sizes="411px" style={{ objectFit: "cover" }} />
+      </div>
+      <div className="flex flex-col flex-1" style={{ padding: "24px", gap: "16px" }}>
+        {/* Figma 268:37893 — smaller cards show ONLY the date, not "RBS | date" */}
+        <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
+          {p.date}
+        </span>
+        <div className="flex flex-col" style={{ gap: "8px", flex: 1 }}>
+          <h3
+            className="group-hover:text-[#305E82] transition-colors"
+            style={{
+              fontSize: "20px",
+              lineHeight: "32px",
+              fontWeight: 600,
+              color: "#121212",
+              letterSpacing: "-0.02em",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {p.title}
+          </h3>
+          <p
+            style={{
+              fontSize: "15px",
+              lineHeight: "24px",
+              fontWeight: 400,
+              color: "#807E7E",
+              letterSpacing: "-0.02em",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
+            {p.excerpt}
           </p>
         </div>
-      </section>
+        {/* Read more button — Figma: 103x40, r=12, transparent bg, #305E82 text + arrow */}
+        <span
+          className="inline-flex items-center group-hover:gap-3 transition-all"
+          style={{
+            gap: "8px",
+            height: "40px",
+            fontSize: "14px",
+            lineHeight: "18px",
+            fontWeight: 500,
+            color: "#305E82",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Read more
+          <Image src="/icons/arrow-right.svg" alt="" width={16} height={16} />
+        </span>
+      </div>
+    </Link>
+  );
+}
 
-      <section className="py-14 bg-[#f6f6f6] flex-1">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          {/* Featured */}
-          <Link href={`/blogs/${featured.slug}`} className="group block bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow mb-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="h-60 lg:h-auto bg-[#d7d7d7] flex items-center justify-center text-[#a0a0a0] text-sm">
-                Featured Image
-              </div>
-              <div className="p-8 flex flex-col justify-center">
-                <span className={`text-xs font-medium px-2 py-1 rounded-full w-fit mb-3 ${categoryColors[featured.category]}`}>
-                  {featured.category}
-                </span>
-                <h2 className="text-xl lg:text-2xl font-semibold text-[#121212] group-hover:text-[#305e82] transition-colors mb-3">
+export default function BlogsPage() {
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+
+      {/* CONTENT — Figma node 254:36886: 1440x1790, padding 80 top/bottom */}
+      <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
+        <div className="max-w-[1440px] mx-auto px-[80px]">
+          {/* Featured article — Figma: 1281x550, r=20, image bg with gradient overlay + bottom-left text */}
+          <Link
+            href={`/blogs/${featured.slug}`}
+            className="relative block overflow-hidden group"
+            style={{ width: "100%", height: "550px", borderRadius: "20px" }}
+          >
+            <Image
+              src={featured.image}
+              alt={featured.title}
+              fill
+              sizes="(max-width: 1440px) 100vw, 1281px"
+              className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+              priority
+            />
+            {/* Gradient overlay — bottom fades to dark for legibility */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,0.85) 100%)",
+              }}
+            />
+            {/* Text overlay bottom-left */}
+            <div
+              className="absolute left-0 right-0 bottom-0 flex flex-col text-white"
+              style={{ padding: "40px", gap: "16px" }}
+            >
+              <FeaturedDateBadge date={featured.date} />
+              <div className="flex flex-col" style={{ gap: "8px", maxWidth: "722px" }}>
+                <h2
+                  style={{
+                    fontSize: "24px",
+                    lineHeight: "40px",
+                    fontWeight: 600,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
                   {featured.title}
                 </h2>
-                <p className="text-sm text-[#7f7e7e] leading-relaxed mb-4">{featured.excerpt}</p>
-                <div className="flex items-center gap-4 text-xs text-[#7f7e7e]">
-                  <span className="flex items-center gap-1"><Calendar size={12} />{featured.date}</span>
-                  <span className="flex items-center gap-1"><Clock size={12} />{featured.readTime}</span>
-                </div>
-                <span className="mt-4 text-sm font-medium text-[#305e82] flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Read article <ArrowRight size={15} />
-                </span>
+                <p
+                  style={{
+                    fontSize: "15px",
+                    lineHeight: "24px",
+                    fontWeight: 400,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  {featured.excerpt}
+                </p>
               </div>
             </div>
           </Link>
 
-          {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rest.map((post) => (
-              <Link key={post.slug} href={`/blogs/${post.slug}`} className="group bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="h-44 bg-[#d7d7d7] flex items-center justify-center text-[#a0a0a0] text-xs">
-                  Post Image
-                </div>
-                <div className="p-5">
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${categoryColors[post.category] ?? "bg-[#ededed] text-[#7f7e7e]"}`}>
-                    {post.category}
-                  </span>
-                  <h3 className="text-base font-semibold text-[#121212] mt-2 mb-2 group-hover:text-[#305e82] transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-xs text-[#7f7e7e] leading-relaxed line-clamp-2 mb-3">{post.excerpt}</p>
-                  <div className="flex items-center gap-3 text-xs text-[#7f7e7e]">
-                    <span className="flex items-center gap-1"><Calendar size={11} />{post.date}</span>
-                    <span className="flex items-center gap-1"><Clock size={11} />{post.readTime}</span>
-                  </div>
-                </div>
-              </Link>
+          {/* Grid — 3 cols × 2 rows, gap 24 col / 40 row */}
+          <div
+            className="grid mx-auto"
+            style={{
+              gridTemplateColumns: "repeat(3, 411px)",
+              gap: "40px 24px",
+              marginTop: "40px",
+              justifyContent: "center",
+            }}
+          >
+            {posts.map((p) => (
+              <PostCard key={p.slug} p={p} />
             ))}
           </div>
         </div>
       </section>
 
-      <Newsletter />
+      {/* CTA — Figma node 254:37219 */}
+      <section className="bg-white" style={{ padding: "24px" }}>
+        <div
+          className="relative overflow-hidden mx-auto flex flex-col items-center justify-center text-center"
+          style={{
+            maxWidth: "1392px",
+            height: "464px",
+            borderRadius: "20px",
+            background: "linear-gradient(186deg, #75A3C7 0%, #305E82 100%)",
+            padding: "0 80px",
+          }}
+        >
+          <div className="flex flex-col" style={{ gap: "40px", maxWidth: "640px" }}>
+            <div className="flex flex-col" style={{ gap: "16px" }}>
+              <h2 className="text-white" style={{ fontSize: "48px", lineHeight: "64px", fontWeight: 600, letterSpacing: "-0.02em" }}>
+                Ready to<br />List Your Property?
+              </h2>
+              <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, letterSpacing: "-0.02em" }}>
+                Join thousands of owners and agents on Nigeria&rsquo;s fastest-growing
+                property platform. Get verified, list your property, and reach millions
+                of seekers.
+              </p>
+            </div>
+            <div className="flex items-center justify-center" style={{ gap: "16px" }}>
+              <Link
+                href="/post-property"
+                className="flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
+                style={{
+                  height: "48px",
+                  padding: "8px 24px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  background: "#FFAE00",
+                  border: "1px solid rgba(120, 158, 187, 0.5)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Get Started Free
+              </Link>
+              <Link
+                href="/login"
+                className="flex items-center justify-center text-white hover:opacity-80 transition-opacity"
+                style={{
+                  padding: "16px 32px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Log in
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

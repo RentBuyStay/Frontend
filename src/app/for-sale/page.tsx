@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
+import Pagination from "@/components/Pagination";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Phone, MessageCircle } from "lucide-react";
@@ -135,8 +136,20 @@ export default function ForSalePage() {
                     {/* Image — Figma: 184x184 SQUARE on left with FOR SALE pill, counter, nav arrows */}
                     <div className="relative w-[184px] h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
                       <Image src={p.image} alt={p.title} fill className="object-cover" />
-                      {/* FOR SALE badge top-left */}
-                      <span className="absolute top-3 left-3 bg-[#ff9c00] text-white px-3 py-1 rounded-md uppercase" style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.05em" }}>
+                      {/* FOR SALE badge — Figma: top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
+                      <span
+                        className="absolute uppercase text-white rounded-full"
+                        style={{
+                          top: "8px",
+                          left: "8px",
+                          fontSize: "10px",
+                          lineHeight: "20px",
+                          fontWeight: 600,
+                          padding: "4px 8px",
+                          letterSpacing: 0,
+                          background: "#FFAE00",
+                        }}
+                      >
                         For Sale
                       </span>
                       {/* Photo counter bottom-left */}
@@ -225,17 +238,9 @@ export default function ForSalePage() {
 
               </div>{/* end listings cards wrapper */}
 
-              {/* Pagination */}
-              <div className="flex items-center justify-center gap-2 mt-6">
-                {[1, 2, 3].map((n) => (
-                  <button key={n} className={`w-9 h-9 rounded-[8px] text-sm font-medium ${n === 1 ? "bg-[#305e82] text-white" : "bg-white border border-[#ededed] text-[#121212] hover:bg-[#f6f6f6]"}`}>
-                    {n}
-                  </button>
-                ))}
-                <span className="px-2 text-[#7f7e7e]">...</span>
-                <button className="flex items-center gap-1 px-3 h-9 rounded-[8px] border border-[#ededed] text-sm font-medium text-[#121212] hover:bg-[#f6f6f6]">
-                  Next <ArrowRight size={14} />
-                </button>
+              {/* Pagination — Figma exact */}
+              <div className="mt-6">
+                <Pagination current={1} />
               </div>
             </div>{/* end LEFT column wrapper */}
 
@@ -337,7 +342,7 @@ export default function ForSalePage() {
                   style={{
                     fontSize: "14px",
                     fontWeight: 600,
-                    background: "#ff9c00",
+                    background: "#FFAE00",
                     width: "147px",
                     height: "48px",
                   }}
@@ -451,7 +456,7 @@ export default function ForSalePage() {
               platform. Get verified, list your property, and reach millions of seekers.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="/post-property" className="bg-[#ff9c00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#e08800] transition-colors" style={{ fontSize: "14px" }}>
+              <Link href="/post-property" className="bg-[#FFAE00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#E69A00] transition-colors" style={{ fontSize: "14px" }}>
                 Get Started Free
               </Link>
               <Link href="/login" className="text-white hover:underline" style={{ fontSize: "14px" }}>

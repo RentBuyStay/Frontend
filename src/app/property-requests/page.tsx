@@ -1,8 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import RequestSearchFilter from "@/components/RequestSearchFilter";
+import Pagination from "@/components/Pagination";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Search, ChevronDown, SlidersHorizontal } from "lucide-react";
 
 export const metadata = {
   title: "Property Requests | RentBuyStay",
@@ -58,62 +59,7 @@ export default function PropertyRequestsPage() {
       <Navbar />
 
       <section className="bg-white">
-        {/* Search row + filter row */}
-        <div className="max-w-[1440px] mx-auto px-[80px] py-10 flex flex-col gap-5">
-          {/* Top row: Tab dropdown | Search input | Search button | Filter button */}
-          <div className="flex items-center gap-4">
-            {/* Tab dropdown */}
-            <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-              <select defaultValue="Rent" className="appearance-none text-sm font-semibold text-[#121212] bg-transparent outline-none pr-6 cursor-pointer">
-                <option>Rent</option>
-                <option>Buy</option>
-                <option>Shortlet</option>
-              </select>
-              <ChevronDown size={14} className="absolute right-3 text-[#7f7e7e] pointer-events-none" />
-            </div>
-
-            {/* Search input */}
-            <div className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
-              <Search size={16} className="text-[#7f7e7e] shrink-0" />
-              <input
-                type="text"
-                placeholder="Jibowu, Yaba, Lagos"
-                className="flex-1 text-sm outline-none placeholder:text-[#7f7e7e] text-[#121212] bg-transparent"
-              />
-            </div>
-
-            {/* Search button — gradient */}
-            <button className="shrink-0 text-white text-sm font-semibold w-[160px] h-12 rounded-[12px] hover:opacity-90 transition-opacity" style={{ background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
-              Search
-            </button>
-
-            {/* Filter button */}
-            <button className="shrink-0 flex items-center gap-2 px-4 h-12 rounded-[12px] bg-[#F6F6F6] hover:bg-[#ededed] transition-colors" style={{ fontSize: "14px", color: "#121212" }}>
-              <SlidersHorizontal size={16} /> Filter
-            </button>
-          </div>
-
-          {/* Filter columns — 5 dropdowns directly on white */}
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
-            {[
-              { label: "Property Type", value: "Flats & Apartments" },
-              { label: "Bedrooms", value: "1" },
-              { label: "Min. Price", value: "No min" },
-              { label: "Max Price", value: "₦1 million" },
-              { label: "Furnished", value: "Any" },
-            ].map((f) => (
-              <div key={f.label} className="flex flex-col gap-1.5">
-                <label style={{ fontSize: "12px", color: "#121212", fontWeight: 500 }}>{f.label}</label>
-                <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                  <select defaultValue={f.value} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                    <option>{f.value}</option>
-                  </select>
-                  <ChevronDown size={14} className="absolute right-4 text-[#7f7e7e] pointer-events-none" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <RequestSearchFilter />
       </section>
 
       {/* PROPERTY REQUESTS + SIDEBAR */}
@@ -198,17 +144,9 @@ export default function PropertyRequestsPage() {
                 ))}
               </div>
 
-              {/* Pagination */}
-              <div className="flex items-center justify-center gap-2 mt-6">
-                {[1, 2, 3].map((n) => (
-                  <button key={n} className={`w-9 h-9 rounded-[8px] text-sm font-medium ${n === 1 ? "bg-[#305e82] text-white" : "bg-white border border-[#ededed] text-[#121212] hover:bg-[#f6f6f6]"}`}>
-                    {n}
-                  </button>
-                ))}
-                <span className="px-2 text-[#7f7e7e]">...</span>
-                <button className="flex items-center gap-1 px-3 h-9 rounded-[8px] border border-[#ededed] text-sm font-medium text-[#121212] hover:bg-[#f6f6f6]">
-                  Next <ArrowRight size={14} />
-                </button>
+              {/* Pagination — Figma exact: arrow-left + page numbers + Next */}
+              <div className="mt-6">
+                <Pagination current={1} />
               </div>
             </div>
 
@@ -292,7 +230,7 @@ export default function PropertyRequestsPage() {
                 <p style={{ fontSize: "14px", lineHeight: "24px" }} className="mb-5 text-white/90">
                   Get instant notifications for recent listings
                 </p>
-                <button className="text-white rounded-[8px] hover:opacity-90 transition-opacity" style={{ fontSize: "14px", fontWeight: 600, background: "#ff9c00", width: "147px", height: "48px" }}>
+                <button className="text-white rounded-[8px] hover:opacity-90 transition-opacity" style={{ fontSize: "14px", fontWeight: 600, background: "#FFAE00", width: "147px", height: "48px" }}>
                   Subscribe Now
                 </button>
               </div>
@@ -313,7 +251,7 @@ export default function PropertyRequestsPage() {
               platform. Get verified, list your property, and reach millions of seekers.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="/post-property" className="bg-[#ff9c00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#e08800] transition-colors" style={{ fontSize: "14px" }}>
+              <Link href="/post-property" className="bg-[#FFAE00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#E69A00] transition-colors" style={{ fontSize: "14px" }}>
                 Get Started Free
               </Link>
               <Link href="/login" className="text-white hover:underline" style={{ fontSize: "14px" }}>

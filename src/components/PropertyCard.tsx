@@ -16,11 +16,8 @@ export interface Property {
   image?: string;
 }
 
-const tagColors: Record<Property["tag"], string> = {
-  "For Sale": "bg-[#ff9c00] text-white",
-  "For Rent": "bg-[#14ae5c] text-white",
-  Shortlet: "bg-[#8a38f5] text-white",
-};
+// Figma: all three tags share the same pill style (bg #FFAE00, white text)
+const BADGE_BG = "#FFAE00";
 
 export default function PropertyCard({ property }: { property: Property }) {
   return (
@@ -39,9 +36,19 @@ export default function PropertyCard({ property }: { property: Property }) {
             </svg>
           </div>
         )}
-        {/* Bottom-right badge */}
+        {/* Badge — Figma: top-left 8px inset, pill r=50, 10px/600 white uppercase, padding 4/8, bg #FFAE00 */}
         <span
-          className={`absolute bottom-3 right-3 text-xs font-semibold px-3 py-1 rounded-md uppercase tracking-wide ${tagColors[property.tag]}`}
+          className="absolute uppercase text-white rounded-full"
+          style={{
+            top: "8px",
+            left: "8px",
+            fontSize: "10px",
+            lineHeight: "20px",
+            fontWeight: 600,
+            padding: "4px 8px",
+            letterSpacing: 0,
+            background: BADGE_BG,
+          }}
         >
           {property.tag}
         </span>

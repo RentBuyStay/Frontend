@@ -1,133 +1,299 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AgencyCard from "@/components/AgencyCard";
+import AgentCard from "@/components/AgentCard";
+import { agencies, agents } from "@/lib/agentsData";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, MapPin, Star, Phone, Mail } from "lucide-react";
+import { ArrowRight, Search, ChevronDown } from "lucide-react";
 
 export const metadata = {
   title: "Agents & Agencies | RentBuyStay",
   description: "Find all verified real estate agents and agencies across Nigeria.",
 };
 
-const agencies = [
-  { id: "1", name: "Quantum Realty", initials: "QR", location: "Lagos", agents: 12, listings: 86 },
-  { id: "2", name: "Union Blue Realty", initials: "UB", location: "Abuja", agents: 8, listings: 54 },
-  { id: "3", name: "Blue Platinum Homes", initials: "BP", location: "Lagos", agents: 20, listings: 120 },
-  { id: "4", name: "Prestige Properties", initials: "PP", location: "PH", agents: 6, listings: 38 },
-  { id: "5", name: "Mersey Properties", initials: "MP", location: "Abuja", agents: 15, listings: 97 },
-  { id: "6", name: "Skyline Homes", initials: "SH", location: "Lagos", agents: 9, listings: 62 },
-];
-
-const agents = [
-  { id: "1", name: "Amelia Franklin", initials: "AF", location: "Lagos", listings: 24, rating: 4.9, reviews: 87, agency: "Quantum Realty" },
-  { id: "2", name: "Chiamaka Obi", initials: "CO", location: "Abuja", listings: 18, rating: 4.8, reviews: 64, agency: "Union Blue Realty" },
-  { id: "3", name: "Elizabeth Monroe", initials: "EM", location: "Lagos", listings: 31, rating: 4.7, reviews: 112, agency: "Blue Platinum Homes" },
-  { id: "4", name: "Tunde Bello", initials: "TB", location: "PH", listings: 15, rating: 4.6, reviews: 43, agency: "Independent" },
-  { id: "5", name: "Ngozi Eze", initials: "NE", location: "Lagos", listings: 22, rating: 4.9, reviews: 95, agency: "Prestige Properties" },
-  { id: "6", name: "Kola Adeyemi", initials: "KA", location: "Ibadan", listings: 9, rating: 4.5, reviews: 38, agency: "Independent" },
-  { id: "7", name: "Sade Okonkwo", initials: "SO", location: "Abuja", listings: 27, rating: 4.8, reviews: 71, agency: "Mersey Properties" },
-  { id: "8", name: "Ibrahim Musa", initials: "IM", location: "Kano", listings: 13, rating: 4.6, reviews: 29, agency: "Independent" },
-  { id: "9", name: "Funke Adeleke", initials: "FA", location: "Lagos", listings: 19, rating: 4.7, reviews: 55, agency: "Skyline Homes" },
-];
+// Homepage shows first 6 agencies and first 9 agents (top of each list)
+const featuredAgencies = agencies.slice(0, 6);
+const featuredAgents = agents.slice(0, 9);
 
 export default function AgentsPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* HERO — Figma node 248:30168: 1440x712, card 1392x664 r=25, city skyline bg */}
+      <section className="bg-white p-6">
+        <div
+          className="relative overflow-hidden bg-[#F3FEFE]"
+          style={{ borderRadius: "25px", height: "664px" }}
+        >
+          <Image
+            src="/images/for-sale-hero.png"
+            alt=""
+            fill
+            className="object-cover"
+            priority
+          />
+          <div
+            className="absolute inset-0 z-[1]"
+            style={{
+              background:
+                "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
+              opacity: 0.65,
+            }}
+          />
 
-      {/* Hero */}
-      <section className="relative h-56 lg:h-72 flex flex-col">
-        <Navbar transparent />
-        <div className="absolute inset-0 z-0">
-          <Image src="/images/prop2.jpg" alt="Find All Realtors" fill className="object-cover" />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-        <div className="relative z-10 flex flex-col justify-center flex-1 px-6 lg:px-12 max-w-[1440px] mx-auto w-full pt-14">
-          <h1 className="text-3xl lg:text-5xl font-semibold text-white mb-4">
-            Find All Realtors in One Place
-          </h1>
-          <div className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 max-w-lg">
-            <Search size={18} className="text-[#7f7e7e] shrink-0" />
-            <input type="text" placeholder="Search by name, location or agency..." className="flex-1 text-sm text-[#121212] outline-none placeholder:text-[#7f7e7e]" />
-            <button className="bg-[#305e82] text-white text-sm font-medium px-4 py-1.5 rounded-lg">Search</button>
+          <Navbar transparent />
+
+          {/* Title block — Figma: 738x208 at y=216 from card top */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-10 text-center flex flex-col"
+            style={{
+              top: "216px",
+              width: "738px",
+              maxWidth: "calc(100% - 48px)",
+              gap: "16px",
+            }}
+          >
+            <h1
+              className="text-white"
+              style={{
+                fontSize: "64px",
+                lineHeight: "80px",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Find All Realtors in
+              <br />
+              One Place
+            </h1>
+            <p
+              className="text-white mx-auto"
+              style={{
+                fontSize: "18px",
+                lineHeight: "32px",
+                fontWeight: 400,
+                letterSpacing: "-0.02em",
+                maxWidth: "735px",
+              }}
+            >
+              Explore the list or search for real estate agents, agencies and developers
+              in our directory.
+            </p>
+          </div>
+
+          {/* Search bar — Figma: 1344x96 at y=544 from card top, r=12, white, padding 24 */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 z-10 bg-white flex items-center"
+            style={{
+              bottom: "24px",
+              width: "calc(100% - 48px)",
+              maxWidth: "1344px",
+              height: "96px",
+              borderRadius: "12px",
+              padding: "24px",
+              gap: "16px",
+            }}
+          >
+            <div
+              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center"
+              style={{ width: "199px", height: "48px", padding: "0 16px" }}
+            >
+              <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                <option>Select state</option>
+                <option>Lagos</option>
+                <option>Abuja</option>
+                <option>Port Harcourt</option>
+              </select>
+              <ChevronDown size={16} className="absolute right-4 text-[#121212] pointer-events-none" />
+            </div>
+
+            <div
+              className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px]"
+              style={{ height: "48px", padding: "0 16px" }}
+            >
+              <Search size={20} className="text-[#807E7E] shrink-0" />
+              <input
+                type="text"
+                placeholder="Enter name, location, area or keyword..."
+                className="flex-1 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
+              />
+            </div>
+
+            <button
+              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity"
+              style={{
+                width: "160px",
+                height: "48px",
+                background:
+                  "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+                border: "1px solid rgba(120, 158, 187, 0.5)",
+              }}
+            >
+              Search
+            </button>
           </div>
         </div>
       </section>
 
-      <section className="flex-1 bg-[#f6f6f6] py-12">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-
-          {/* All Agencies & Developers */}
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-[#121212]">All Agencies &amp; Developers</h2>
-              <Link href="/agencies" className="text-sm text-[#305e82] font-medium hover:underline">View all</Link>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {agencies.map((agency) => (
-                <div key={agency.id} className="bg-white rounded-2xl p-4 text-center hover:shadow-md transition-shadow cursor-pointer">
-                  <div className="w-14 h-14 rounded-xl bg-[#f3fefe] border border-[#ededed] flex items-center justify-center text-[#305e82] font-bold text-lg mx-auto mb-3">
-                    {agency.initials}
-                  </div>
-                  <p className="text-xs font-semibold text-[#121212] line-clamp-2 leading-tight">{agency.name}</p>
-                  <p className="text-xs text-[#7f7e7e] mt-1">{agency.listings} listings</p>
-                  <div className="flex items-center justify-center gap-1 mt-1 text-xs text-[#7f7e7e]">
-                    <MapPin size={10} /> {agency.location}
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* ALL AGENCIES & DEVELOPERS — 3x2 grid, 411x456 cards, gap 24 */}
+      <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "60px" }}>
+        <div className="max-w-[1440px] mx-auto px-[80px]">
+          <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
+            <h2
+              style={{
+                fontSize: "32px",
+                lineHeight: "40px",
+                fontWeight: 600,
+                color: "#121212",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              All Agencies &amp; Developers
+            </h2>
+            <Link
+              href="/agencies"
+              className="flex items-center gap-2 hover:text-[#305e82] transition-colors whitespace-nowrap"
+              style={{
+                fontSize: "14px",
+                color: "#121212",
+                fontWeight: 500,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              View All <ArrowRight size={18} strokeWidth={1.5} />
+            </Link>
           </div>
 
-          {/* All Agents */}
-          <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-[#121212]">All Agents</h2>
-              <p className="text-sm text-[#7f7e7e]">{agents.length} verified agents</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {agents.map((agent) => (
-                <div key={agent.id} className="bg-white rounded-2xl p-5 flex items-start gap-4 hover:shadow-md transition-shadow">
-                  <div className="w-14 h-14 rounded-full bg-[#305e82] flex items-center justify-center text-white text-lg font-semibold shrink-0">
-                    {agent.initials}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#121212]">{agent.name}</p>
-                    <p className="text-xs text-[#7f7e7e] mt-0.5">{agent.agency}</p>
-                    <div className="flex items-center gap-1 text-xs text-[#7f7e7e] mt-0.5">
-                      <MapPin size={10} /> {agent.location}
-                    </div>
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center gap-1 text-xs">
-                        <Star size={11} className="text-[#ffae00] fill-[#ffae00]" />
-                        <span className="font-medium text-[#121212]">{agent.rating}</span>
-                        <span className="text-[#7f7e7e]">({agent.reviews})</span>
-                      </div>
-                      <span className="text-xs text-[#7f7e7e]">{agent.listings} listings</span>
-                    </div>
-                    <div className="flex gap-2 mt-3">
-                      <button className="flex-1 flex items-center justify-center gap-1 bg-[#305e82] text-white text-xs py-2 rounded-lg hover:bg-[#254d6b] transition-colors">
-                        <Phone size={12} /> Call
-                      </button>
-                      <button className="flex-1 flex items-center justify-center gap-1 border border-[#305e82] text-[#305e82] text-xs py-2 rounded-lg hover:bg-[#f3fefe] transition-colors">
-                        <Mail size={12} /> Message
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div
+            className="grid mx-auto"
+            style={{
+              gridTemplateColumns: "repeat(3, 411px)",
+              gap: "40px 24px",
+              justifyContent: "center",
+            }}
+          >
+            {featuredAgencies.map((a) => (
+              <AgencyCard key={a.id} a={a} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-14 bg-[#305e82] text-white">
-        <div className="max-w-[1440px] mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-2xl font-semibold mb-1">Ready to List Your Property?</h2>
-            <p className="text-white/70 text-sm">List your property and let our verified agents connect you with buyers and tenants.</p>
+      {/* ALL AGENTS — 3x3 grid, 411x284 cards, gap 24 */}
+      <section className="bg-white" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
+        <div className="max-w-[1440px] mx-auto px-[80px]">
+          <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
+            <h2
+              style={{
+                fontSize: "32px",
+                lineHeight: "40px",
+                fontWeight: 600,
+                color: "#121212",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              All Agents
+            </h2>
+            <Link
+              href="/agents/all"
+              className="flex items-center gap-2 hover:text-[#305e82] transition-colors whitespace-nowrap"
+              style={{
+                fontSize: "14px",
+                color: "#121212",
+                fontWeight: 500,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              View All <ArrowRight size={18} strokeWidth={1.5} />
+            </Link>
           </div>
-          <Link href="/post-property" className="shrink-0 bg-[#ff5a00] text-white font-semibold px-8 py-3 rounded-xl hover:bg-[#e04f00] transition-colors">Post a Property</Link>
+
+          <div
+            className="grid mx-auto"
+            style={{
+              gridTemplateColumns: "repeat(3, 411px)",
+              gap: "40px 24px",
+              justifyContent: "center",
+            }}
+          >
+            {featuredAgents.map((a, i) => (
+              <AgentCard key={i} a={a} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA — Figma: 1440x512, inner 1392x464 r=20 brand gradient */}
+      <section className="bg-white" style={{ padding: "24px" }}>
+        <div
+          className="relative overflow-hidden mx-auto flex flex-col items-center justify-center text-center"
+          style={{
+            maxWidth: "1392px",
+            height: "464px",
+            borderRadius: "20px",
+            background: "linear-gradient(186deg, #75A3C7 0%, #305E82 100%)",
+            padding: "0 80px",
+          }}
+        >
+          <div className="flex flex-col" style={{ gap: "40px", maxWidth: "640px" }}>
+            <div className="flex flex-col" style={{ gap: "16px" }}>
+              <h2
+                className="text-white"
+                style={{
+                  fontSize: "48px",
+                  lineHeight: "64px",
+                  fontWeight: 600,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Ready to
+                <br />
+                List Your Property?
+              </h2>
+              <p
+                className="text-white"
+                style={{
+                  fontSize: "18px",
+                  lineHeight: "32px",
+                  fontWeight: 400,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Join thousands of owners and agents on Nigeria&rsquo;s fastest-growing
+                property platform. Get verified, list your property, and reach millions
+                of seekers.
+              </p>
+            </div>
+            <div className="flex items-center justify-center" style={{ gap: "16px" }}>
+              <Link
+                href="/post-property"
+                className="flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
+                style={{
+                  height: "48px",
+                  padding: "8px 24px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  background: "#FFAE00",
+                  border: "1px solid rgba(120, 158, 187, 0.5)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Get Started Free
+              </Link>
+              <Link
+                href="/login"
+                className="flex items-center justify-center text-white hover:opacity-80 transition-opacity"
+                style={{
+                  padding: "16px 32px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Log in
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
