@@ -1,7 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GetStartedFreeButton from "@/components/GetStartedFreeButton";
+import LogInButton from "@/components/LogInButton";
 import Image from "next/image";
-import Link from "next/link";
 
 export const metadata = {
   title: "About Us | RentBuyStay",
@@ -666,8 +667,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="flex items-center justify-center" style={{ gap: "16px" }}>
-              <Link
-                href="/post-property"
+              <GetStartedFreeButton
                 className="flex items-center justify-center text-white hover:opacity-90 transition-opacity"
                 style={{
                   height: "48px",
@@ -679,11 +679,8 @@ export default function AboutPage() {
                   border: "1px solid rgba(120,158,187,0.5)",
                   letterSpacing: "-0.02em",
                 }}
-              >
-                Get Started Free
-              </Link>
-              <Link
-                href="/login"
+              />
+              <LogInButton
                 className="flex items-center justify-center text-white hover:opacity-80 transition-opacity"
                 style={{
                   height: "48px",
@@ -692,9 +689,7 @@ export default function AboutPage() {
                   fontWeight: 500,
                   letterSpacing: "-0.02em",
                 }}
-              >
-                Log in
-              </Link>
+              />
             </div>
           </div>
         </div>

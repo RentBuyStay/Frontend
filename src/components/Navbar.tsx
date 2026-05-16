@@ -86,16 +86,18 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
           {/* Auth — gap 16px to match figma */}
           <div className="hidden lg:flex items-center gap-4 shrink-0">
-            <Link
-              href="/login"
-              className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors"
-              style={{ letterSpacing: "-0.02em" }}
+            <button
+              type="button"
+              onClick={() => setShowLogin(true)}
+              className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
+              style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
             >
               Log in
-            </Link>
-            <Link
-              href="/post-property"
-              className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity"
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLogin(true)}
+              className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
               style={{
                 background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
                 border: "1px solid rgba(120,158,187,0.5)",
@@ -103,7 +105,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
               }}
             >
               Post Property
-            </Link>
+            </button>
           </div>
 
           {/* Mobile toggle */}
@@ -121,10 +123,22 @@ export default function Navbar({ transparent = false }: NavbarProps) {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-[#ededed]">
-              <Link href="/login" className="text-sm font-medium text-[#121212]">Log in</Link>
-              <Link href="/post-property" className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center">
+              <button
+                type="button"
+                onClick={() => { setOpen(false); setShowLogin(true); }}
+                className="text-sm font-medium text-[#121212] text-left"
+                style={{ background: "transparent", border: "none", padding: 0, cursor: "pointer" }}
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                onClick={() => { setOpen(false); setShowLogin(true); }}
+                className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center cursor-pointer"
+                style={{ border: "none" }}
+              >
                 Post Property
-              </Link>
+              </button>
             </div>
           </div>
         )}
@@ -151,12 +165,18 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
         {/* Auth */}
         <div className="hidden lg:flex items-center gap-4 shrink-0">
-          <Link href="/login" className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors" style={{ letterSpacing: "-0.02em" }}>
+          <button
+            type="button"
+            onClick={() => setShowLogin(true)}
+            className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
+            style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
+          >
             Log in
-          </Link>
-          <Link
-            href="/post-property"
-            className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity"
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowLogin(true)}
+            className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
             style={{
               background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
               border: "1px solid rgba(120,158,187,0.5)",
@@ -164,7 +184,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
             }}
           >
             Post Property
-          </Link>
+          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -181,8 +201,22 @@ export default function Navbar({ transparent = false }: NavbarProps) {
             </Link>
           ))}
           <div className="flex flex-col gap-2 pt-2 border-t border-[#ededed]">
-            <Link href="/login" className="text-sm font-medium">Log in</Link>
-            <Link href="/post-property" className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center">Post Property</Link>
+            <button
+              type="button"
+              onClick={() => { setOpen(false); setShowLogin(true); }}
+              className="text-sm font-medium text-left cursor-pointer"
+              style={{ background: "transparent", border: "none", padding: 0 }}
+            >
+              Log in
+            </button>
+            <button
+              type="button"
+              onClick={() => { setOpen(false); setShowLogin(true); }}
+              className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center cursor-pointer"
+              style={{ border: "none" }}
+            >
+              Post Property
+            </button>
           </div>
         </div>
       )}

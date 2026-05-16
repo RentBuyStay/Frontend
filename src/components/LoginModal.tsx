@@ -4,7 +4,16 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 
-export default function LoginModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function LoginModal({
+  open,
+  onClose,
+  onSwitchToRegister,
+}: {
+  open: boolean;
+  onClose: () => void;
+  /** Optional: called when user clicks "Register here" — typically closes this and opens CreateAccountModal */
+  onSwitchToRegister?: () => void;
+}) {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
@@ -62,8 +71,8 @@ export default function LoginModal({ open, onClose }: { open: boolean; onClose: 
             style={{ width: "76px", height: "64px" }}
           />
 
-          {/* 2. Title — Figma: Geist SemiBold 24px / 32px LH, color #121212, 2 lines */}
-          <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+          {/* 2. Title — Figma: Geist SemiBold 24px / 32px LH, color #121212, 2 lines, LEFT-aligned */}
+          <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212", textAlign: "left" }}>
             Sign in to unlock the best<br />of RentBuyStay
           </h2>
 
@@ -71,7 +80,7 @@ export default function LoginModal({ open, onClose }: { open: boolean; onClose: 
           <div className="flex flex-col" style={{ gap: "16px" }}>
             {/* Name section — gap 8 */}
             <div className="flex flex-col" style={{ gap: "8px" }}>
-              <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
+              <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em", textAlign: "left" }}>
                 Name
               </label>
               <div
@@ -82,14 +91,14 @@ export default function LoginModal({ open, onClose }: { open: boolean; onClose: 
                   type="text"
                   placeholder="Enter your full name here"
                   className="flex-1 outline-none bg-transparent"
-                  style={{ fontSize: "14px", lineHeight: "24px", color: "#121212" }}
+                  style={{ fontSize: "14px", lineHeight: "24px", color: "#121212", textAlign: "left" }}
                 />
               </div>
             </div>
 
             {/* Password section — gap 8 between label, input, and remember/forgot row */}
             <div className="flex flex-col" style={{ gap: "8px" }}>
-              <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
+              <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em", textAlign: "left" }}>
                 Password
               </label>
               <div
@@ -100,7 +109,7 @@ export default function LoginModal({ open, onClose }: { open: boolean; onClose: 
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   className="flex-1 outline-none bg-transparent"
-                  style={{ fontSize: "14px", lineHeight: "24px", color: "#121212" }}
+                  style={{ fontSize: "14px", lineHeight: "24px", color: "#121212", textAlign: "left" }}
                 />
                 <button
                   type="button"
@@ -148,9 +157,26 @@ export default function LoginModal({ open, onClose }: { open: boolean; onClose: 
             {/* Register link — Figma: Manrope 16px center, color #807e7e + #305e82 */}
             <p className="text-center" style={{ fontSize: "16px", lineHeight: "24px", color: "#807e7e" }}>
               Don&rsquo;t have an account yet?{" "}
-              <a href="#" style={{ fontWeight: 500, color: "#305e82" }} className="hover:underline">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onSwitchToRegister) onSwitchToRegister();
+                  else onClose();
+                }}
+                style={{
+                  fontWeight: 500,
+                  color: "#305e82",
+                  fontFamily: "inherit",
+                  fontSize: "inherit",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+                className="hover:underline"
+              >
                 Register here
-              </a>
+              </button>
             </p>
           </div>
         </div>
