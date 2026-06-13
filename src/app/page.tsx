@@ -551,7 +551,8 @@ export default function HomePage() {
                     src={type.image}
                     alt={type.label}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 640px) 100vw, 588px"
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
 
