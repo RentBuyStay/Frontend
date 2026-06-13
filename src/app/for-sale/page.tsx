@@ -110,19 +110,19 @@ export default function ForSalePage() {
 
             {/* LEFT column: header + listings */}
             <div className="flex flex-col gap-6 min-w-0">
-              {/* Header inside left column */}
-              <div className="flex items-center justify-between">
+              {/* Header inside left column — Figma mobile: stacked, title 16px; desktop: one row, 24px */}
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+                  <h2 className="text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]" style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                     All Properties for Sale in Nigeria
                   </h2>
-                  <p style={{ fontSize: "14px", color: "#7f7e7e", marginTop: "4px" }}>
-                    Showing 1 - 10 of 27
+                  <p style={{ fontSize: "14px", lineHeight: "24px", color: "#807e7e", marginTop: "4px" }}>
+                    Showing 1 - 10 of 37
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span style={{ fontSize: "14px", color: "#7f7e7e" }}>Sort</span>
-                  <select className="px-4 py-2 border border-[#ededed] rounded-[8px] text-sm bg-white">
+                <div className="flex items-center gap-4 self-end md:self-auto">
+                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#121212" }}>Sort:</span>
+                  <select className="px-3 h-10 bg-[#f6f6f6] rounded-[12px] text-[12px] text-[#807e7e] outline-none cursor-pointer">
                     <option>Newest</option>
                     <option>Price: Low to High</option>
                     <option>Price: High to Low</option>
