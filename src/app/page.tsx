@@ -63,16 +63,16 @@ type LocationItem = (typeof locations)[number];
 
 function LocationCard({ loc }: { loc: LocationItem }) {
   return (
-    <Link href={loc.href} className="group relative h-[450px] rounded-[20px] overflow-hidden block bg-[#f4f4f4]">
+    <Link href={loc.href} className="group relative h-[300px] md:h-[450px] rounded-[20px] overflow-hidden block bg-[#f4f4f4]">
       {/* Image fills the card */}
       <Image src={loc.image} alt={loc.name} fill className="object-cover group-hover:scale-[1.03] transition-transform duration-500" />
       {/* Gradient overlay — black to transparent */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
       {/* Text + button bottom-left, with 32px padding */}
-      <div className="absolute bottom-0 left-0 p-8 flex flex-col gap-4">
+      <div className="absolute bottom-0 left-0 p-6 md:p-8 flex flex-col gap-3 md:gap-4">
         {/* Title + subtitle */}
         <div className="flex flex-col gap-2">
-          <p className="text-white" style={{ fontSize: "32px", lineHeight: "40px", fontWeight: 500, letterSpacing: "-0.02em" }}>
+          <p className="text-white" style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", fontWeight: 500, letterSpacing: "-0.02em" }}>
             {loc.name}
           </p>
           <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400 }}>
@@ -123,8 +123,8 @@ export default function HomePage() {
 
       {/* ── HERO — Figma: rounded card 1392x934, 24px margin all sides, bg #F3FEFE, border-radius 25px ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-6">
-        <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] h-[934px]">
+        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
+        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] h-[600px] md:h-[934px]">
 
           {/* Background image — bleeds top/bottom (Figma position y=-21, height 976) */}
           <div className="absolute inset-x-0 -top-[21px] h-[976px] z-0">
@@ -152,22 +152,21 @@ export default function HomePage() {
           <Navbar transparent />
 
           {/* Heading + subtitle — Figma: top 235, center horizontal, width 641 */}
-          <div className="absolute top-[235px] left-1/2 -translate-x-1/2 w-[641px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
+          <div className="absolute top-[100px] md:top-[235px] left-1/2 -translate-x-1/2 w-[641px] max-w-[calc(100%-32px)] flex flex-col gap-3 md:gap-4 z-10 text-center">
             <h1
               className="text-white font-semibold"
               style={{
-                fontSize: "64px",
-                lineHeight: "80px",
+                fontSize: "clamp(32px, 7vw, 64px)",
+                lineHeight: "1.2",
                 letterSpacing: "-0.02em",
               }}
             >
               Find Your Perfect Home in Nigeria
             </h1>
             <p
-              className="text-white"
+              className="text-white text-sm md:text-[18px]"
               style={{
-                fontSize: "18px",
-                lineHeight: "32px",
+                lineHeight: "1.7",
                 letterSpacing: "-0.02em",
                 fontWeight: 400,
               }}
@@ -179,7 +178,7 @@ export default function HomePage() {
           </div>
 
           {/* Stats row — Figma: top 526, center horizontal, gap 16px */}
-          <div className="absolute top-[526px] left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 text-white">
+          <div className="absolute top-[360px] md:top-[526px] left-1/2 -translate-x-1/2 z-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-white w-[calc(100%-32px)] md:w-auto">
             {stats.map((s, i) => (
               <div key={s.label} className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -196,8 +195,8 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Search bar — Figma: top 722, sides 24, full inner width */}
-          <div className="absolute top-[722px] left-6 right-6 z-10">
+          {/* Search bar — bottom on mobile, Figma y722 on desktop */}
+          <div className="absolute bottom-4 left-4 right-4 md:bottom-auto md:top-[722px] md:left-6 md:right-6 z-10">
             <SearchBar />
           </div>
         </div>
@@ -206,13 +205,13 @@ export default function HomePage() {
 
       {/* ── FEATURED PROPERTIES — Figma: bg white, 80px padding, header at y=80, cards at y=224 ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
           {/* Header — Figma: width 1280, row space-between */}
-          <div className="flex items-end justify-between mb-[64px]">
+          <div className="flex items-end justify-between mb-10 md:mb-[64px]">
             <div className="flex flex-col gap-1">
               <h2
                 className="text-[#121212] font-semibold"
-                style={{ fontSize: "32px", lineHeight: "40px", letterSpacing: "-0.02em" }}
+                style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
               >
                 Featured Properties
               </h2>
@@ -244,13 +243,13 @@ export default function HomePage() {
 
       {/* ── HOW RENTBUYSTAY WORKS — Figma: section 904h, bg white, header at y=80, content at y=224 (737x600 + 519x600 side by side) ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — Figma: width 628, centered, column gap 8 */}
-          <div className="max-w-[628px] mx-auto mb-[64px] flex flex-col items-center gap-2 text-center">
+          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "32px", lineHeight: "40px", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
             >
               How RentBuyStay Works
             </h2>
@@ -266,7 +265,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-[737fr_519fr] gap-6 items-stretch">
 
             {/* Left: image panel — 737x600, rounded-25 — Figma rendered with full room background */}
-            <div className="relative rounded-[25px] overflow-hidden bg-[#D8D8D8] min-h-[600px]">
+            <div className="relative rounded-[25px] overflow-hidden bg-[#D8D8D8] min-h-[280px] md:min-h-[600px]">
               <Image
                 src="/images/hiw-panel.png"
                 alt="Happy customer using RentBuyStay"
@@ -323,12 +322,12 @@ export default function HomePage() {
 
       {/* ── TOP VERIFIED AGENTS — Figma: section 1440x928, bg white, header 1280x136, cards 1280x592 (3 cols x 2 rows) ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — Figma: row space-between, heading 40px Geist SemiBold lh:64, subtitle 18px lh:32 */}
-          <div className="flex items-end justify-between mb-[64px]">
+          <div className="flex items-end justify-between mb-10 md:mb-[64px]">
             <div className="max-w-[628px] flex flex-col gap-1">
-              <h2 style={{ fontSize: "40px", lineHeight: "64px", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
+              <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 Top Verified Agents
               </h2>
               <p style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, color: "#2e2e2e" }}>
@@ -443,13 +442,13 @@ export default function HomePage() {
 
       {/* ── EVERY PROPERTY TYPE — Figma: section 1128h, bg white, header at y=80 (centered, w=628), cards at y=256, 120px sides ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[120px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[120px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — centered, w=628 */}
-          <div className="max-w-[628px] mx-auto mb-[64px] flex flex-col items-center gap-2 text-center">
+          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "32px", lineHeight: "40px", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
             >
               Every Property Type, Every Need
             </h2>
@@ -514,7 +513,7 @@ export default function HomePage() {
           >
             <h2
               className="font-semibold mb-4 max-w-[500px]"
-              style={{ fontSize: "48px", lineHeight: "60px", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.25", letterSpacing: "-0.02em" }}
             >
               Ready to<br />List Your Property?
             </h2>
@@ -547,13 +546,13 @@ export default function HomePage() {
 
       {/* ── BROWSE BY LOCATION — Figma: section 1702h, white bg, header at y=80 (centered, w=628), grid at y=224, 1280 wide ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header centered */}
-          <div className="max-w-[628px] mx-auto mb-[64px] flex flex-col items-center gap-2 text-center">
+          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "32px", lineHeight: "40px", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
             >
               Browse By Location
             </h2>
@@ -574,13 +573,13 @@ export default function HomePage() {
             <LocationCard loc={locations[0]} />
 
             {/* Row 2: Ibadan 2/3 + Abuja 1/3 */}
-            <div className="grid grid-cols-3 gap-6">
-              <div className="col-span-2"><LocationCard loc={locations[1]} /></div>
-              <div className="col-span-1"><LocationCard loc={locations[2]} /></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2"><LocationCard loc={locations[1]} /></div>
+              <div className="md:col-span-1"><LocationCard loc={locations[2]} /></div>
             </div>
 
             {/* Row 3: Ogun + PH equal 50/50 */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <LocationCard loc={locations[3]} />
               <LocationCard loc={locations[4]} />
             </div>
@@ -590,11 +589,11 @@ export default function HomePage() {
 
       {/* ── FAQ — Figma: 1440x1248 white bg, header 628x168 centered, list 846 wide centered, items 846x72 with gap 24, rounded-12, bg #f6f6f6 ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] pt-[80px] pb-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — centered, 628 wide */}
-          <div className="max-w-[628px] mx-auto mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2 style={{ fontSize: "40px", lineHeight: "64px", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
+          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
+            <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
               Frequently Asked Questions
             </h2>
             <p style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, color: "#2e2e2e" }}>
