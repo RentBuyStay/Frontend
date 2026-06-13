@@ -70,7 +70,7 @@ export default function ForSalePage() {
       {/* ── HERO ── */}
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-6 py-6">
-        <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[852px]">
+        <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[560px] md:min-h-[852px]">
           <div className="absolute inset-0 z-0">
             <Image src="/images/for-sale-hero.png" alt="Properties for Sale" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-black/55" />
@@ -79,8 +79,8 @@ export default function ForSalePage() {
           <Navbar transparent />
 
           {/* Heading */}
-          <div className="absolute top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
-            <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
+          <div className="absolute top-[90px] md:top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
+            <h1 className="text-white font-semibold" style={{ fontSize: "clamp(30px, 6.5vw, 64px)", lineHeight: "1.2", letterSpacing: "-0.02em" }}>
               Properties for Sale in Nigeria
             </h1>
             <p className="text-white" style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 400 }}>
@@ -92,7 +92,7 @@ export default function ForSalePage() {
           </div>
 
           {/* Search bar at bottom */}
-          <div className="absolute bottom-6 left-6 right-6 z-10">
+          <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 z-10">
             <SearchBar defaultTab="Buy" />
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function ForSalePage() {
 
       {/* ── LISTINGS + SIDEBAR ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] py-[60px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-10 md:py-[60px]">
 
           {/* 2-column layout: flexible listings + fixed 411 sidebar */}
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
@@ -134,9 +134,9 @@ export default function ForSalePage() {
                 <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 transition-shadow">
 
                   {/* TOP SECTION: image left + content right */}
-                  <div className="flex gap-5">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
                     {/* Image — Figma: 184x184 SQUARE on left with FOR SALE pill, counter, nav arrows */}
-                    <div className="relative w-[184px] h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
+                    <div className="relative w-full h-[200px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
                       <Image src={p.image} alt={p.title} fill className="object-cover" />
                       {/* FOR SALE badge — Figma: top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
                       <span
