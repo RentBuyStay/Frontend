@@ -78,22 +78,24 @@ export default function ForSalePage() {
 
           <Navbar transparent />
 
-          {/* Heading — Figma mobile: 32/48 heading + 14/24 paragraph, gap 8, at y~200 */}
-          <div className="absolute top-[160px] md:top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-32px)] md:max-w-[calc(100%-48px)] flex flex-col gap-2 md:gap-4 z-10 text-center">
-            <h1 className="text-white font-semibold text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]" style={{ letterSpacing: "-0.02em" }}>
-              Properties for<br className="md:hidden" /> Sale in Nigeria
-            </h1>
-            <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-              The properties have been listed by verified estate agents who can be contacted using
-              the contact information provided for each property listing. We have 21,141 available
-              flats, houses, land and commercial property for sale in Nigeria. Refine your property
-              search by price, number of beds and type of property, etc.
-            </p>
-          </div>
-
-          {/* Search bar at bottom */}
-          <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 z-10">
-            <SearchBar defaultTab="Buy" />
+          {/* Content — heading/paragraph centered vertically, search pinned to bottom */}
+          <div className="absolute inset-0 z-10 flex flex-col px-4 pt-[100px] pb-4 md:px-6 md:pt-[120px] md:pb-6">
+            <div className="flex-1 flex items-center justify-center">
+              <div className="w-[738px] max-w-full flex flex-col gap-2 md:gap-4 text-center">
+                <h1 className="text-white font-semibold text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]" style={{ letterSpacing: "-0.02em" }}>
+                  Properties for<br className="md:hidden" /> Sale in Nigeria
+                </h1>
+                <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
+                  The properties have been listed by verified estate agents who can be contacted using
+                  the contact information provided for each property listing. We have 21,141 available
+                  flats, houses, land and commercial property for sale in Nigeria. Refine your property
+                  search by price, number of beds and type of property, etc.
+                </p>
+              </div>
+            </div>
+            <div className="w-full">
+              <SearchBar defaultTab="Buy" />
+            </div>
           </div>
         </div>
         </div>

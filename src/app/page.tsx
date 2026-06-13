@@ -183,36 +183,38 @@ export default function HomePage() {
           {/* Navbar — inside the card, top: 24, sides: 24 */}
           <Navbar transparent />
 
-          {/* ===== DESKTOP hero content — fills the viewport; search pinned to bottom ===== */}
-          <div className="hidden md:flex md:flex-col absolute inset-0 z-10 items-center px-6 pt-[180px] pb-6">
-            {/* Heading + subtitle — Figma: center, width 641 */}
-            <div className="w-[641px] max-w-full flex flex-col gap-4 text-center">
-              <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
-                Find Your Perfect Home in Nigeria
-              </h1>
-              <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: 400 }}>
-                Rent, buy, or book short stays across Nigeria&apos;s top locations with verified agents
-                and listings. Discover thousands of verified properties to rent, buy, or book for
-                short stays — from Abuja to Lagos and beyond.
-              </p>
-            </div>
+          {/* ===== DESKTOP hero content — fills the viewport; content centered, search at bottom ===== */}
+          <div className="hidden md:flex md:flex-col absolute inset-0 z-10 items-center px-6 pt-[100px] pb-6">
+            <div className="flex-1 flex flex-col items-center justify-center gap-12">
+              {/* Heading + subtitle — Figma: center, width 641 */}
+              <div className="w-[641px] max-w-full flex flex-col gap-4 text-center">
+                <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
+                  Find Your Perfect Home in Nigeria
+                </h1>
+                <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: 400 }}>
+                  Rent, buy, or book short stays across Nigeria&apos;s top locations with verified agents
+                  and listings. Discover thousands of verified properties to rent, buy, or book for
+                  short stays — from Abuja to Lagos and beyond.
+                </p>
+              </div>
 
-            {/* Stats row */}
-            <div className="mt-12 flex items-center gap-4 text-white">
-              {stats.map((s, i) => (
-                <div key={s.label} className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Image src="/icons/hero-check.svg" alt="" width={24} height={24} />
-                    <span style={{ fontSize: "16px", fontWeight: 600, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.value}</span>
-                    <span style={{ fontSize: "14px", fontWeight: 400, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.label}</span>
+              {/* Stats row */}
+              <div className="flex items-center gap-4 text-white">
+                {stats.map((s, i) => (
+                  <div key={s.label} className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Image src="/icons/hero-check.svg" alt="" width={24} height={24} />
+                      <span style={{ fontSize: "16px", fontWeight: 600, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.value}</span>
+                      <span style={{ fontSize: "14px", fontWeight: 400, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.label}</span>
+                    </div>
+                    {i < stats.length - 1 && <span className="text-white/60 text-base">•</span>}
                   </div>
-                  {i < stats.length - 1 && <span className="text-white/60 text-base">•</span>}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
             {/* Search bar — pinned to the bottom */}
-            <div className="mt-auto w-full">
+            <div className="w-full">
               <SearchBar />
             </div>
           </div>
