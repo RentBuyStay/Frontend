@@ -106,15 +106,42 @@ function LocationCard({ loc }: { loc: LocationItem }) {
 }
 
 const faqs = [
-  "What is RentBuyStay?",
-  "How do I search for a property?",
-  "Do I need to pay a subscription fee to find a house?",
-  "How do I track my inquiries?",
-  "How do I contact an agent or owner?",
-  "How do I upload my property?",
-  "Why is my account in “Restricted Mode”?",
-  "What is the difference between an Agent and an Agency account?",
-  "How is the platform moderated?",
+  {
+    q: "What is RentBuyStay?",
+    a: "It is a digital real estate marketplace in Nigeria designed to connect property seekers, owners, agents, and agencies for renting, buying, or booking short stays.",
+  },
+  {
+    q: "How do I search for a property?",
+    a: "Use the search bar on the homepage to filter by location, property type, price range and more. You can browse listings for sale, rent or shortlet without creating an account.",
+  },
+  {
+    q: "Do I need to pay a subscription fee to find a house?",
+    a: "No. Searching and browsing listings is completely free. Subscriptions only apply to agents and owners who want to list and promote their properties.",
+  },
+  {
+    q: "How do I track my inquiries?",
+    a: "Once you log in, your dashboard keeps a record of every property you’ve contacted or saved, so you can follow up on all your inquiries in one place.",
+  },
+  {
+    q: "How do I contact an agent or owner?",
+    a: "Open any listing and use the Call or Message button to reach the verified agent or owner directly.",
+  },
+  {
+    q: "How do I upload my property?",
+    a: "Click “Post Property”, create or log into your account and complete verification, then add your property details, photos and pricing. Listings are reviewed before going live.",
+  },
+  {
+    q: "Why is my account in “Restricted Mode”?",
+    a: "New accounts stay in Restricted Mode until identity (KYC) verification is complete. Once verified, full access — including listing and messaging — is unlocked.",
+  },
+  {
+    q: "What is the difference between an Agent and an Agency account?",
+    a: "An Agent account is for an individual real estate professional, while an Agency account represents a registered company that can manage multiple agents and listings under one profile.",
+  },
+  {
+    q: "How is the platform moderated?",
+    a: "Our team reviews listings and verifies agents and agencies. Suspicious activity and reported listings are investigated, and accounts that violate our policies can be restricted or suspended.",
+  },
 ];
 
 const stats = [
@@ -655,13 +682,13 @@ export default function HomePage() {
 
           {/* FAQ list — 846 wide centered, gap 24 between items */}
           <div className="max-w-[846px] mx-auto flex flex-col gap-4 md:gap-6">
-            {faqs.map((q, i) => (
+            {faqs.map((f, i) => (
               <details key={i} className="group bg-[#f6f6f6] rounded-[12px] overflow-hidden">
                 <summary
                   className="flex items-center justify-between cursor-pointer list-none px-4 md:px-6 py-4 md:py-0 min-h-[56px] md:min-h-0 md:h-[72px]"
                 >
                   <span className="text-[14px] md:text-[16px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
-                    {q}
+                    {f.q}
                   </span>
                   {/* Plus when closed, Minus when open — Figma: orange #FFAE00 */}
                   <span className="shrink-0 ml-4 w-6 h-6 flex items-center justify-center text-[#ffae00]">
@@ -679,7 +706,7 @@ export default function HomePage() {
                 </summary>
                 <div className="px-4 md:px-6 pb-4 md:pb-6 pt-0">
                   <p className="text-[12px] leading-[20px] text-[#807e7e] md:text-[14px] md:leading-[24px] md:text-[#2e2e2e]" style={{ letterSpacing: "-0.02em" }}>
-                    Our support team is happy to help. Contact us at help@rentbuystay.com or use the live chat below for assistance.
+                    {f.a}
                   </p>
                 </div>
               </details>
