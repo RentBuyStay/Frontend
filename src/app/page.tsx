@@ -279,7 +279,7 @@ export default function HomePage() {
               className="flex items-center gap-2 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
               style={{ letterSpacing: "-0.02em" }}
             >
-              View All
+              <span className="hidden sm:inline">View All</span>
               <ArrowRight size={18} strokeWidth={1.5} />
             </Link>
           </div>
@@ -391,7 +391,7 @@ export default function HomePage() {
               className="flex items-center gap-2 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
               style={{ fontSize: "14px", fontWeight: 500 }}
             >
-              View All
+              <span className="hidden sm:inline">View All</span>
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
             </Link>
           </div>

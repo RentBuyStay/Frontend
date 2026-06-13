@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, BadgeCheck } from "lucide-react";
 
 export interface Property {
   id: string;
@@ -23,10 +22,10 @@ export default function PropertyCard({ property }: { property: Property }) {
   return (
     <Link
       href={`/properties/${property.id}`}
-      className="group block bg-white border border-[#ededed] rounded-[16px] overflow-hidden transition-shadow"
+      className="group block bg-white border border-[#f6f6f6] rounded-[20px] overflow-hidden transition-shadow"
     >
-      {/* Image with badge */}
-      <div className="relative h-[260px] bg-[#f6f6f6]">
+      {/* Image with badge — Figma: 224h, badge bottom-right r=8, 12px/600 white uppercase, pad 4/8 */}
+      <div className="relative h-[224px] bg-[#ededed]">
         {property.image ? (
           <Image src={property.image} alt={property.title} fill className="object-cover" />
         ) : (
@@ -36,17 +35,16 @@ export default function PropertyCard({ property }: { property: Property }) {
             </svg>
           </div>
         )}
-        {/* Badge — Figma: top-left 8px inset, pill r=50, 10px/600 white uppercase, padding 4/8, bg #FFAE00 */}
         <span
-          className="absolute uppercase text-white rounded-full"
+          className="absolute uppercase text-white inline-flex items-center"
           style={{
-            top: "8px",
-            left: "8px",
-            fontSize: "10px",
+            right: "16px",
+            bottom: "16px",
+            fontSize: "12px",
             lineHeight: "20px",
             fontWeight: 600,
             padding: "4px 8px",
-            letterSpacing: 0,
+            borderRadius: "8px",
             background: BADGE_BG,
           }}
         >
@@ -55,48 +53,52 @@ export default function PropertyCard({ property }: { property: Property }) {
       </div>
 
       {/* Body */}
-      <div className="p-4 flex flex-col gap-2">
-        {/* Price */}
-        <p className="text-[20px] font-bold text-[#121212] leading-tight">
-          {property.price}
-        </p>
-
-        {/* Title */}
-        <p className="text-[15px] font-medium text-[#121212] line-clamp-1 mt-1">
-          {property.title}
-        </p>
-
-        {/* Location */}
-        <div className="flex items-center gap-1.5 text-sm text-[#7f7e7e]">
-          <MapPin size={14} className="text-[#305e82]" />
-          <span>{property.location}</span>
+      <div className="px-4 pt-4 flex flex-col gap-4">
+        {/* Price + title + location */}
+        <div className="flex flex-col gap-2">
+          {/* Price — Figma: 16px Bold #305E82 */}
+          <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 700, color: "#305E82" }}>
+            {property.price}
+          </p>
+          {/* Title — Figma: 14px Medium #121212 */}
+          <p className="line-clamp-1" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>
+            {property.title}
+          </p>
+          {/* Location — Figma: location icon 20 + 12px #305E82 */}
+          <div className="flex items-center gap-2">
+            <Image src="/icons/location.svg" alt="" width={20} height={20} />
+            <span style={{ fontSize: "12px", lineHeight: "20px", color: "#305E82" }}>{property.location}</span>
+          </div>
         </div>
 
-        {/* Stats row — Figma icons: maximize (36:1764), ion:bed-outline (46:1803), solar:bath-linear (46:1811) at 20px */}
-        <div className="flex items-center gap-3 mt-2 pt-3 border-t border-[#ededed] text-sm text-[#7f7e7e]">
-          <span className="flex items-center gap-1.5">
+        {/* Specs row — Figma: 12px #807E7E, icons 20px, divider top */}
+        <div className="flex items-center gap-4 pt-4 border-t border-[#f6f6f6]" style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
+          <span className="flex items-center gap-2">
             <Image src="/icons/prop-maximize.svg" alt="" width={20} height={20} />
             {property.sqft}
           </span>
-          <span className="text-[#ededed]">|</span>
-          <span className="flex items-center gap-1.5">
+          <span className="w-px h-3.5 bg-[#f6f6f6]" />
+          <span className="flex items-center gap-2">
             <Image src="/icons/prop-bed.svg" alt="" width={20} height={20} />
             {property.beds} Beds
           </span>
-          <span className="text-[#ededed]">|</span>
-          <span className="flex items-center gap-1.5">
+          <span className="w-px h-3.5 bg-[#f6f6f6]" />
+          <span className="flex items-center gap-2">
             <Image src="/icons/prop-bath.svg" alt="" width={20} height={20} />
             {property.baths} Baths
           </span>
         </div>
 
-        {/* Agent row */}
-        <div className="flex items-center gap-2 mt-2 pt-3 border-t border-[#ededed]">
-          <div className="w-7 h-7 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center text-[#305e82] text-xs font-semibold">
+        {/* Agent row — Figma: avatar 40, name 14 SemiBold #121212, verify 20, divider top */}
+        <div className="flex items-center gap-3 pb-4 pt-4 border-t border-[#f6f6f6]">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+            style={{ background: "rgba(48,94,130,0.05)", color: "#305E82", fontSize: "14px", fontWeight: 600 }}
+          >
             {property.agentInitials}
           </div>
-          <span className="text-sm font-medium text-[#121212]">{property.agentName}</span>
-          <BadgeCheck size={16} className="text-[#14ae5c] fill-[#14ae5c] [&>path:nth-child(2)]:stroke-white" />
+          <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{property.agentName}</span>
+          <Image src="/icons/verify.svg" alt="" width={20} height={20} />
         </div>
       </div>
     </Link>
