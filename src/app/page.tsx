@@ -5,7 +5,7 @@ import PropertyCard from "@/components/PropertyCard";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, MessageCircle, Check } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Check, Search, ChevronDown, SlidersHorizontal } from "lucide-react";
 
 // How RentBuyStay Works — 4 steps from Figma, with icon name + brand color (icon bg AND title color)
 const steps = [
@@ -58,6 +58,18 @@ const locations = [
   { name: "Ogun", count: "472 Properties Listed", image: "/images/city-ogun.png", href: "/search?location=ogun" },
   { name: "Port-Harcourt", count: "718 Properties Listed", image: "/images/city-ph.png", href: "/search?location=port-harcourt" },
 ];
+
+// Mobile hero stat — Figma: check icon + "{value} {label}" at 12px (value SemiBold)
+function HeroStat({ value, label }: { value: string; label: string }) {
+  return (
+    <span className="flex items-center gap-2 whitespace-nowrap">
+      <Check size={20} className="text-[#ffae00] shrink-0" strokeWidth={3} />
+      <span style={{ fontSize: "12px", lineHeight: "150%", letterSpacing: "-0.01em" }}>
+        <span style={{ fontWeight: 600 }}>{value}</span> {label}
+      </span>
+    </span>
+  );
+}
 
 type LocationItem = (typeof locations)[number];
 
@@ -151,53 +163,93 @@ export default function HomePage() {
           {/* Navbar — inside the card, top: 24, sides: 24 */}
           <Navbar transparent />
 
-          {/* Heading + subtitle — Figma: top 235, center horizontal, width 641 */}
-          <div className="absolute top-[100px] md:top-[235px] left-1/2 -translate-x-1/2 w-[641px] max-w-[calc(100%-32px)] flex flex-col gap-3 md:gap-4 z-10 text-center">
-            <h1
-              className="text-white font-semibold"
-              style={{
-                fontSize: "clamp(32px, 7vw, 64px)",
-                lineHeight: "1.2",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Find Your Perfect Home in Nigeria
-            </h1>
-            <p
-              className="text-white text-sm md:text-[18px]"
-              style={{
-                lineHeight: "1.7",
-                letterSpacing: "-0.02em",
-                fontWeight: 400,
-              }}
-            >
-              Rent, buy, or book short stays across Nigeria&apos;s top locations with verified agents
-              and listings. Discover thousands of verified properties to rent, buy, or book for
-              short stays — from Abuja to Lagos and beyond.
-            </p>
-          </div>
+          {/* ===== DESKTOP hero content (Figma desktop frame) ===== */}
+          <div className="hidden md:block">
+            {/* Heading + subtitle — Figma: top 235, center, width 641 */}
+            <div className="absolute top-[235px] left-1/2 -translate-x-1/2 w-[641px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
+              <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
+                Find Your Perfect Home in Nigeria
+              </h1>
+              <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", letterSpacing: "-0.02em", fontWeight: 400 }}>
+                Rent, buy, or book short stays across Nigeria&apos;s top locations with verified agents
+                and listings. Discover thousands of verified properties to rent, buy, or book for
+                short stays — from Abuja to Lagos and beyond.
+              </p>
+            </div>
 
-          {/* Stats row — Figma: top 526, center horizontal, gap 16px */}
-          <div className="absolute top-[360px] md:top-[526px] left-1/2 -translate-x-1/2 z-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-white w-[calc(100%-32px)] md:w-auto">
-            {stats.map((s, i) => (
-              <div key={s.label} className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Check size={20} className="text-[#ffae00]" strokeWidth={3} />
-                  <span style={{ fontSize: "16px", fontWeight: 600, lineHeight: "150%", letterSpacing: "-0.01em" }}>
-                    {s.value}
-                  </span>
-                  <span style={{ fontSize: "14px", fontWeight: 400, lineHeight: "150%", letterSpacing: "-0.01em" }}>
-                    {s.label}
-                  </span>
+            {/* Stats row — Figma: top 526 */}
+            <div className="absolute top-[526px] left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 text-white">
+              {stats.map((s, i) => (
+                <div key={s.label} className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Check size={20} className="text-[#ffae00]" strokeWidth={3} />
+                    <span style={{ fontSize: "16px", fontWeight: 600, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.value}</span>
+                    <span style={{ fontSize: "14px", fontWeight: 400, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.label}</span>
+                  </div>
+                  {i < stats.length - 1 && <span className="text-white/60 text-base">•</span>}
                 </div>
-                {i < stats.length - 1 && <span className="text-white/60 text-base">•</span>}
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Search bar — Figma y722 */}
+            <div className="absolute top-[722px] left-6 right-6 z-10">
+              <SearchBar />
+            </div>
           </div>
 
-          {/* Search bar — bottom on mobile, Figma y722 on desktop */}
-          <div className="absolute bottom-4 left-4 right-4 md:bottom-auto md:top-[722px] md:left-6 md:right-6 z-10">
-            <SearchBar />
+          {/* ===== MOBILE hero content (Figma 312:9806) ===== */}
+          <div className="md:hidden absolute inset-0 z-10 flex flex-col px-4 pb-4 pt-[100px]">
+            <div className="flex-1 flex flex-col items-center justify-center gap-8 text-center">
+              {/* Title — 32/48 SemiBold, 2-line break */}
+              <div className="flex flex-col items-center gap-2">
+                <h1 className="text-white" style={{ fontSize: "32px", lineHeight: "48px", fontWeight: 600, letterSpacing: "-0.02em" }}>
+                  Find Your Perfect<br />Home in Nigeria
+                </h1>
+                <p className="text-white" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, letterSpacing: "-0.02em" }}>
+                  Rent, buy, or book short stays across Nigeria&apos;s top locations with verified agents
+                  and listings. Discover thousands of verified properties to rent, buy, or book for
+                  short stays — from Abuja to Lagos and beyond.
+                </p>
+              </div>
+              {/* Stats — 12px, icon 24, wraps to 2 rows */}
+              <div className="flex flex-col items-center gap-2 text-white">
+                <div className="flex items-center gap-2">
+                  <HeroStat value="10K+" label="Active Listings" />
+                  <span className="text-white/60">•</span>
+                  <HeroStat value="2K+" label="Verified Agents" />
+                </div>
+                <HeroStat value="36" label="States Covered" />
+              </div>
+            </div>
+
+            {/* Search — 2-row white card (Rent dropdown + input / filter + Search) */}
+            <div className="bg-white rounded-[15px] p-2 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 px-4 shrink-0">
+                  <span style={{ fontSize: "12px", color: "#121212" }}>Rent</span>
+                  <ChevronDown size={16} className="text-[#121212]" />
+                </div>
+                <div className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
+                  <Search size={16} className="text-[#807E7E] shrink-0" />
+                  <input
+                    placeholder="Enter location, area or keyword..."
+                    className="flex-1 min-w-0 bg-transparent outline-none placeholder:text-[#807e7ebf]"
+                    style={{ fontSize: "10px", color: "#121212" }}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button aria-label="Filters" className="flex items-center justify-center bg-[#F6F6F6] rounded-[12px] w-12 h-12 shrink-0">
+                  <SlidersHorizontal size={16} className="text-[#121212]" />
+                </button>
+                <button
+                  className="flex-1 h-12 rounded-[12px] text-white text-[14px] font-medium"
+                  style={{ background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)", border: "1px solid rgba(120,158,187,0.5)" }}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         </div>
