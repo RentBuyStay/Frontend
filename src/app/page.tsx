@@ -5,7 +5,7 @@ import PropertyCard from "@/components/PropertyCard";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 // How RentBuyStay Works — 4 steps from Figma, with icon name + brand color (icon bg AND title color)
 const steps = [
@@ -75,36 +75,30 @@ type LocationItem = (typeof locations)[number];
 
 function LocationCard({ loc }: { loc: LocationItem }) {
   return (
-    <Link href={loc.href} className="group relative h-[300px] md:h-[450px] rounded-[20px] overflow-hidden block bg-[#f4f4f4]">
+    <Link href={loc.href} className="group relative h-[300px] md:h-[450px] rounded-[20px] overflow-hidden block bg-[#f4f4f4] border border-[#f8f8f8]">
       {/* Image fills the card */}
       <Image src={loc.image} alt={loc.name} fill className="object-cover group-hover:scale-[1.03] transition-transform duration-500" />
       {/* Gradient overlay — black to transparent */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-      {/* Text + button bottom-left, with 32px padding */}
-      <div className="absolute bottom-0 left-0 p-6 md:p-8 flex flex-col gap-3 md:gap-4">
-        {/* Title + subtitle */}
+      {/* Text + button bottom-left — Figma mobile: 16px pad, gap 16, name 20 Medium,
+           count 12 @0.8, View Properties 14 Medium; desktop scales up */}
+      <div className="absolute bottom-0 left-0 p-4 md:p-8 flex flex-col gap-4">
+        {/* Title + count */}
         <div className="flex flex-col gap-2">
           <p className="text-white" style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", fontWeight: 500, letterSpacing: "-0.02em" }}>
             {loc.name}
           </p>
-          <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400 }}>
+          <p className="text-white/80 md:text-white text-[12px] leading-normal md:text-[18px] md:leading-[32px]" style={{ fontWeight: 400 }}>
             {loc.count}
           </p>
         </div>
-        {/* View Properties — Figma: NO background/border, padding 10px top/bottom 0 sides, gap 16px */}
+        {/* View Properties — Figma: no bg/border, gap 8, arrow 16 (white) */}
         <div
-          className="inline-flex items-center text-white"
-          style={{
-            paddingTop: "10px",
-            paddingBottom: "10px",
-            gap: "16px",
-            fontSize: "16px",
-            fontWeight: 500,
-            fontFamily: "Geist, sans-serif",
-          }}
+          className="inline-flex items-center text-white text-[14px] md:text-[16px] gap-2 md:gap-4"
+          style={{ paddingTop: "8px", paddingBottom: "8px", fontWeight: 500 }}
         >
           View Properties
-          <ArrowRight size={16} strokeWidth={2} />
+          <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} />
         </div>
       </div>
     </Link>
@@ -563,37 +557,36 @@ export default function HomePage() {
 
       {/* ── READY TO LIST CTA — Figma: section 512h white, inner card 1392x464 with gradient bg, rounded-20, 24px page padding ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-6">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6">
           <div
-            className="rounded-[20px] h-[464px] flex flex-col items-center justify-center text-white text-center px-6"
+            className="rounded-[20px] h-[296px] md:h-[464px] flex flex-col items-center justify-center text-white text-center px-4 md:px-6"
             style={{
               background: "linear-gradient(174deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 96%), #305E82",
             }}
           >
             <h2
-              className="font-semibold mb-4 max-w-[500px]"
+              className="font-semibold mb-2 md:mb-4 max-w-[500px]"
               style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.25", letterSpacing: "-0.02em" }}
             >
               Ready to<br />List Your Property?
             </h2>
             <p
-              className="mb-8 max-w-[600px] text-white/85"
-              style={{ fontSize: "16px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              className="mb-6 md:mb-8 max-w-[600px] text-[12px] md:text-[16px] leading-[24px] tracking-[-0.02em]"
             >
               Join thousands of owners and agents on Nigeria&apos;s fastest-growing property
               platform. Get verified, list your property, and reach millions of seekers.
             </p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 md:gap-6">
               <Link
                 href="/post-property"
-                className="bg-[#ff9c00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#e08800] transition-colors"
+                className="bg-[#FFAE00] text-white font-medium h-12 px-6 rounded-[12px] flex items-center justify-center hover:opacity-90 transition-opacity whitespace-nowrap"
                 style={{ fontSize: "14px" }}
               >
                 Get Started Free
               </Link>
               <Link
                 href="/login"
-                className="text-white hover:underline"
+                className="text-white hover:underline whitespace-nowrap"
                 style={{ fontSize: "14px" }}
               >
                 Log in
