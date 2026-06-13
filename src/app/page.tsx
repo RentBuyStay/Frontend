@@ -45,7 +45,7 @@ const agents = [
 ];
 
 const propertyTypes = [
-  { label: "Residential Homes", desc: "Single family homes, condos, townhouses and luxury estates.", image: "/images/pt-residential.jpg", href: "/for-sale" },
+  { label: "Residential Homes", desc: "Single-family houses, condos, townhouses, and luxury estates.", image: "/images/pt-residential.jpg", href: "/for-sale" },
   { label: "Commercial Spaces", desc: "Offices, retail spaces, warehouses, and mixed-use developments.", image: "/images/pt-commercial.jpg", href: "/for-sale?type=commercial" },
   { label: "Rental Properties", desc: "Short-term stays, long-term rentals, and corporate housing solutions.", image: "/images/pt-rental.jpg", href: "/for-rent" },
   { label: "Land & Lots", desc: "Residential lots, commercial land, and investment opportunities.", image: "/images/pt-land.jpg", href: "/for-sale?type=land" },
@@ -515,12 +515,17 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 2x2 grid — image top, text below on white */}
+          {/* Cards — Figma: bordered card (#f8f8f8), image flush top, title + desc,
+               full-width divider, then Get Started link. 1 col mobile / 2 col desktop */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {propertyTypes.map((type) => (
-              <div key={type.label} className="group flex flex-col gap-4">
-                {/* Image */}
-                <div className="relative h-[200px] rounded-[16px] overflow-hidden bg-[#d7d7d7]">
+              <Link
+                key={type.label}
+                href={type.href}
+                className="group flex flex-col bg-white border border-[#f8f8f8] rounded-[20px] overflow-hidden transition-shadow"
+              >
+                {/* Image — flush to card top, bg #ededed */}
+                <div className="relative w-full h-[150px] md:h-[200px] bg-[#ededed] overflow-hidden">
                   <Image
                     src={type.image}
                     alt={type.label}
@@ -529,29 +534,28 @@ export default function HomePage() {
                   />
                 </div>
 
-                {/* Text below image */}
-                <div className="flex flex-col gap-1">
-                  <p
-                    className="text-[#121212] font-semibold"
-                    style={{ fontSize: "18px", letterSpacing: "-0.01em" }}
-                  >
+                {/* Text — Figma: title 16px SemiBold #121212, desc 14px Regular #807E7E */}
+                <div className="px-4 pt-4 flex flex-col gap-2">
+                  <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                     {type.label}
                   </p>
-                  <p
-                    className="text-[#7f7e7e]"
-                    style={{ fontSize: "13px", lineHeight: "150%" }}
-                  >
+                  <p style={{ fontSize: "14px", lineHeight: "24px", color: "#807E7E", letterSpacing: "-0.02em" }}>
                     {type.desc}
                   </p>
-                  <Link
-                    href={type.href}
-                    className="text-[#305e82] hover:underline flex items-center gap-1 mt-2 font-medium group-hover:gap-2 transition-all"
-                    style={{ fontSize: "13px" }}
-                  >
-                    Get Started Free <ArrowRight size={13} strokeWidth={1.5} />
-                  </Link>
                 </div>
-              </div>
+
+                {/* Full-width divider — Figma: #F8F8F8 */}
+                <div className="h-px bg-[#f8f8f8] mt-4" />
+
+                {/* Get Started Free + arrow — Figma: row gap 8, #305E82 */}
+                <span
+                  className="flex items-center gap-2 px-4 py-3 font-medium group-hover:gap-3 transition-all"
+                  style={{ fontSize: "14px", color: "#305E82" }}
+                >
+                  Get Started Free
+                  <Image src="/icons/arrow-right.svg" alt="" width={16} height={16} />
+                </span>
+              </Link>
             ))}
           </div>
         </div>
