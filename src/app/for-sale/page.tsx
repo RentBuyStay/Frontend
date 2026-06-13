@@ -207,7 +207,7 @@ export default function ForSalePage() {
                   </div>
 
                   {/* BOTTOM ROW (full card width): Agent left | Stats right */}
-                  <div className="flex items-center justify-between border-t border-[#ededed] pt-4">
+                  <div className="flex items-center justify-between border-t border-[#ededed] pt-4 -mx-5 px-5">
                     {/* Agent: avatar + name + verify */}
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
@@ -275,7 +275,7 @@ export default function ForSalePage() {
                 </div>
 
                 {/* Divider */}
-                <div className="border-t border-[#ededed] my-4" />
+                <div className="border-t border-[#ededed] my-4 -mx-6" />
 
                 {/* Second nested table: Type | 1 Bed | 2 Bed | ... */}
                 <div className="flex flex-col">
@@ -396,7 +396,7 @@ export default function ForSalePage() {
                     </div>
 
                     {/* Divider */}
-                    <div className="h-px bg-[#f6f6f6]" />
+                    <div className="h-px bg-[#f6f6f6] -mx-5" />
 
                     {/* Rating + listings */}
                     <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
@@ -412,7 +412,7 @@ export default function ForSalePage() {
                     </div>
 
                     {/* Divider */}
-                    <div className="h-px bg-[#f6f6f6]" />
+                    <div className="h-px bg-[#f6f6f6] -mx-5" />
 
                     {/* Buttons */}
                     <div className="flex gap-3">

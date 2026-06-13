@@ -52,10 +52,10 @@ export default function PropertyCard({ property }: { property: Property }) {
         </span>
       </div>
 
-      {/* Body */}
-      <div className="px-4 pt-4 flex flex-col gap-4">
+      {/* Body — dividers run full-width (touch the card border), content stays inset */}
+      <div className="px-4 flex flex-col">
         {/* Price + title + location */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 py-4">
           {/* Price — Figma: 16px Bold #305E82 */}
           <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 700, color: "#305E82" }}>
             {property.price}
@@ -71,8 +71,10 @@ export default function PropertyCard({ property }: { property: Property }) {
           </div>
         </div>
 
-        {/* Specs row — Figma: 12px #807E7E, icons 20px, divider top */}
-        <div className="flex items-center gap-4 pt-4 border-t border-[#f6f6f6]" style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
+        <div className="h-px bg-[#f6f6f6] -mx-4" />
+
+        {/* Specs row — Figma: 12px #807E7E, icons 20px */}
+        <div className="flex items-center gap-4 py-4" style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
           <span className="flex items-center gap-2">
             <Image src="/icons/prop-maximize.svg" alt="" width={20} height={20} />
             {property.sqft}
@@ -89,8 +91,10 @@ export default function PropertyCard({ property }: { property: Property }) {
           </span>
         </div>
 
-        {/* Agent row — Figma: avatar 40, name 14 SemiBold #121212, verify 20, divider top */}
-        <div className="flex items-center gap-3 pb-4 pt-4 border-t border-[#f6f6f6]">
+        <div className="h-px bg-[#f6f6f6] -mx-4" />
+
+        {/* Agent row — Figma: avatar 40, name 14 SemiBold #121212, verify 20 */}
+        <div className="flex items-center gap-3 py-4">
           <div
             className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
             style={{ background: "rgba(48,94,130,0.05)", color: "#305E82", fontSize: "14px", fontWeight: 600 }}

@@ -438,7 +438,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-[#f6f6f6]" />
+                <div className="h-px bg-[#f6f6f6] -mx-6" />
 
                 {/* 2. Rating + Listings (LEFT) | View all Properties (RIGHT) — same row */}
                 <div className="flex items-center justify-between">
@@ -463,7 +463,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-[#f6f6f6]" />
+                <div className="h-px bg-[#f6f6f6] -mx-6" />
 
                 {/* 3. Call + Message buttons */}
                 <div className="flex gap-4">

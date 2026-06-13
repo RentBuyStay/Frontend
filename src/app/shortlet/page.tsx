@@ -188,7 +188,7 @@ export default function ShortletPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between border-t border-[#ededed] pt-4">
+                    <div className="flex items-center justify-between border-t border-[#ededed] pt-4 -mx-5 px-5">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
                           {p.agentInitials}
@@ -244,7 +244,7 @@ export default function ShortletPage() {
                   ))}
                 </div>
 
-                <div className="border-t border-[#ededed] my-4" />
+                <div className="border-t border-[#ededed] my-4 -mx-6" />
 
                 <div className="flex flex-col">
                   <div className="grid grid-cols-6 gap-2 py-1.5 border-b border-[#ededed]" style={{ fontSize: "12px", color: "#305e82", fontWeight: 600 }}>
@@ -342,7 +342,7 @@ export default function ShortletPage() {
                       </div>
                     </div>
 
-                    <div className="h-px bg-[#f6f6f6]" />
+                    <div className="h-px bg-[#f6f6f6] -mx-5" />
 
                     <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
                       <div className="flex items-center gap-1.5">
@@ -356,7 +356,7 @@ export default function ShortletPage() {
                       </div>
                     </div>
 
-                    <div className="h-px bg-[#f6f6f6]" />
+                    <div className="h-px bg-[#f6f6f6] -mx-5" />
 
                     <div className="flex gap-3">
                       <button className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
