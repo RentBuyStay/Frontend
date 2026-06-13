@@ -253,29 +253,29 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
           {/* Header — Figma: width 1280, row space-between */}
-          <div className="flex items-start justify-between gap-3 mb-10 md:mb-[64px]">
-            <div className="flex flex-col gap-1 min-w-0">
+          <div className="mb-10 md:mb-[64px]">
+            <div className="flex items-start justify-between gap-3">
               <h2
-                className="text-[#121212] font-semibold"
+                className="text-[#121212] font-semibold min-w-0"
                 style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
               >
                 Featured Properties
               </h2>
-              <p
-                className="text-[#7f7e7e]"
-                style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              <Link
+                href="/search"
+                className="flex items-center gap-2 shrink-0 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
+                style={{ letterSpacing: "-0.02em" }}
               >
-                Premium and handpicked listings from verified agents.
-              </p>
+                <span>View All</span>
+                <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
+              </Link>
             </div>
-            <Link
-              href="/search"
-              className="flex items-center gap-2 shrink-0 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
-              style={{ letterSpacing: "-0.02em" }}
+            <p
+              className="mt-2 max-w-full md:max-w-[628px] text-[#7f7e7e]"
+              style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
             >
-              <span>View All</span>
-              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
-            </Link>
+              Premium and handpicked listings from verified agents.
+            </p>
           </div>
 
           {/* Cards — Figma: row gap 24px, 3 columns */}
@@ -374,23 +374,23 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — Figma: row space-between, heading 40px Geist SemiBold lh:64, subtitle 18px lh:32 */}
-          <div className="flex items-start justify-between gap-3 mb-10 md:mb-[64px]">
-            <div className="max-w-[628px] min-w-0 flex flex-col gap-1">
-              <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
+          <div className="mb-10 md:mb-[64px]">
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="min-w-0" style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 Top Verified Agents
               </h2>
-              <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-                Connect with our network of trusted and verified real estate professionals across Nigeria.
-              </p>
+              <Link
+                href="/agents"
+                className="flex items-center gap-2 shrink-0 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
+                style={{ fontSize: "14px", fontWeight: 500 }}
+              >
+                <span>View All</span>
+                <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
+              </Link>
             </div>
-            <Link
-              href="/agents"
-              className="flex items-center gap-2 shrink-0 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
-              style={{ fontSize: "14px", fontWeight: 500 }}
-            >
-              <span>View All</span>
-              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
-            </Link>
+            <p className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
+              Connect with our network of trusted and verified real estate professionals across Nigeria.
+            </p>
           </div>
 
           {/* Cards — 3 per row, gap 24 */}

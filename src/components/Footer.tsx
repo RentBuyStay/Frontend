@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const company = [
-  { label: "About Us", href: "/about" },
-  { label: "Blog", href: "/blogs" },
-  { label: "Contact", href: "/contact" },
+const explore = [
+  { label: "Properties for Rent", href: "/for-rent" },
+  { label: "Properties for Sale", href: "/for-sale" },
+  { label: "Shortlets", href: "/shortlet" },
+  { label: "Agents", href: "/agents" },
+  { label: "Property Requests", href: "/property-requests" },
 ];
 
 const legal = [
@@ -67,12 +69,12 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
             <div className="flex flex-col gap-4 w-full sm:w-[180px] shrink-0">
               <h4 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
-                COMPANY
+                EXPLORE
               </h4>
               <ul className="flex flex-col">
-                {company.map((l) => (
+                {explore.map((l) => (
                   <li key={l.href} style={{ height: "35px" }}>
-                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "#ffffff" }}>
+                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "rgba(255,255,255,0.8)" }}>
                       {l.label}
                     </Link>
                   </li>
@@ -87,7 +89,7 @@ export default function Footer() {
               <ul className="flex flex-col">
                 {legal.map((l) => (
                   <li key={l.label} style={{ height: "35px" }}>
-                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "#ffffff" }}>
+                    <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "rgba(255,255,255,0.8)" }}>
                       {l.label}
                     </Link>
                   </li>
@@ -151,8 +153,9 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Copyright — absolute overlay on top of watermark, NO divider line */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px]">
+        {/* Copyright — absolute overlay on watermark, with divider line above (Figma) */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] flex flex-col items-center gap-6">
+          <div className="w-full h-px bg-white/20" />
           <p style={{ fontSize: "14px", lineHeight: "35px", fontWeight: 300, color: "#ffffff", textAlign: "center" }}>
             Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
           </p>
