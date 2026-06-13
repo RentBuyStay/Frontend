@@ -5,7 +5,7 @@ import PropertyCard from "@/components/PropertyCard";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, MessageCircle, Check, Search, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Phone, MessageCircle, Check } from "lucide-react";
 
 // How RentBuyStay Works — 4 steps from Figma, with icon name + brand color (icon bg AND title color)
 const steps = [
@@ -227,10 +227,10 @@ export default function HomePage() {
               <div className="flex items-center gap-2">
                 <div className="flex items-center justify-between bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 px-4 shrink-0">
                   <span style={{ fontSize: "12px", color: "#121212" }}>Rent</span>
-                  <ChevronDown size={16} className="text-[#121212]" />
+                  <Image src="/icons/hero-arrow-down.svg" alt="" width={16} height={16} />
                 </div>
                 <div className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
-                  <Search size={16} className="text-[#807E7E] shrink-0" />
+                  <Image src="/icons/hero-search.svg" alt="" width={16} height={16} className="shrink-0" />
                   <input
                     placeholder="Enter location, area or keyword..."
                     className="flex-1 min-w-0 bg-transparent outline-none placeholder:text-[#807e7ebf]"
@@ -240,7 +240,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2">
                 <button aria-label="Filters" className="flex items-center justify-center bg-[#F6F6F6] rounded-[12px] w-12 h-12 shrink-0">
-                  <SlidersHorizontal size={16} className="text-[#121212]" />
+                  <Image src="/icons/hero-setting-5.svg" alt="" width={16} height={16} />
                 </button>
                 <button
                   className="flex-1 h-12 rounded-[12px] text-white text-[14px] font-medium"

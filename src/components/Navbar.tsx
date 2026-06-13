@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import LoginModal from "./LoginModal";
 
 type DropdownItem = { label: string; href: string; action?: "login" };
@@ -110,7 +110,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
           {/* Mobile toggle */}
           <button className="lg:hidden p-2 text-[#121212]" onClick={() => setOpen(!open)}>
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? <X size={22} /> : <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />}
           </button>
         </nav>
 
@@ -189,7 +189,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
         {/* Mobile toggle */}
         <button className="lg:hidden p-2" onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={22} /> : <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />}
         </button>
       </div>
 
