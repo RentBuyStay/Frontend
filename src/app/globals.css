@@ -157,6 +157,21 @@
   background: linear-gradient(90deg, rgba(48,94,130,0) 0%, rgba(48,94,130,0.5) 49.5%, rgba(48,94,130,0) 100%);
 }
 
+/* How RentBuyStay Works — step cards auto-scroll vertically inside the fixed-height
+   panel (Figma "how RBS works" component animates between two scroll variants).
+   The track is taller than the panel, so it eases up to reveal the last card, then back. */
+@keyframes hiw-scroll {
+  0%, 18%   { transform: translateY(0); }
+  82%, 100% { transform: translateY(min(0px, calc(-100% + var(--hiw-h, 600px)))); }
+}
+.hiw-track {
+  animation: hiw-scroll 11s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hiw-panel { height: auto !important; }
+  .hiw-track { position: static !important; animation: none !important; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

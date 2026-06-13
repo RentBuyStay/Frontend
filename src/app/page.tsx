@@ -5,7 +5,7 @@ import PropertyCard from "@/components/PropertyCard";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Phone, MessageCircle, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 
 // How RentBuyStay Works — 4 steps from Figma, with icon name + brand color (icon bg AND title color)
 const steps = [
@@ -279,8 +279,8 @@ export default function HomePage() {
               className="flex items-center gap-2 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
               style={{ letterSpacing: "-0.02em" }}
             >
-              <span className="hidden sm:inline">View All</span>
-              <ArrowRight size={18} strokeWidth={1.5} />
+              <span>View All</span>
+              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
             </Link>
           </div>
 
@@ -309,7 +309,7 @@ export default function HomePage() {
               className="text-[#7f7e7e]"
               style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
             >
-              Find and secure your ideal property in four easy steps
+              Find and secure your ideal property in four easy steps.
             </p>
           </div>
 
@@ -317,7 +317,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-[737fr_519fr] gap-6 items-stretch">
 
             {/* Left: image panel — 737x600, rounded-25 — Figma rendered with full room background */}
-            <div className="relative rounded-[25px] overflow-hidden bg-[#D8D8D8] min-h-[280px] md:min-h-[600px]">
+            <div className="relative rounded-[25px] overflow-hidden bg-[#D8D8D8] min-h-[450px] md:min-h-[600px]">
               <Image
                 src="/images/hiw-panel.png"
                 alt="Happy customer using RentBuyStay"
@@ -326,12 +326,14 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Right: 4 step cards container — Figma: 519w, bg #f6f6f6, rounded-20, gap 16px between cards */}
-            <div className="bg-[#f6f6f6] rounded-[20px] p-6 flex flex-col gap-4 justify-center">
-              {steps.map((step) => (
+            {/* Right: 4 step cards — fixed-height panel that clips; cards auto-scroll
+                 vertically to reveal all four (Figma "how RBS works" animation) */}
+            <div className="hiw-panel relative bg-[#f6f6f6] rounded-[20px] h-[450px] md:h-[600px] overflow-hidden">
+              <div className="hiw-track absolute inset-x-0 top-0 flex flex-col gap-4 p-4 md:p-6 [--hiw-h:450px] md:[--hiw-h:600px]">
+                {steps.map((step) => (
                 <div
                   key={step.title}
-                  className="bg-white rounded-[20px] flex items-start gap-4"
+                  className="bg-white rounded-[20px] border border-[#f4f4f4] flex items-start gap-4"
                   style={{ padding: "24px" }}
                 >
                   {/* 48x48 colored icon — Figma: fully rounded (cornerRadius 33554400) */}
@@ -366,7 +368,8 @@ export default function HomePage() {
                     </p>
                   </div>
                 </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -382,7 +385,7 @@ export default function HomePage() {
               <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 Top Verified Agents
               </h2>
-              <p style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, color: "#2e2e2e" }}>
+              <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
                 Connect with our network of trusted and verified real estate professionals across Nigeria.
               </p>
             </div>
@@ -391,7 +394,7 @@ export default function HomePage() {
               className="flex items-center gap-2 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
               style={{ fontSize: "14px", fontWeight: 500 }}
             >
-              <span className="hidden sm:inline">View All</span>
+              <span>View All</span>
               <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
             </Link>
           </div>
@@ -471,7 +474,7 @@ export default function HomePage() {
                     className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors"
                     style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}
                   >
-                    <Phone size={18} strokeWidth={1.5} /> Call
+                    <Image src="/icons/call.svg" alt="" width={20} height={20} /> Call
                   </button>
                   <button
                     className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity"
@@ -483,7 +486,7 @@ export default function HomePage() {
                       background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
                     }}
                   >
-                    <MessageCircle size={18} strokeWidth={1.5} /> Message
+                    <Image src="/icons/messages-2.svg" alt="" width={20} height={20} /> Message
                   </button>
                 </div>
               </div>
