@@ -87,7 +87,7 @@ function PlacementCard({
     <button
       type="button"
       onClick={onClick}
-      className="bg-[#F5F5F5] text-left hover:shadow-md transition-shadow"
+      className="bg-[#F5F5F5] text-left transition-shadow"
       style={{
         width: "411px",
         height: "429px",

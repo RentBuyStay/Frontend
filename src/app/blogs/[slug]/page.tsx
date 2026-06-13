@@ -40,7 +40,7 @@ function RelatedCard({ p }: { p: (typeof related)[number] }) {
   return (
     <Link
       href={`/blogs/${p.slug}`}
-      className="bg-white overflow-hidden flex flex-col group hover:shadow-md transition-shadow"
+      className="bg-white overflow-hidden flex flex-col group transition-shadow"
       style={{ width: "411px", height: "500px", borderRadius: "20px" }}
     >
       <div className="relative shrink-0" style={{ width: "411px", height: "260px" }}>

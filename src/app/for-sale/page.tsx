@@ -131,7 +131,7 @@ export default function ForSalePage() {
               {/* Listings cards */}
               <div className="flex flex-col gap-6">
               {listings.map((p) => (
-                <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
+                <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 transition-shadow">
 
                   {/* TOP SECTION: image left + content right */}
                   <div className="flex gap-5">

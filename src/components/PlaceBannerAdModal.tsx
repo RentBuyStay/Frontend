@@ -164,7 +164,7 @@ export default function PlaceBannerAdModal({
               {placementOpen && (
                 <div
                   className="absolute left-0 right-0 mt-1 bg-white rounded-[12px] py-2"
-                  style={{ zIndex: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.08)" }}
+                  style={{ zIndex: 10 }}
                 >
                   {placementOptions.map((opt) => (
                     <button

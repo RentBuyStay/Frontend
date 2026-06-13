@@ -116,7 +116,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
 
         {/* Mobile menu */}
         {open && (
-          <div className="lg:hidden mt-2 rounded-2xl bg-white shadow-lg px-6 py-4 flex flex-col gap-4">
+          <div className="lg:hidden mt-2 rounded-2xl bg-white px-6 py-4 flex flex-col gap-4">
             {navLinks.map((l) => (
               <Link key={l.href} href={l.href} className="text-sm font-medium text-[#121212]" onClick={() => setOpen(false)}>
                 {l.label}
@@ -295,7 +295,6 @@ function DropdownMenu({
             zIndex: 9999,
             // Flat top (attached to navbar bottom), rounded only bottom corners
             borderRadius: "0 0 12px 12px",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
           }}
         >
           {dropdown.map((item) =>

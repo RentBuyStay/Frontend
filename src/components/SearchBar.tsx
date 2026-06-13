@@ -38,7 +38,7 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   }
 
   return (
-    <div className="bg-white rounded-[12px] shadow-2xl w-full p-6 flex flex-col gap-4">
+    <div className="bg-white rounded-[12px] w-full p-6 flex flex-col gap-4">
 
       {/* Top row: tab dropdown | search input | search button */}
       <div className="flex items-center gap-4">

@@ -89,7 +89,7 @@ function PostCard({ p }: { p: Post }) {
   return (
     <Link
       href={`/blogs/${p.slug}`}
-      className="bg-white overflow-hidden flex flex-col group hover:shadow-md transition-shadow"
+      className="bg-white overflow-hidden flex flex-col group transition-shadow"
       style={{
         width: "411px",
         height: "500px",

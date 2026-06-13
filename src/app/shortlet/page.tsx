@@ -122,7 +122,7 @@ export default function ShortletPage() {
 
               <div className="flex flex-col gap-6">
                 {listings.map((p) => (
-                  <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
+                  <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 transition-shadow">
 
                     <div className="flex gap-5">
                       <div className="relative w-[184px] h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">

@@ -298,7 +298,6 @@ export default function AboutPage() {
                   height: "172.79px",
                   borderRadius: "24px",
                   marginLeft: i === 0 ? 0 : "-24px",
-                  boxShadow: "0px 8px 30px 0px rgba(180, 180, 180, 0.25)",
                   zIndex: 3 - i,
                   transform: `rotate(${card.rotate}deg)`,
                   transformOrigin: "center center",
@@ -368,7 +367,7 @@ export default function AboutPage() {
             className="absolute flex flex-col justify-center"
             style={{ left: "80px", top: "80px", width: "620px", gap: "16px" }}
           >
-            {/* OUR STORY pill — Figma 791:92456: bg #F6F6F6 r:50 padding 8 gap 8 shadow + tag-user icon */}
+            {/* OUR STORY pill — Figma 791:92456: bg #F6F6F6 r:50 padding 8 gap 8 + tag-user icon */}
             <span
               className="inline-flex items-center self-start"
               style={{
@@ -376,7 +375,6 @@ export default function AboutPage() {
                 background: "#F6F6F6",
                 borderRadius: "50px",
                 gap: "8px",
-                boxShadow: "0px 10px 30px -8px rgba(176,176,176,0.15)",
               }}
             >
               <Image src="/icons/tag-user.svg" alt="" width={20} height={20} />
@@ -506,7 +504,6 @@ export default function AboutPage() {
                 background: "#F6F6F6",
                 borderRadius: "50px",
                 gap: "8px",
-                boxShadow: "0px 10px 30px -8px rgba(176,176,176,0.15)",
               }}
             >
               <Image src="/icons/octicon-goal.svg" alt="" width={20} height={20} />

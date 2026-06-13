@@ -23,7 +23,7 @@ export default function PropertyCard({ property }: { property: Property }) {
   return (
     <Link
       href={`/properties/${property.id}`}
-      className="group block bg-white border border-[#ededed] rounded-[16px] overflow-hidden hover:shadow-lg transition-shadow"
+      className="group block bg-white border border-[#ededed] rounded-[16px] overflow-hidden transition-shadow"
     >
       {/* Image with badge */}
       <div className="relative h-[260px] bg-[#f6f6f6]">
