@@ -5,7 +5,6 @@ import PropertyCard from "@/components/PropertyCard";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
-import { Check } from "lucide-react";
 
 // How RentBuyStay Works — 4 steps from Figma, with icon name + brand color (icon bg AND title color)
 const steps = [
@@ -63,7 +62,7 @@ const locations = [
 function HeroStat({ value, label }: { value: string; label: string }) {
   return (
     <span className="flex items-center gap-2 whitespace-nowrap">
-      <Check size={20} className="text-[#ffae00] shrink-0" strokeWidth={3} />
+      <Image src="/icons/hero-check.svg" alt="" width={24} height={24} className="shrink-0" />
       <span style={{ fontSize: "12px", lineHeight: "150%", letterSpacing: "-0.01em" }}>
         <span style={{ fontWeight: 600 }}>{value}</span> {label}
       </span>
@@ -203,7 +202,7 @@ export default function HomePage() {
               {stats.map((s, i) => (
                 <div key={s.label} className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <Check size={20} className="text-[#ffae00]" strokeWidth={3} />
+                    <Image src="/icons/hero-check.svg" alt="" width={24} height={24} />
                     <span style={{ fontSize: "16px", fontWeight: 600, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.value}</span>
                     <span style={{ fontSize: "14px", fontWeight: 400, lineHeight: "150%", letterSpacing: "-0.01em" }}>{s.label}</span>
                   </div>
