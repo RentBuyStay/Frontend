@@ -284,7 +284,7 @@ export default function HomePage() {
             <div className="flex items-start justify-between gap-3">
               <h2
                 className="text-[#121212] font-semibold min-w-0"
-                style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
+                style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
               >
                 Featured Properties
               </h2>
@@ -298,8 +298,8 @@ export default function HomePage() {
               </Link>
             </div>
             <p
-              className="mt-2 max-w-full md:max-w-[628px] text-[#7f7e7e]"
-              style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
+              style={{ letterSpacing: "-0.02em" }}
             >
               Premium and handpicked listings from verified agents.
             </p>
@@ -322,13 +322,13 @@ export default function HomePage() {
           <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
             >
               How RentBuyStay Works
             </h2>
             <p
-              className="text-[#7f7e7e]"
-              style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
+              style={{ letterSpacing: "-0.02em" }}
             >
               Find and secure your ideal property in four easy steps.
             </p>
@@ -403,7 +403,7 @@ export default function HomePage() {
           {/* Header — Figma: row space-between, heading 40px Geist SemiBold lh:64, subtitle 18px lh:32 */}
           <div className="mb-10 md:mb-[64px]">
             <div className="flex items-start justify-between gap-3">
-              <h2 className="min-w-0" style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
+              <h2 className="min-w-0" style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 Top Verified Agents
               </h2>
               <Link
@@ -415,7 +415,7 @@ export default function HomePage() {
                 <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
               </Link>
             </div>
-            <p className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
+            <p className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
               Connect with our network of trusted and verified real estate professionals across Nigeria.
             </p>
           </div>
@@ -524,13 +524,13 @@ export default function HomePage() {
           <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
             >
               Every Property Type, Every Need
             </h2>
             <p
-              className="text-[#7f7e7e]"
-              style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
+              style={{ letterSpacing: "-0.02em" }}
             >
               Discover homes tailored to your lifestyle, from cozy apartments to luxury estates.
             </p>
@@ -631,13 +631,13 @@ export default function HomePage() {
           <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
             <h2
               className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
             >
               Browse By Location
             </h2>
             <p
-              className="text-[#7f7e7e]"
-              style={{ fontSize: "14px", lineHeight: "150%", letterSpacing: "-0.01em" }}
+              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
+              style={{ letterSpacing: "-0.02em" }}
             >
               Find properties in Nigeria&apos;s most popular cities.
             </p>
@@ -672,10 +672,10 @@ export default function HomePage() {
 
           {/* Header — centered, 628 wide */}
           <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
               Frequently Asked Questions
             </h2>
-            <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
+            <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
               We&rsquo;re dedicated to revolutionizing the way property and people connect. Our platform is built on ease of access and trust to streamline the buying, selling, and leasing process for everyone.
             </p>
           </div>
