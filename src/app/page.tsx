@@ -122,7 +122,8 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-white">
 
       {/* ── HERO — Figma: rounded card 1392x934, 24px margin all sides, bg #F3FEFE, border-radius 25px ── */}
-      <section className="bg-white p-6">
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-6">
         <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] h-[934px]">
 
           {/* Background image — bleeds top/bottom (Figma position y=-21, height 976) */}
@@ -199,6 +200,7 @@ export default function HomePage() {
           <div className="absolute top-[722px] left-6 right-6 z-10">
             <SearchBar />
           </div>
+        </div>
         </div>
       </section>
 

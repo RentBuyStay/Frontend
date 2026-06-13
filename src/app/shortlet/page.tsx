@@ -65,7 +65,8 @@ export default function ShortletPage() {
     <div className="min-h-screen flex flex-col bg-white">
 
       {/* HERO */}
-      <section className="bg-white p-6">
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-6">
         <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[852px]">
           <div className="absolute inset-0 z-0">
             <Image src="/images/shortlet-hero.png" alt="Shortlet Apartments" fill className="object-cover" priority />
@@ -89,6 +90,7 @@ export default function ShortletPage() {
           <div className="absolute bottom-6 left-6 right-6 z-10">
             <SearchBar defaultTab="Shortlet" />
           </div>
+        </div>
         </div>
       </section>
 

@@ -20,7 +20,8 @@ export default function AgentsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* HERO — Figma node 248:30168: 1440x712, card 1392x664 r=25, city skyline bg */}
-      <section className="bg-white p-6">
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-6 py-6">
         <div
           className="relative overflow-hidden bg-[#F3FEFE]"
           style={{ borderRadius: "25px", height: "664px" }}
@@ -132,6 +133,7 @@ export default function AgentsPage() {
               Search
             </button>
           </div>
+        </div>
         </div>
       </section>
 
