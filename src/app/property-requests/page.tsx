@@ -64,7 +64,7 @@ export default function PropertyRequestsPage() {
 
       {/* PROPERTY REQUESTS + SIDEBAR */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-[80px] py-[60px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-[60px]">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
 
             {/* LEFT */}
@@ -94,7 +94,7 @@ export default function PropertyRequestsPage() {
                 {requests.map((r) => (
                   <div key={r.id} className="bg-white border border-[#ededed] rounded-[16px] p-6 flex flex-col gap-4">
                     {/* Top row: Seeking | Bedroom (2 columns) */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className="flex flex-col gap-1">
                         <p style={{ fontSize: "12px", color: "#807e7e" }}>Seeking</p>
                         <p style={{ fontSize: "16px", fontWeight: 600, color: "#121212" }}>{r.lookingFor}</p>
@@ -243,7 +243,7 @@ export default function PropertyRequestsPage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-6 py-6">
           <div className="rounded-[20px] h-[464px] flex flex-col items-center justify-center text-white text-center px-6" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
-            <h2 className="font-semibold mb-4 max-w-[500px]" style={{ fontSize: "48px", lineHeight: "60px", letterSpacing: "-0.02em" }}>
+            <h2 className="font-semibold mb-4 max-w-[500px]" style={{ fontSize: "clamp(26px, 6vw, 48px)", lineHeight: "1.25", letterSpacing: "-0.02em" }}>
               Ready to<br />List Your Property?
             </h2>
             <p className="mb-8 max-w-[600px] text-white/85" style={{ fontSize: "16px", lineHeight: "150%" }}>

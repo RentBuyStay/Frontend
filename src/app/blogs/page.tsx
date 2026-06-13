@@ -165,7 +165,7 @@ export default function BlogsPage() {
 
       {/* CONTENT — Figma node 254:36886: 1440x1790, padding 80 top/bottom */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Featured article — Figma: 1281x550, r=20, image bg with gradient overlay + bottom-left text */}
           <Link
             href={`/blogs/${featured.slug}`}
@@ -221,13 +221,8 @@ export default function BlogsPage() {
 
           {/* Grid — 3 cols × 2 rows, gap 24 col / 40 row */}
           <div
-            className="grid mx-auto"
-            style={{
-              gridTemplateColumns: "repeat(3, 411px)",
-              gap: "40px 24px",
-              marginTop: "40px",
-              justifyContent: "center",
-            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "40px 24px", marginTop: "40px" }}
           >
             {posts.map((p) => (
               <PostCard key={p.slug} p={p} />

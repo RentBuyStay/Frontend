@@ -110,7 +110,7 @@ export default function BlogPostPage() {
 
       {/* MAIN — Figma node 268:38037: 1440x2372, padding 80 top/bottom */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Hero image — Figma: 1280x600, r=25 */}
           <div
             className="relative overflow-hidden"
@@ -265,13 +265,8 @@ export default function BlogPostPage() {
               </p>
             </div>
             <div
-              className="grid mx-auto"
-              style={{
-                gridTemplateColumns: "repeat(3, 411px)",
-                gap: "24px",
-                justifyContent: "center",
-                width: "100%",
-              }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full"
+              style={{ gap: "24px" }}
             >
               {related.map((p) => (
                 <RelatedCard key={p.slug} p={p} />

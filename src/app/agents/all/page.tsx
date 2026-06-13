@@ -17,21 +17,20 @@ export default function AllAgentsPage() {
       {/* HERO — Figma node 252:34023: plain white navbar + search bar, no border anywhere */}
       <Navbar />
       <section className="bg-white" style={{ padding: "40px 0" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Search bar — Figma is white-on-white (invisible card), so the items align with the navbar/heading at the section edge. No horizontal padding inside, just vertical breathing room. */}
           <div
-            className="bg-white flex items-center"
+            className="bg-white flex flex-col md:flex-row md:items-center"
             style={{
               width: "100%",
-              height: "96px",
               borderRadius: "12px",
               padding: "24px 0",
-              gap: "16px",
+              gap: "12px",
             }}
           >
             <div
-              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center"
-              style={{ width: "199px", height: "48px", padding: "0 16px" }}
+              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-full md:w-[199px]"
+              style={{ height: "48px", padding: "0 16px" }}
             >
               <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
                 <option>Select state</option>
@@ -55,9 +54,8 @@ export default function AllAgentsPage() {
             </div>
 
             <button
-              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity"
+              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity w-full md:w-[160px]"
               style={{
-                width: "160px",
                 height: "48px",
                 background:
                   "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
@@ -72,7 +70,7 @@ export default function AllAgentsPage() {
 
       {/* MAIN — heading + filters + grid + pagination */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           <div className="flex items-end justify-between" style={{ marginBottom: "40px" }}>
             <div className="flex flex-col" style={{ gap: "8px" }}>
               <h1
@@ -136,12 +134,8 @@ export default function AllAgentsPage() {
 
           {/* Grid — 3 cols × 4 rows (12 cards), gap 24 col / 40 row */}
           <div
-            className="grid mx-auto"
-            style={{
-              gridTemplateColumns: "repeat(3, 411px)",
-              gap: "40px 24px",
-              justifyContent: "center",
-            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "40px 24px" }}
           >
             {agents.map((a, i) => (
               <AgentCard key={i} a={a} />
