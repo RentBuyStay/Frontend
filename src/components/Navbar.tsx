@@ -108,41 +108,13 @@ export default function Navbar({ transparent = false }: NavbarProps) {
             </button>
           </div>
 
-          {/* Mobile toggle */}
-          <button className="lg:hidden p-2 text-[#121212]" onClick={() => setOpen(!open)}>
-            {open ? <X size={22} /> : <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />}
+          {/* Mobile toggle — opens the right-side drawer */}
+          <button className="lg:hidden p-2 text-[#121212]" onClick={() => setOpen(true)} aria-label="Open menu">
+            <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />
           </button>
         </nav>
-
-        {/* Mobile menu */}
-        {open && (
-          <div className="lg:hidden mt-2 rounded-2xl bg-white px-6 py-4 flex flex-col gap-4">
-            {navLinks.map((l) => (
-              <Link key={l.href} href={l.href} className="text-sm font-medium text-[#121212]" onClick={() => setOpen(false)}>
-                {l.label}
-              </Link>
-            ))}
-            <div className="flex flex-col gap-2 pt-2 border-t border-[#ededed]">
-              <button
-                type="button"
-                onClick={() => { setOpen(false); setShowLogin(true); }}
-                className="text-sm font-medium text-[#121212] text-left"
-                style={{ background: "transparent", border: "none", padding: 0, cursor: "pointer" }}
-              >
-                Log in
-              </button>
-              <button
-                type="button"
-                onClick={() => { setOpen(false); setShowLogin(true); }}
-                className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center cursor-pointer"
-                style={{ border: "none" }}
-              >
-                Post Property
-              </button>
-            </div>
-          </div>
-        )}
       </div>
+      <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
       </>
     );
   }
@@ -187,41 +159,149 @@ export default function Navbar({ transparent = false }: NavbarProps) {
           </button>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="lg:hidden p-2" onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />}
+        {/* Mobile toggle — opens the right-side drawer */}
+        <button className="lg:hidden p-2" onClick={() => setOpen(true)} aria-label="Open menu">
+          <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />
         </button>
       </div>
-
-      {open && (
-        <div className="lg:hidden bg-white border-t border-[#ededed] px-6 py-4 flex flex-col gap-4">
-          {navLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="text-sm font-medium text-[#121212]" onClick={() => setOpen(false)}>
-              {l.label}
-            </Link>
-          ))}
-          <div className="flex flex-col gap-2 pt-2 border-t border-[#ededed]">
-            <button
-              type="button"
-              onClick={() => { setOpen(false); setShowLogin(true); }}
-              className="text-sm font-medium text-left cursor-pointer"
-              style={{ background: "transparent", border: "none", padding: 0 }}
-            >
-              Log in
-            </button>
-            <button
-              type="button"
-              onClick={() => { setOpen(false); setShowLogin(true); }}
-              className="text-sm font-semibold bg-[#305e82] text-white px-4 py-2.5 rounded-xl text-center cursor-pointer"
-              style={{ border: "none" }}
-            >
-              Post Property
-            </button>
-          </div>
-        </div>
-      )}
     </header>
+    <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
     </>
+  );
+}
+
+/* MobileDrawer — right slide-in panel + dimmed backdrop for the mobile menu.
+   Open and close both live on the right, where the hamburger sits. The panel is
+   full-height and covers the page (search bar, hero, etc.) instead of floating over it. */
+function MobileDrawer({
+  open,
+  onClose,
+  onLogin,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onLogin: () => void;
+}) {
+  // Lock body scroll + close on Escape while the drawer is open
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, onClose]);
+
+  return (
+    <div className="lg:hidden" aria-hidden={!open}>
+      {/* Backdrop — dims and blurs the page, tap to close */}
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 z-[60] bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${
+          open ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+
+      {/* Drawer panel */}
+      <aside
+        role="dialog"
+        aria-modal="true"
+        className={`fixed top-0 right-0 z-[70] flex h-full w-[82%] max-w-[320px] flex-col bg-white shadow-2xl transition-transform duration-300 ease-out ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Header — logo + close (X sits exactly where the hamburger was) */}
+        <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#ededed] px-5">
+          <Image src="/images/logo.svg" alt="RentBuyStay" width={140} height={40} className="h-10 w-auto" />
+          <button onClick={onClose} aria-label="Close menu" className="-mr-2 p-2 text-[#121212]">
+            <X size={24} />
+          </button>
+        </div>
+
+        {/* Links (Requests / Services expand inline) */}
+        <nav className="flex-1 overflow-y-auto px-5 py-2">
+          {navLinks.map((l) =>
+            l.dropdown ? (
+              <details key={l.href} className="group border-b border-[#f6f6f6]">
+                <summary className="flex cursor-pointer list-none items-center justify-between py-3.5 text-[15px] font-medium text-[#121212]">
+                  {l.label}
+                  <ChevronDown
+                    size={18}
+                    strokeWidth={1.5}
+                    className="text-[#807e7e] transition-transform group-open:rotate-180"
+                  />
+                </summary>
+                <div className="flex flex-col pb-2">
+                  {l.dropdown.map((item) =>
+                    item.action === "login" ? (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          onLogin();
+                        }}
+                        className="py-2.5 pl-3 text-left text-[14px] text-[#807e7e] hover:text-[#305e82] transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={onClose}
+                        className="py-2.5 pl-3 text-[14px] text-[#807e7e] hover:text-[#305e82] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    )
+                  )}
+                </div>
+              </details>
+            ) : (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={onClose}
+                className="block border-b border-[#f6f6f6] py-3.5 text-[15px] font-medium text-[#121212] hover:text-[#305e82] transition-colors"
+              >
+                {l.label}
+              </Link>
+            )
+          )}
+        </nav>
+
+        {/* Auth actions pinned to the bottom */}
+        <div className="flex shrink-0 flex-col gap-3 border-t border-[#ededed] px-5 py-4">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onLogin();
+            }}
+            className="flex h-11 items-center justify-center rounded-[12px] border border-[#ededed] text-[14px] font-medium text-[#121212] hover:bg-[#f6f6f6] transition-colors"
+          >
+            Log in
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              onLogin();
+            }}
+            className="flex h-11 items-center justify-center rounded-[12px] text-[14px] font-medium text-white hover:opacity-90 transition-opacity"
+            style={{ background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}
+          >
+            Post Property
+          </button>
+        </div>
+      </aside>
+    </div>
   );
 }
 
