@@ -24,7 +24,7 @@ export default function AgentsPage() {
         <div className="max-w-[1440px] mx-auto px-6 py-6">
         <div
           className="relative overflow-hidden bg-[#F3FEFE]"
-          style={{ borderRadius: "25px", height: "664px" }}
+          style={{ borderRadius: "25px", minHeight: "560px" }}
         >
           <Image
             src="/images/for-sale-hero.png"
@@ -48,7 +48,7 @@ export default function AgentsPage() {
           <div
             className="absolute left-1/2 -translate-x-1/2 z-10 text-center flex flex-col"
             style={{
-              top: "216px",
+              top: "120px",
               width: "738px",
               maxWidth: "calc(100% - 48px)",
               gap: "16px",
@@ -57,8 +57,8 @@ export default function AgentsPage() {
             <h1
               className="text-white"
               style={{
-                fontSize: "64px",
-                lineHeight: "80px",
+                fontSize: "clamp(30px, 6.5vw, 64px)",
+                lineHeight: "1.2",
                 fontWeight: 600,
                 letterSpacing: "-0.02em",
               }}
@@ -84,20 +84,19 @@ export default function AgentsPage() {
 
           {/* Search bar — Figma: 1344x96 at y=544 from card top, r=12, white, padding 24 */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-10 bg-white flex items-center"
+            className="absolute left-1/2 -translate-x-1/2 z-10 bg-white flex flex-col md:flex-row md:items-center"
             style={{
-              bottom: "24px",
-              width: "calc(100% - 48px)",
+              bottom: "16px",
+              width: "calc(100% - 32px)",
               maxWidth: "1344px",
-              height: "96px",
               borderRadius: "12px",
-              padding: "24px",
-              gap: "16px",
+              padding: "16px",
+              gap: "12px",
             }}
           >
             <div
-              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center"
-              style={{ width: "199px", height: "48px", padding: "0 16px" }}
+              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-full md:w-[199px]"
+              style={{ height: "48px", padding: "0 16px" }}
             >
               <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
                 <option>Select state</option>
@@ -121,9 +120,8 @@ export default function AgentsPage() {
             </div>
 
             <button
-              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity"
+              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity w-full md:w-[160px]"
               style={{
-                width: "160px",
                 height: "48px",
                 background:
                   "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
@@ -139,7 +137,7 @@ export default function AgentsPage() {
 
       {/* ALL AGENCIES & DEVELOPERS — 3x2 grid, 411x456 cards, gap 24 */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "60px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
             <h2
               style={{
@@ -167,12 +165,8 @@ export default function AgentsPage() {
           </div>
 
           <div
-            className="grid mx-auto"
-            style={{
-              gridTemplateColumns: "repeat(3, 411px)",
-              gap: "40px 24px",
-              justifyContent: "center",
-            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "40px 24px" }}
           >
             {featuredAgencies.map((a) => (
               <AgencyCard key={a.id} a={a} />
@@ -183,7 +177,7 @@ export default function AgentsPage() {
 
       {/* ALL AGENTS — 3x3 grid, 411x284 cards, gap 24 */}
       <section className="bg-white" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
             <h2
               style={{
@@ -211,12 +205,8 @@ export default function AgentsPage() {
           </div>
 
           <div
-            className="grid mx-auto"
-            style={{
-              gridTemplateColumns: "repeat(3, 411px)",
-              gap: "40px 24px",
-              justifyContent: "center",
-            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "40px 24px" }}
           >
             {featuredAgents.map((a, i) => (
               <AgentCard key={i} a={a} />
