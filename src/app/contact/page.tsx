@@ -57,8 +57,8 @@ export default function ContactPage() {
             <h1
               className="text-white text-center"
               style={{
-                fontSize: "64px",
-                lineHeight: "80px",
+                fontSize: "clamp(30px, 6.5vw, 64px)",
+                lineHeight: "1.2",
                 fontWeight: 600,
                 letterSpacing: "-0.02em",
               }}
@@ -466,7 +466,7 @@ export default function ContactPage() {
             <div className="flex flex-col" style={{ gap: "16px" }}>
               <h2
                 className="text-white"
-                style={{ fontSize: "48px", lineHeight: "64px", fontWeight: 600, textAlign: "center" }}
+                style={{ fontSize: "clamp(26px, 6vw, 48px)", lineHeight: "1.3", fontWeight: 600, textAlign: "center" }}
               >
                 Ready to
                 <br />

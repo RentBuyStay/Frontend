@@ -186,8 +186,8 @@ export default function AboutPage() {
             <h1
               className="text-white"
               style={{
-                fontSize: "64px",
-                lineHeight: "80px",
+                fontSize: "clamp(30px, 6.5vw, 64px)",
+                lineHeight: "1.2",
                 fontWeight: 600,
                 letterSpacing: "-0.02em",
               }}
@@ -228,7 +228,7 @@ export default function AboutPage() {
               >
                 <span
                   style={{
-                    fontSize: "48px",
+                    fontSize: "clamp(26px, 6vw, 48px)",
                     fontWeight: 600,
                     letterSpacing: "-0.02em",
                     textAlign: "center",
@@ -340,8 +340,8 @@ export default function AboutPage() {
             className="text-center"
             style={{
               maxWidth: "1280px",
-              fontSize: "40px",
-              lineHeight: "64px",
+              fontSize: "clamp(22px, 4.5vw, 40px)",
+              lineHeight: "1.3",
               fontWeight: 500,
               color: "#121212",
               letterSpacing: "-0.02em",
@@ -393,8 +393,8 @@ export default function AboutPage() {
             </span>
             <h2
               style={{
-                fontSize: "40px",
-                lineHeight: "64px",
+                fontSize: "clamp(22px, 4.5vw, 40px)",
+                lineHeight: "1.3",
                 fontWeight: 600,
                 color: "#121212",
                 letterSpacing: "-0.02em",
@@ -522,8 +522,8 @@ export default function AboutPage() {
             </span>
             <h2
               style={{
-                fontSize: "40px",
-                lineHeight: "64px",
+                fontSize: "clamp(22px, 4.5vw, 40px)",
+                lineHeight: "1.3",
                 fontWeight: 600,
                 color: "#121212",
                 letterSpacing: "-0.02em",
@@ -642,7 +642,7 @@ export default function AboutPage() {
             <div className="flex flex-col" style={{ gap: "16px" }}>
               <h2
                 className="text-white"
-                style={{ fontSize: "48px", lineHeight: "64px", fontWeight: 600, textAlign: "center" }}
+                style={{ fontSize: "clamp(26px, 6vw, 48px)", lineHeight: "1.3", fontWeight: 600, textAlign: "center" }}
               >
                 Ready to
                 <br />
@@ -703,8 +703,8 @@ export default function AboutPage() {
           >
             <h2
               style={{
-                fontSize: "40px",
-                lineHeight: "64px",
+                fontSize: "clamp(22px, 4.5vw, 40px)",
+                lineHeight: "1.3",
                 fontWeight: 600,
                 color: "#121212",
                 letterSpacing: "-0.02em",
