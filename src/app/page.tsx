@@ -350,11 +350,11 @@ export default function HomePage() {
             {/* Right: 4 step cards — fixed-height panel that clips; cards auto-scroll
                  vertically to reveal all four (Figma "how RBS works" animation) */}
             <div className="hiw-panel relative bg-[#f6f6f6] rounded-[20px] h-[450px] md:h-[600px] overflow-hidden">
-              <div className="hiw-track absolute inset-x-0 top-0 flex flex-col gap-4 p-4 md:p-6 [--hiw-h:450px] md:[--hiw-h:600px]">
+              <div className="hiw-track absolute inset-x-0 top-0 flex flex-col items-stretch md:items-center gap-4 p-4 md:p-6 [--hiw-h:450px] md:[--hiw-h:600px]">
                 {steps.map((step) => (
                 <div
                   key={step.title}
-                  className="bg-white rounded-[20px] border border-[#f4f4f4] flex items-start gap-4"
+                  className="bg-white rounded-[20px] border border-[#f4f4f4] flex items-start gap-4 w-full md:w-[384px]"
                   style={{ padding: "24px" }}
                 >
                   {/* 48x48 colored icon — Figma: fully rounded (cornerRadius 33554400) */}
@@ -543,7 +543,7 @@ export default function HomePage() {
               <Link
                 key={type.label}
                 href={type.href}
-                className="group flex flex-col bg-white border border-[#f8f8f8] rounded-[20px] overflow-hidden transition-shadow"
+                className="group flex flex-col bg-white border border-[#f6f6f6] rounded-[20px] overflow-hidden transition-shadow"
               >
                 {/* Image — flush to card top, bg #ededed */}
                 <div className="relative w-full h-[150px] md:h-[200px] bg-[#ededed] overflow-hidden">
@@ -555,23 +555,23 @@ export default function HomePage() {
                   />
                 </div>
 
-                {/* Text — Figma: title 16px SemiBold #121212, desc 14px Regular #807E7E */}
-                <div className="px-4 pt-4 flex flex-col gap-2">
-                  <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+                {/* Text — Figma: title 16/20 SemiBold #121212, desc 14/16 Regular #807E7E */}
+                <div className="px-4 md:px-6 pt-4 md:pt-6 flex flex-col gap-2 md:gap-4">
+                  <p className="text-[16px] md:text-[20px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                     {type.label}
                   </p>
-                  <p style={{ fontSize: "14px", lineHeight: "24px", color: "#807E7E", letterSpacing: "-0.02em" }}>
+                  <p className="text-[14px] md:text-[16px]" style={{ lineHeight: "24px", color: "#807E7E", letterSpacing: "-0.02em" }}>
                     {type.desc}
                   </p>
                 </div>
 
-                {/* Full-width divider — Figma: #F8F8F8 */}
-                <div className="h-px bg-[#f8f8f8] mt-4" />
+                {/* Full-width divider — Figma: #F6F6F6 */}
+                <div className="h-px bg-[#f6f6f6] mt-4" />
 
-                {/* Get Started Free + arrow — Figma: row gap 8, #305E82 */}
+                {/* Get Started Free + arrow — Figma: row gap 8, 14/16 #305E82 */}
                 <span
-                  className="flex items-center gap-2 px-4 py-3 font-medium group-hover:gap-3 transition-all"
-                  style={{ fontSize: "14px", color: "#305E82" }}
+                  className="flex items-center gap-2 px-4 md:px-6 py-3 font-medium group-hover:gap-3 transition-all text-[14px] md:text-[16px]"
+                  style={{ color: "#305E82" }}
                 >
                   Get Started Free
                   <Image src="/icons/arrow-right.svg" alt="" width={16} height={16} />
@@ -593,27 +593,27 @@ export default function HomePage() {
           >
             <h2
               className="font-semibold mb-2 md:mb-4 max-w-[500px]"
-              style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.25", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.33", letterSpacing: "-0.02em" }}
             >
               Ready to<br />List Your Property?
             </h2>
             <p
-              className="mb-6 md:mb-8 max-w-[600px] text-[12px] md:text-[16px] leading-[24px] tracking-[-0.02em]"
+              className="mb-6 md:mb-10 max-w-[600px] text-[12px] leading-[24px] md:text-[18px] md:leading-[35px] tracking-[-0.02em]"
             >
               Join thousands of owners and agents on Nigeria&apos;s fastest-growing property
               platform. Get verified, list your property, and reach millions of seekers.
             </p>
-            <div className="flex items-center gap-4 md:gap-6">
+            <div className="flex items-center gap-4">
               <Link
                 href="/post-property"
                 className="bg-[#FFAE00] text-white font-medium h-12 px-6 rounded-[12px] flex items-center justify-center hover:opacity-90 transition-opacity whitespace-nowrap"
-                style={{ fontSize: "14px" }}
+                style={{ fontSize: "14px", border: "1px solid rgba(120,158,187,0.5)" }}
               >
                 Get Started Free
               </Link>
               <Link
                 href="/login"
-                className="text-white hover:underline whitespace-nowrap"
+                className="flex items-center justify-center h-12 px-8 text-white font-medium hover:underline whitespace-nowrap"
                 style={{ fontSize: "14px" }}
               >
                 Log in
