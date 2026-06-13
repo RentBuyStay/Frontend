@@ -67,8 +67,8 @@ export default function ForRentPage() {
 
       {/* HERO */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-6">
-        <div className="relative rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[560px] md:min-h-[852px]">
+        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
+        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[852px]">
           <div className="absolute inset-0 z-0">
             <Image src="/images/for-rent-hero.png" alt="Properties for Rent" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-black/55" />
@@ -76,11 +76,11 @@ export default function ForRentPage() {
 
           <Navbar transparent />
 
-          <div className="absolute top-[90px] md:top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
-            <h1 className="text-white font-semibold" style={{ fontSize: "clamp(30px, 6.5vw, 64px)", lineHeight: "1.2", letterSpacing: "-0.02em" }}>
-              Properties for Rent in Nigeria
+          <div className="absolute top-[160px] md:top-[180px] left-1/2 -translate-x-1/2 w-[738px] max-w-[calc(100%-32px)] md:max-w-[calc(100%-48px)] flex flex-col gap-2 md:gap-4 z-10 text-center">
+            <h1 className="text-white font-semibold text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]" style={{ letterSpacing: "-0.02em" }}>
+              Properties for<br className="md:hidden" /> Rent in Nigeria
             </h1>
-            <p className="text-white" style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 400 }}>
+            <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
               The properties have been listed by verified estate agents who can be contacted using
               the contact information provided for each property listing. We have 25,141 available
               flats, houses, and commercial property for rent in Nigeria. Refine your property
