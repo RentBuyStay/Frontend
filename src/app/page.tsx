@@ -45,10 +45,10 @@ const agents = [
 ];
 
 const propertyTypes = [
-  { label: "Residential Homes", desc: "Single-family houses, condos, townhouses, and luxury estates.", image: "/images/pt-residential.jpg", href: "/for-sale" },
-  { label: "Commercial Spaces", desc: "Offices, retail spaces, warehouses, and mixed-use developments.", image: "/images/pt-commercial.jpg", href: "/for-sale?type=commercial" },
-  { label: "Rental Properties", desc: "Short-term stays, long-term rentals, and corporate housing solutions.", image: "/images/pt-rental.jpg", href: "/for-rent" },
-  { label: "Land & Lots", desc: "Residential lots, commercial land, and investment opportunities.", image: "/images/pt-land.jpg", href: "/for-sale?type=land" },
+  { label: "Residential Homes", desc: "Single-family houses, condos, townhouses, and luxury estates.", image: "/images/pt-residential.png", href: "/for-sale" },
+  { label: "Commercial Spaces", desc: "Offices, retail spaces, warehouses, and mixed-use developments.", image: "/images/pt-commercial.png", href: "/for-sale?type=commercial" },
+  { label: "Rental Properties", desc: "Short-term stays, long-term rentals, and corporate housing solutions.", image: "/images/pt-rental.png", href: "/for-rent" },
+  { label: "Land & Lots", desc: "Residential lots, commercial land, and investment opportunities.", image: "/images/pt-land.png", href: "/for-sale?type=land" },
 ];
 
 const locations = [
@@ -552,7 +552,7 @@ export default function HomePage() {
                     alt={type.label}
                     fill
                     sizes="(max-width: 640px) 100vw, 588px"
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
 
