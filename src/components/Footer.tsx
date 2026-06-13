@@ -34,7 +34,7 @@ export default function Footer() {
       style={{ background: "#305E82" }}
     >
       {/* Main content - top section */}
-      <div className="max-w-[1440px] mx-auto px-[120px] pt-20 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] pt-12 lg:pt-20 relative z-10">
         {/* Top layout — Figma: Brand left (282), Group of 3 right with justify-between */}
         <div className="flex flex-col lg:flex-row lg:justify-between gap-y-10">
 
@@ -152,7 +152,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright — absolute overlay on top of watermark, NO divider line */}
-        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-[120px]">
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px]">
           <p style={{ fontSize: "14px", lineHeight: "35px", fontWeight: 300, color: "#ffffff", textAlign: "center" }}>
             Copyright © {new Date().getFullYear()} RentBuyStay. All Rights Reserved.
           </p>

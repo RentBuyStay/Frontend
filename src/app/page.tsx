@@ -253,8 +253,8 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
           {/* Header — Figma: width 1280, row space-between */}
-          <div className="flex items-end justify-between mb-10 md:mb-[64px]">
-            <div className="flex flex-col gap-1">
+          <div className="flex items-start justify-between gap-3 mb-10 md:mb-[64px]">
+            <div className="flex flex-col gap-1 min-w-0">
               <h2
                 className="text-[#121212] font-semibold"
                 style={{ fontSize: "clamp(20px, 4vw, 32px)", lineHeight: "1.3", letterSpacing: "-0.02em" }}
@@ -270,11 +270,11 @@ export default function HomePage() {
             </div>
             <Link
               href="/search"
-              className="flex items-center gap-2 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
+              className="flex items-center gap-2 shrink-0 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
               style={{ letterSpacing: "-0.02em" }}
             >
               <span>View All</span>
-              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
+              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
             </Link>
           </div>
 
@@ -374,8 +374,8 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
           {/* Header — Figma: row space-between, heading 40px Geist SemiBold lh:64, subtitle 18px lh:32 */}
-          <div className="flex items-end justify-between mb-10 md:mb-[64px]">
-            <div className="max-w-[628px] flex flex-col gap-1">
+          <div className="flex items-start justify-between gap-3 mb-10 md:mb-[64px]">
+            <div className="max-w-[628px] min-w-0 flex flex-col gap-1">
               <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 Top Verified Agents
               </h2>
@@ -385,11 +385,11 @@ export default function HomePage() {
             </div>
             <Link
               href="/agents"
-              className="flex items-center gap-2 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
+              className="flex items-center gap-2 shrink-0 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
               style={{ fontSize: "14px", fontWeight: 500 }}
             >
               <span>View All</span>
-              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} />
+              <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
             </Link>
           </div>
 
@@ -648,24 +648,23 @@ export default function HomePage() {
             <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.4", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
               Frequently Asked Questions
             </h2>
-            <p style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, color: "#2e2e2e" }}>
+            <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[18px] md:leading-[32px] md:text-[#2e2e2e]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
               We&rsquo;re dedicated to revolutionizing the way property and people connect. Our platform is built on ease of access and trust to streamline the buying, selling, and leasing process for everyone.
             </p>
           </div>
 
           {/* FAQ list — 846 wide centered, gap 24 between items */}
-          <div className="max-w-[846px] mx-auto flex flex-col gap-6">
+          <div className="max-w-[846px] mx-auto flex flex-col gap-4 md:gap-6">
             {faqs.map((q, i) => (
               <details key={i} className="group bg-[#f6f6f6] rounded-[12px] overflow-hidden">
                 <summary
-                  className="flex items-center justify-between cursor-pointer list-none px-6"
-                  style={{ height: "72px" }}
+                  className="flex items-center justify-between cursor-pointer list-none px-4 md:px-6 py-4 md:py-0 min-h-[56px] md:min-h-0 md:h-[72px]"
                 >
-                  <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+                  <span className="text-[14px] md:text-[16px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                     {q}
                   </span>
-                  {/* Plus when closed, Minus when open */}
-                  <span className="shrink-0 ml-4 w-6 h-6 flex items-center justify-center text-[#121212]">
+                  {/* Plus when closed, Minus when open — Figma: orange #FFAE00 */}
+                  <span className="shrink-0 ml-4 w-6 h-6 flex items-center justify-center text-[#ffae00]">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                       {/* Horizontal line — always visible */}
                       <line x1="0" y1="7" x2="14" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -678,8 +677,8 @@ export default function HomePage() {
                     </svg>
                   </span>
                 </summary>
-                <div className="px-6 pb-6 pt-0">
-                  <p style={{ fontSize: "14px", lineHeight: "24px", color: "#2e2e2e" }}>
+                <div className="px-4 md:px-6 pb-4 md:pb-6 pt-0">
+                  <p className="text-[12px] leading-[20px] text-[#807e7e] md:text-[14px] md:leading-[24px] md:text-[#2e2e2e]" style={{ letterSpacing: "-0.02em" }}>
                     Our support team is happy to help. Contact us at help@rentbuystay.com or use the live chat below for assistance.
                   </p>
                 </div>
