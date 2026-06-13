@@ -156,7 +156,7 @@ export default function HomePage() {
       {/* ── HERO — Figma: rounded card 1392x934, 24px margin all sides, bg #F3FEFE, border-radius 25px ── */}
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
-        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] h-[600px] md:h-[934px]">
+        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)]">
 
           {/* Background image — bleeds top/bottom (Figma position y=-21, height 976) */}
           <div className="absolute inset-x-0 -top-[21px] h-[976px] z-0">
@@ -183,10 +183,10 @@ export default function HomePage() {
           {/* Navbar — inside the card, top: 24, sides: 24 */}
           <Navbar transparent />
 
-          {/* ===== DESKTOP hero content (Figma desktop frame) ===== */}
-          <div className="hidden md:block">
-            {/* Heading + subtitle — Figma: top 235, center, width 641 */}
-            <div className="absolute top-[235px] left-1/2 -translate-x-1/2 w-[641px] max-w-[calc(100%-48px)] flex flex-col gap-4 z-10 text-center">
+          {/* ===== DESKTOP hero content — fills the viewport; search pinned to bottom ===== */}
+          <div className="hidden md:flex md:flex-col absolute inset-0 z-10 items-center px-6 pt-[180px] pb-6">
+            {/* Heading + subtitle — Figma: center, width 641 */}
+            <div className="w-[641px] max-w-full flex flex-col gap-4 text-center">
               <h1 className="text-white font-semibold" style={{ fontSize: "64px", lineHeight: "80px", letterSpacing: "-0.02em" }}>
                 Find Your Perfect Home in Nigeria
               </h1>
@@ -197,8 +197,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Stats row — Figma: top 526 */}
-            <div className="absolute top-[526px] left-1/2 -translate-x-1/2 z-10 flex items-center gap-4 text-white">
+            {/* Stats row */}
+            <div className="mt-12 flex items-center gap-4 text-white">
               {stats.map((s, i) => (
                 <div key={s.label} className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
@@ -211,8 +211,8 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Search bar — Figma y722 */}
-            <div className="absolute top-[722px] left-6 right-6 z-10">
+            {/* Search bar — pinned to the bottom */}
+            <div className="mt-auto w-full">
               <SearchBar />
             </div>
           </div>
