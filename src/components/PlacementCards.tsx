@@ -87,20 +87,16 @@ function PlacementCard({
     <button
       type="button"
       onClick={onClick}
-      className="bg-[#F5F5F5] text-left transition-shadow"
+      className="bg-[#F6F6F6] text-left transition-shadow w-full flex flex-col"
       style={{
-        width: "411px",
-        height: "429px",
         borderRadius: "24px",
         padding: "16px 16px 24px 16px",
-        display: "flex",
-        flexDirection: "column",
         gap: "24px",
       }}
     >
       <div
-        className="bg-white"
-        style={{ width: "379px", height: "221px", borderRadius: "20px" }}
+        className="bg-white w-full"
+        style={{ height: "221px", borderRadius: "20px" }}
       />
       <div className="flex flex-col" style={{ gap: "8px" }}>
         <h3
@@ -125,7 +121,7 @@ function PlacementCard({
           {p.description}
         </p>
       </div>
-      <div className="flex items-center" style={{ gap: "8px" }}>
+      <div className="flex items-center flex-wrap" style={{ gap: "8px" }}>
         <div
           className="flex items-center"
           style={{
@@ -179,15 +175,7 @@ export default function PlacementCards() {
 
   return (
     <>
-      <div
-        className="grid mx-auto"
-        style={{
-          gridTemplateColumns: "repeat(3, 411px)",
-          gap: "40px 24px",
-          marginTop: "40px",
-          justifyContent: "center",
-        }}
-      >
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-y-10 mt-8 md:mt-10">
         {placements.map((p) => (
           <PlacementCard
             key={p.value}

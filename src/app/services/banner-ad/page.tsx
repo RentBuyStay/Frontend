@@ -13,12 +13,11 @@ export const metadata = {
 export default function PlaceBannerAdPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* HERO — Figma node 218:27209: 1440x900, inset 24px card, transparent navbar */}
-      <section className="bg-white p-6">
-        <div
-          className="relative overflow-hidden bg-[#F3FEFE]"
-          style={{ borderRadius: "25px", height: "852px" }}
-        >
+      {/* HERO — Figma 769:81209 (mobile) / 218:27209 (desktop): image bg + transparent navbar + heading.
+          NOTE: the Figma mobile hero frame carries shortlet placeholder copy + a property search; the
+          real banner-ad hero is the media-placement heading (no search), kept here and made responsive. */}
+      <section className="bg-white p-4 md:p-6">
+        <div className="relative overflow-hidden bg-[#EBEBEB] rounded-[20px] md:rounded-[25px] h-[520px] md:h-[852px]">
           <Image
             src="/images/banner-ad-hero.png"
             alt="Reach millions with a media placement"
@@ -38,34 +37,18 @@ export default function PlaceBannerAdPage() {
           <Navbar transparent />
 
           <div
-            className="absolute left-1/2 -translate-x-1/2 z-10 text-center flex flex-col"
-            style={{
-              top: "250px",
-              width: "738px",
-              maxWidth: "calc(100% - 48px)",
-              gap: "16px",
-            }}
+            className="absolute left-1/2 -translate-x-1/2 z-10 text-center flex flex-col top-[120px] md:top-[250px] gap-2 md:gap-4"
+            style={{ width: "738px", maxWidth: "calc(100% - 32px)" }}
           >
             <h1
-              className="text-white"
-              style={{
-                fontSize: "64px",
-                lineHeight: "80px",
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-              }}
+              className="text-white text-[32px] leading-[40px] md:text-[64px] md:leading-[80px]"
+              style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
             >
               Reach Millions with a Media Placement on RentBuyStay
             </h1>
             <p
-              className="text-white mx-auto"
-              style={{
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                letterSpacing: "-0.02em",
-                maxWidth: "735px",
-              }}
+              className="text-white mx-auto text-[14px] leading-[24px] md:text-[18px] md:leading-[32px]"
+              style={{ fontWeight: 400, letterSpacing: "-0.02em", maxWidth: "735px" }}
             >
               Position your brand at the forefront of the digital landscape with high-impact
               media placements that bridge the gap between your products and millions of
@@ -75,15 +58,13 @@ export default function PlaceBannerAdPage() {
         </div>
       </section>
 
-      {/* CARDS — Figma node 218:26231: 1440x1663, padding 80 top/bottom */}
-      <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
-        <div className="max-w-[1440px] mx-auto px-[80px]">
+      {/* CARDS — Figma 769:81774: intro text + placement cards */}
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-12 md:py-20">
           <p
-            className="mx-auto text-center"
+            className="mx-auto text-center text-[14px] leading-[24px] md:text-[18px] md:leading-[32px]"
             style={{
               maxWidth: "735px",
-              fontSize: "18px",
-              lineHeight: "32px",
               fontWeight: 400,
               color: "#121212",
               letterSpacing: "-0.02em",
