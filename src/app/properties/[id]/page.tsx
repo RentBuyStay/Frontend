@@ -256,7 +256,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Description — Figma 133:18697 */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[32px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Description
               </h2>
               <p className="text-[16px]" style={{ lineHeight: "24px", fontWeight: 400, color: "#121212" }}>
@@ -279,7 +279,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Amenities & Features — Figma 133:18700: 4-column grid with tick-circle bullets */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[32px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Amenities &amp; Features
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 md:gap-x-[72px] md:gap-y-6">
@@ -296,21 +296,21 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Property Details — Figma 133:18753: 2-column key/value grid */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[32px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Property Details
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "24px" }}>
                 {[
                   { k: "PROPERTY ID", v: `RBS-L-00${4820 + parseInt(property.id, 10)}` },
                   { k: "TYPE", v: "Apartment and Flat" },
-                  { k: "STATUS", v: "Active" },
+                  { k: "Status", v: "Active" },
                   { k: "LISTED ON", v: "28 Mar 2026" },
                 ].map((row) => (
-                  <div key={row.k} className="flex flex-col" style={{ gap: "4px" }}>
-                    <span style={{ fontSize: "12px", lineHeight: "20px", fontWeight: 500, color: "#807E7E", letterSpacing: "0.05em" }}>
+                  <div key={row.k} className="flex flex-col" style={{ gap: "8px" }}>
+                    <span style={{ fontSize: "13px", lineHeight: "20px", fontWeight: 400, color: "#807E7E", letterSpacing: "-0.02em" }}>
                       {row.k}
                     </span>
-                    <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>
+                    <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
                       {row.v}
                     </span>
                   </div>
@@ -321,12 +321,12 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             {/* View Map — Figma 133:18770: real interactive map via OpenStreetMap embed.
                 Lagos center: 6.5244, 3.3792 — small bbox keeps the marker visible. */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[32px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 View Map
               </h2>
               <div
                 className="relative overflow-hidden bg-[#F6F6F6]"
-                style={{ width: "100%", height: "400px", borderRadius: "20px" }}
+                style={{ width: "100%", height: "424px", borderRadius: "20px" }}
               >
                 <iframe
                   title={`Map of ${property.location}`}
