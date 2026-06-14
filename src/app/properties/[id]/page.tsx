@@ -83,8 +83,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             {/* Report Listing — Figma 133:18663: bg white, r:12, 8px 16px padding, w:162.2 h:48
                 flag icon stroke #D80027, text "Report Listing" 14/500 #D80027 */}
             <button
-              className="flex items-center justify-center shrink-0 hover:opacity-90 transition-opacity w-10 h-10 md:w-[162px] md:h-12 rounded-[12px]"
-              style={{ gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6" }}
+              className="flex items-center justify-center shrink-0 hover:opacity-90 transition-opacity w-10 h-10 md:w-[162px] md:h-12 rounded-[12px] md:bg-white md:border md:border-[#f6f6f6]"
+              style={{ gap: "8px" }}
             >
               <Image src="/icons/flag-report.svg" alt="" width={24} height={24} />
               <span className="hidden md:inline" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#D80027" }}>
@@ -164,10 +164,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Description — Figma 133:18697 */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 style={{ fontSize: "20px", lineHeight: "28px", fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Description
               </h2>
-              <p style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#121212" }}>
+              <p className="text-[16px] md:text-[14px]" style={{ lineHeight: "24px", fontWeight: 400, color: "#121212" }}>
                 This stunning {property.beds}-bedroom apartment is situated in the heart of{" "}
                 {property.location}, offering breathtaking views and top-tier finishes throughout.
                 The property features an open-plan living and dining area, a fully fitted kitchen,
@@ -187,10 +187,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Amenities & Features — Figma 133:18700: 4-column grid with tick-circle bullets */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 style={{ fontSize: "20px", lineHeight: "28px", fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Amenities &amp; Features
               </h2>
-              <div className="grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", gap: "16px 24px" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3" style={{ gap: "16px 24px" }}>
                 {amenities.map((a) => (
                   <div key={a} className="flex items-center" style={{ gap: "8px" }}>
                     <Image src="/icons/tick-circle.svg" alt="" width={20} height={20} />
@@ -204,10 +204,10 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
             {/* Property Details — Figma 133:18753: 2-column key/value grid */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 style={{ fontSize: "20px", lineHeight: "28px", fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Property Details
               </h2>
-              <div className="grid" style={{ gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "24px" }}>
                 {[
                   { k: "PROPERTY ID", v: `RBS-L-00${4820 + parseInt(property.id, 10)}` },
                   { k: "TYPE", v: "Apartment and Flat" },
@@ -229,7 +229,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             {/* View Map — Figma 133:18770: real interactive map via OpenStreetMap embed.
                 Lagos center: 6.5244, 3.3792 — small bbox keeps the marker visible. */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 style={{ fontSize: "20px", lineHeight: "28px", fontWeight: 600, color: "#305E82" }}>
+              <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 View Map
               </h2>
               <div
