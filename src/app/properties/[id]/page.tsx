@@ -5,6 +5,7 @@ import Link from "next/link";
 import { mockProperties } from "@/lib/mockData";
 import PropertyCard from "@/components/PropertyCard";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
+import SearchBar from "@/components/SearchBar";
 
 // Property detail — Figma node 133:18506 ("about prop for sale")
 // Linked from home page featured-property cards via ON_CLICK prototype interaction.
@@ -100,9 +101,16 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Navbar — Figma uses a search/filter strip here; using regular Navbar for now */}
+      {/* Navbar — Figma 133:18507 / 743:69606: navbar + search strip at the top */}
       <section className="bg-white" style={{ paddingTop: "24px", paddingLeft: "24px", paddingRight: "24px" }}>
         <Navbar />
+      </section>
+
+      {/* Search strip — same compact search used on the listing pages */}
+      <section className="bg-white">
+        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-[80px] pt-6">
+          <SearchBar defaultTab="Rent" />
+        </div>
       </section>
 
       {/* TOP HEADER — Figma 133:18646 (Group 2087326551): x:80 y:40 w:1280 h:104
