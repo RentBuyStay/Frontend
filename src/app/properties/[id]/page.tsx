@@ -83,8 +83,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             {/* Report Listing — Figma 133:18663: bg white, r:12, 8px 16px padding, w:162.2 h:48
                 flag icon stroke #D80027, text "Report Listing" 14/500 #D80027 */}
             <button
-              className="flex items-center justify-center shrink-0 hover:opacity-90 transition-opacity w-10 h-10 md:w-[162px] md:h-12 rounded-[12px] md:bg-white md:border md:border-[#f6f6f6]"
-              style={{ gap: "8px" }}
+              className="flex items-center justify-center shrink-0 gap-2 hover:opacity-80 transition-opacity w-10 h-10 md:w-auto md:h-12"
             >
               <Image src="/icons/flag-report.svg" alt="" width={24} height={24} />
               <span className="hidden md:inline" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#D80027" }}>
