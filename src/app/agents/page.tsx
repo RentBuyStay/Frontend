@@ -24,7 +24,7 @@ export default function AgentsPage() {
       {/* HERO — Figma node 248:30168: 1440x712, card 1392x664 r=25, city skyline bg */}
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6">
-        <div className="relative overflow-hidden bg-[#EBEBEB] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[560px]">
+        <div className="relative overflow-hidden bg-[#EBEBEB] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[852px]">
           <Image
             src="/images/for-sale-hero.png"
             alt=""

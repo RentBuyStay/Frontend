@@ -133,92 +133,60 @@ export default function LegalPage({
   effectiveDate = "Effective Date: April 8, 2026        Last Updated: April 8, 2026",
 }: LegalPageProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* HERO — Figma 268:39229: 1440x168, white. Inner card 1392x120 at x:24 y:24 with navbar */}
-      <section className="bg-white" style={{ paddingLeft: "24px", paddingRight: "24px", paddingTop: "24px" }}>
-        <div className="relative" style={{ height: "120px" }}>
-          <Navbar variant="page" />
-        </div>
-      </section>
+    <div className="min-h-screen flex flex-col bg-white overflow-x-clip">
+      <Navbar variant="page" />
 
-      {/* SECTION 1 — Figma 268:39232: 1440x2706 (height varies per page)
-          Title block at x:80 y:80 w:845 column gap 8
-          Body at x:80 y:248 w:1280 */}
+      {/* TITLE + BODY — Figma 268:39232 (desktop) / 786:90807 (mobile).
+          Same 16/40 body + 20/64 headings on both; gutter 16px mobile / 80px desktop. */}
       <section className="bg-white">
-        <div className="relative mx-auto" style={{ width: "1440px", maxWidth: "100%" }}>
-          <div
-            className="flex flex-col"
-            style={{
-              paddingLeft: "80px",
-              paddingRight: "80px",
-              paddingTop: "80px",
-              paddingBottom: "80px",
-              gap: "48px",
-            }}
-          >
-            {/* Title block — Figma 268:39235: w:845 column gap 8 */}
-            <div className="flex flex-col" style={{ width: "845px", maxWidth: "100%", gap: "8px" }}>
-              <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                Legal
-              </span>
-              <h1
-                style={{
-                  fontSize: "48px",
-                  lineHeight: "64px",
-                  fontWeight: 600,
-                  color: "#121212",
-                }}
-              >
-                {title}
-              </h1>
-              <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                {effectiveDate}
-              </span>
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-10 md:py-20 flex flex-col gap-8 md:gap-12">
+          {/* Title block */}
+          <div className="flex flex-col gap-2 lg:max-w-[845px]">
+            <span className="text-[12px] md:text-[16px] leading-[20px] md:leading-[24px] font-normal text-[#807E7E]">
+              Legal
+            </span>
+            <h1
+              className="text-[24px] leading-[32px] md:text-[48px] md:leading-[64px]"
+              style={{ fontWeight: 600, color: "#121212" }}
+            >
+              {title}
+            </h1>
+            {/* Split on the wide gap so "Effective Date" and "Last Updated" keep a real
+                gap (HTML collapses the literal spaces); one line on desktop, wraps on mobile. */}
+            <div className="flex gap-x-4 md:gap-x-8 text-[12px] md:text-[16px] leading-[20px] md:leading-[24px] font-normal text-[#807E7E]">
+              {effectiveDate.split(/\s{2,}/).map((part, i) => (
+                <span key={i} className="whitespace-nowrap">{part}</span>
+              ))}
             </div>
-
-            {/* Body — Figma 268:39295: w:1280, 16/40 Geist Regular #121212 (headers SemiBold 20/64) */}
-            <div style={{ width: "1280px", maxWidth: "100%" }}>{renderBody(body)}</div>
           </div>
+
+          {/* Body — numbered headings auto-bold to 20/64; body is 16/40 */}
+          <div>{renderBody(body)}</div>
         </div>
       </section>
 
       <ListPropertyCTA />
 
-      {/* FAQ — Figma 268:40624 — same 9 items as About page */}
-      <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
-        <div className="mx-auto" style={{ width: "1440px", maxWidth: "100%" }}>
-          <div className="flex flex-col items-center text-center mx-auto" style={{ width: "628px", maxWidth: "100%", gap: "8px" }}>
+      {/* FAQ — same 9 items as the About page */}
+      <section className="bg-white">
+        <div className="max-w-[846px] mx-auto px-4 md:px-0 py-12 md:py-20 flex flex-col items-center gap-8 md:gap-10">
+          <div className="w-full flex flex-col text-center gap-2 lg:w-[628px]">
             <h2
-              style={{
-                fontSize: "40px",
-                lineHeight: "64px",
-                fontWeight: 600,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-                textAlign: "center",
-              }}
+              className="text-[28px] leading-[36px] md:text-[40px] md:leading-[64px]"
+              style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               Frequently Asked Questions
             </h2>
             <p
-              style={{
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                color: "rgba(46,46,46,0.6)",
-                letterSpacing: "-0.02em",
-                textAlign: "center",
-              }}
+              className="text-[14px] leading-[28px] md:text-[18px] md:leading-[32px]"
+              style={{ fontWeight: 400, color: "rgba(46,46,46,0.6)", letterSpacing: "-0.02em" }}
             >
               We&rsquo;re dedicated to revolutionizing the way property and people connect.
               Our platform is built on ease of access and trust to streamline the buying,
               selling, and leasing process for everyone.
             </p>
           </div>
-          <div
-            className="flex flex-col mx-auto"
-            style={{ width: "846px", maxWidth: "100%", gap: "24px", marginTop: "40px" }}
-          >
+          <div className="w-full flex flex-col gap-4 md:gap-6">
             {faqs.map((f) => (
               <FAQItem key={f.q} q={f.q} a={f.a} />
             ))}
