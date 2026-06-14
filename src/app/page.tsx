@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
+import SectionHeader from "@/components/SectionHeader";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
@@ -281,31 +282,12 @@ export default function HomePage() {
       {/* ── FEATURED PROPERTIES — Figma: bg white, 80px padding, header at y=80, cards at y=224 ── */}
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
-          {/* Header — Figma: width 1280, row space-between */}
-          <div className="mb-10 md:mb-[64px]">
-            <div className="flex items-start justify-between gap-3">
-              <h2
-                className="text-[#121212] font-semibold min-w-0"
-                style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
-              >
-                Featured Properties
-              </h2>
-              <Link
-                href="/search"
-                className="flex items-center gap-2 shrink-0 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap font-medium"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                <span>View All</span>
-                <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
-              </Link>
-            </div>
-            <p
-              className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Premium and handpicked listings from verified agents.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="Featured Properties"
+            subtitle="Premium and handpicked listings from verified agents."
+            viewAllHref="/search"
+          />
 
           {/* Cards — Figma: row gap 24px, 3 columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -320,21 +302,11 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
-          {/* Header — Figma: width 628, centered, column gap 8 */}
-          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2
-              className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
-            >
-              How RentBuyStay Works
-            </h2>
-            <p
-              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Find and secure your ideal property in four easy steps.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="How RentBuyStay Works"
+            subtitle="Find and secure your ideal property in four easy steps."
+          />
 
           {/* Two side-by-side panels — Figma ratio 737:519, gap 24, both grow with content */}
           <div className="grid grid-cols-1 lg:grid-cols-[737fr_519fr] gap-6 items-stretch">
@@ -402,25 +374,12 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
-          {/* Header — Figma: row space-between, heading 40px Geist SemiBold lh:64, subtitle 18px lh:32 */}
-          <div className="mb-10 md:mb-[64px]">
-            <div className="flex items-start justify-between gap-3">
-              <h2 className="min-w-0" style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
-                Top Verified Agents
-              </h2>
-              <Link
-                href="/agents"
-                className="flex items-center gap-2 shrink-0 text-[#121212] hover:text-[#305e82] transition-colors whitespace-nowrap"
-                style={{ fontSize: "14px", fontWeight: 500 }}
-              >
-                <span>View All</span>
-                <Image src="/icons/arrow-right.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6 shrink-0" />
-              </Link>
-            </div>
-            <p className="mt-2 max-w-full md:max-w-[628px] text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-              Connect with our network of trusted and verified real estate professionals across Nigeria.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="Top Verified Agents"
+            subtitle="Connect with our network of trusted and verified real estate professionals across Nigeria."
+            viewAllHref="/agents"
+          />
 
           {/* Cards — 3 per row, gap 24 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -522,21 +481,11 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[120px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
-          {/* Header — centered, w=628 */}
-          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2
-              className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
-            >
-              Every Property Type, Every Need
-            </h2>
-            <p
-              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Discover homes tailored to your lifestyle, from cozy apartments to luxury estates.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="Every Property Type, Every Need"
+            subtitle="Discover homes tailored to your lifestyle, from cozy apartments to luxury estates."
+          />
 
           {/* Cards — Figma: bordered card (#f8f8f8), image flush top, title + desc,
                full-width divider, then Get Started link. 1 col mobile / 2 col desktop */}
@@ -591,21 +540,11 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
-          {/* Header centered */}
-          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2
-              className="text-[#121212] font-semibold"
-              style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", letterSpacing: "-0.02em" }}
-            >
-              Browse By Location
-            </h2>
-            <p
-              className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Find properties in Nigeria&apos;s most popular cities.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="Browse By Location"
+            subtitle="Find properties in Nigeria's most popular cities."
+          />
 
           {/* Figma layout (verified via API):
               Row 1: Lagos full width 1280
@@ -634,15 +573,11 @@ export default function HomePage() {
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] pt-12 md:pt-[80px] pb-12 md:pb-[80px]">
 
-          {/* Header — centered, 628 wide */}
-          <div className="max-w-[628px] mx-auto mb-10 md:mb-[64px] flex flex-col items-center gap-2 text-center">
-            <h2 style={{ fontSize: "clamp(20px, 4.5vw, 40px)", lineHeight: "1.6", fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
-              Frequently Asked Questions
-            </h2>
-            <p className="text-[14px] leading-[24px] text-[#807e7e] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-              We&rsquo;re dedicated to revolutionizing the way property and people connect. Our platform is built on ease of access and trust to streamline the buying, selling, and leasing process for everyone.
-            </p>
-          </div>
+          {/* Header */}
+          <SectionHeader
+            title="Frequently Asked Questions"
+            subtitle="We're dedicated to revolutionizing the way property and people connect. Our platform is built on ease of access and trust to streamline the buying, selling, and leasing process for everyone."
+          />
 
           {/* FAQ list — 846 wide centered, gap 24 between items */}
           <div className="max-w-[846px] mx-auto flex flex-col gap-4 md:gap-6">
