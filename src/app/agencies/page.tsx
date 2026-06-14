@@ -20,10 +20,9 @@ export default function AllAgenciesPage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Search bar — Figma is white-on-white (invisible card), so the items align with the navbar/heading at the section edge. No horizontal padding inside, just vertical breathing room. */}
           <div
-            className="bg-white flex flex-col md:flex-row md:items-center"
+            className="bg-white flex flex-col md:flex-row md:items-center md:h-24"
             style={{
               width: "100%",
-              height: "96px",
               borderRadius: "12px",
               padding: "24px 0",
               gap: "16px",
@@ -73,10 +72,7 @@ export default function AllAgenciesPage() {
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Heading bar — Figma node 252:33985: 1281x72 */}
-          <div
-            className="flex items-end justify-between"
-            style={{ marginBottom: "40px" }}
-          >
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 md:mb-10">
             <div className="flex flex-col" style={{ gap: "8px" }}>
               <h1
                 style={{
@@ -117,9 +113,8 @@ export default function AllAgenciesPage() {
                 <button
                   key={label}
                   type="button"
-                  className="flex items-center justify-between bg-[#F6F6F6] hover:bg-[#EDEDED] transition-colors rounded-[12px]"
+                  className="flex-1 md:flex-none md:w-[120px] flex items-center justify-between bg-[#F6F6F6] hover:bg-[#EDEDED] transition-colors rounded-[12px]"
                   style={{
-                    width: "120px",
                     height: "40px",
                     padding: "8px 16px",
                   }}

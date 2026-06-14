@@ -71,7 +71,7 @@ export default function AllAgentsPage() {
       {/* MAIN — heading + filters + grid + pagination */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
-          <div className="flex items-end justify-between" style={{ marginBottom: "40px" }}>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8 md:mb-10">
             <div className="flex flex-col" style={{ gap: "8px" }}>
               <h1
                 style={{
@@ -112,8 +112,8 @@ export default function AllAgentsPage() {
                 <button
                   key={label}
                   type="button"
-                  className="flex items-center justify-between bg-[#F6F6F6] hover:bg-[#EDEDED] transition-colors rounded-[12px]"
-                  style={{ width: "120px", height: "40px", padding: "8px 16px" }}
+                  className="flex-1 md:flex-none md:w-[120px] flex items-center justify-between bg-[#F6F6F6] hover:bg-[#EDEDED] transition-colors rounded-[12px]"
+                  style={{ height: "40px", padding: "8px 16px" }}
                 >
                   <span
                     style={{
