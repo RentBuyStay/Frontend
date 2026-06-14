@@ -41,7 +41,7 @@ export default function AgentsPage() {
             }}
           />
 
-          <Navbar transparent />
+          <Navbar variant="hero" />
 
           {/* Title block — Figma: 738x208 at y=216 from card top */}
           <div

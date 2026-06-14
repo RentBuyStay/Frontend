@@ -40,7 +40,7 @@ const related = [
 export default function BlogPostPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Navbar />
+      <Navbar variant="page" />
 
       {/* MAIN — Figma node 268:38037: 1440x2372, padding 80 top/bottom */}
       <section className="bg-white pt-10 md:pt-20 pb-20">

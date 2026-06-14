@@ -106,7 +106,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       <section className="bg-white">
         <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 pt-4 md:pt-6">
           <div className="rounded-[20px] md:rounded-[25px] bg-white md:p-6 flex flex-col gap-10">
-            <Navbar transparent floating={false} />
+            <Navbar variant="card" />
             <SearchBar defaultTab="Rent" />
           </div>
         </div>

@@ -107,7 +107,7 @@ export default function BlogsPage() {
               />
             </div>
 
-            <Navbar transparent />
+            <Navbar variant="hero" />
 
             <div className="absolute inset-0 z-10 flex flex-col px-4 pt-[100px] pb-4 md:px-6 md:pt-[120px] md:pb-6">
               <div className="flex-1 flex items-center justify-center">

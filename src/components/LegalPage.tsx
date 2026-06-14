@@ -137,7 +137,7 @@ export default function LegalPage({
       {/* HERO — Figma 268:39229: 1440x168, white. Inner card 1392x120 at x:24 y:24 with navbar */}
       <section className="bg-white" style={{ paddingLeft: "24px", paddingRight: "24px", paddingTop: "24px" }}>
         <div className="relative" style={{ height: "120px" }}>
-          <Navbar />
+          <Navbar variant="page" />
         </div>
       </section>
 

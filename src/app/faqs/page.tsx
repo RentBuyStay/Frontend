@@ -21,7 +21,7 @@ export default function FAQsPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar variant="page" />
 
       <section className="bg-[#121212] text-white py-16">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">

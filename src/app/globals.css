@@ -143,7 +143,8 @@
   border-radius: 0 0 20px 20px;
 }
 
-/* Plain navbar gradient horizontal line below (for white pages) — has 80px padding from page edges */
+/* Solid white-page header underline. Inset to match the header's page gutter:
+   16px on mobile (px-4) so the line spans nearly the full width, 80px on desktop (md:px-[80px]). */
 .nav-gradient-border-bottom {
   position: relative;
 }
@@ -151,10 +152,16 @@
   content: '';
   position: absolute;
   bottom: 0;
-  left: 80px;
-  right: 80px;
+  left: 16px;
+  right: 16px;
   height: 1px;
   background: linear-gradient(90deg, rgba(48,94,130,0) 0%, rgba(48,94,130,0.5) 49.5%, rgba(48,94,130,0) 100%);
+}
+@media (min-width: 768px) {
+  .nav-gradient-border-bottom::after {
+    left: 80px;
+    right: 80px;
+  }
 }
 
 /* How RentBuyStay Works — step cards auto-scroll vertically inside the fixed-height

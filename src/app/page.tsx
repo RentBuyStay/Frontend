@@ -183,7 +183,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/20 z-[1]" />
 
           {/* Navbar — inside the card, top: 24, sides: 24 */}
-          <Navbar transparent />
+          <Navbar variant="hero" />
 
           {/* ===== DESKTOP hero content — fills the viewport; content centered, search at bottom ===== */}
           <div className="hidden md:flex md:flex-col absolute inset-0 z-10 items-center px-6 pt-[100px] pb-6">

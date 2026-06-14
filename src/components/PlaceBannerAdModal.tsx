@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Navbar from "./Navbar";
 
 export type PlacementOption = {
   label: string;
@@ -87,10 +88,9 @@ export default function PlaceBannerAdModal({
           className="bg-white w-full min-h-full md:min-h-0 md:max-w-[497px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Mobile: full-screen page with a top navbar bar */}
-          <div className="md:hidden flex items-center justify-between px-4 h-20 border-b border-[#f6f6f6] shrink-0">
-            <Image src="/images/logo.svg" alt="RentBuyStay" width={140} height={40} className="h-10 w-auto" />
-            <Image src="/icons/tabler-menu-4.svg" alt="" width={24} height={24} aria-hidden="true" />
+          {/* Mobile: full-screen page with the real site navbar (functional hamburger + drawer) */}
+          <div className="md:hidden shrink-0">
+            <Navbar variant="page" />
           </div>
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-10" style={{ gap: "40px" }}>
             <div className="flex flex-col items-center" style={{ gap: "24px" }}>
@@ -136,10 +136,9 @@ export default function PlaceBannerAdModal({
         className="bg-white w-full min-h-full md:min-h-0 md:max-w-[751px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto relative flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Mobile: full-screen page with a top navbar bar */}
-        <div className="md:hidden flex items-center justify-between px-4 h-20 border-b border-[#f6f6f6] shrink-0">
-          <Image src="/images/logo.svg" alt="RentBuyStay" width={140} height={40} className="h-10 w-auto" />
-          <Image src="/icons/tabler-menu-4.svg" alt="" width={24} height={24} aria-hidden="true" />
+        {/* Mobile: full-screen page with the real site navbar (functional hamburger + drawer) */}
+        <div className="md:hidden shrink-0">
+          <Navbar variant="page" />
         </div>
 
         <div className="p-4 md:p-10">

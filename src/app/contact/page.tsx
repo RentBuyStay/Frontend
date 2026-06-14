@@ -46,7 +46,7 @@ export default function ContactPage() {
           {/* Solid dark overlay 0.2 — Figma second fill */}
           <div className="absolute inset-0 z-1" style={{ background: "rgba(0,0,0,0.2)" }} />
 
-          <Navbar transparent />
+          <Navbar variant="hero" />
 
           {/* Title block — Figma 280:10877: x:327 y:282 w:738 column gap 16 */}
           <div

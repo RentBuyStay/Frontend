@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X, ChevronDown } from "lucide-react";
 import LoginModal from "./LoginModal";
 
@@ -29,15 +30,25 @@ const navLinks: NavLink[] = [
   { label: "Blog", href: "/blogs" },
 ];
 
+type NavbarVariant = "hero" | "card" | "page";
+
 interface NavbarProps {
-  /** When true the navbar uses the glass card background */
-  transparent?: boolean;
-  /** When transparent: position the glass nav absolutely over a hero image (true),
-      or render it in normal flow, e.g. inside a card on a white page (false). */
-  floating?: boolean;
+  /**
+   * "hero" — glass nav floating (absolute) over an image hero; the page supplies
+   *          the `relative` hero container. (default)
+   * "card" — bare glass nav embedded inside a white card next to a search bar
+   *          (property detail, property requests).
+   * "page" — glass nav in the standard page container, for white pages with no
+   *          image hero (blog detail, agencies, agents list, FAQs, legal, search).
+   *
+   * Every variant renders the SAME glass nav + mobile drawer, so the header looks
+   * and behaves identically site-wide (incl. the full-width rounded underline and
+   * the working mobile drawer) — only the outer wrapper differs per context.
+   */
+  variant?: NavbarVariant;
 }
 
-export default function Navbar({ transparent = false, floating = true }: NavbarProps) {
+export default function Navbar({ variant = "hero" }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -60,115 +71,96 @@ export default function Navbar({ transparent = false, floating = true }: NavbarP
       </Link>
     );
 
-  if (transparent) {
-    return (
-      <>
-      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
-      <div className={floating ? "absolute top-0 left-0 right-0 z-50 px-6 pt-6" : ""}>
-        {/* Glass card */}
-        <nav
-          className="nav-gradient-border flex items-center justify-between px-6 h-[72px] rounded-[20px]"
-          style={{ background: "rgba(255,255,255,0.50)" }}
-        >
-          {/* Logo — Figma: 166x48 */}
-          <Link href="/" className="shrink-0">
-            <Image
-              src="/images/logo.svg"
-              alt="RentBuyStay"
-              width={166}
-              height={48}
-              className="h-12 w-auto"
-              priority
-            />
-          </Link>
+  // Shared nav contents (DRY) — logo on the left; desktop links + auth on the
+  // right; on mobile the links/auth hide and the hamburger opens the drawer.
+  // Used by BOTH the glass card nav and the solid page header below.
+  const navInner = (
+    <>
+      {/* Logo — Figma: 166x48 */}
+      <Link href="/" className="shrink-0">
+        <Image
+          src="/images/logo.svg"
+          alt="RentBuyStay"
+          width={166}
+          height={48}
+          className="h-12 w-auto"
+          priority
+        />
+      </Link>
 
-          {/* Desktop links — Figma: gap 16px, item padding 4px 12px, gap 4px between text and arrow */}
-          <div className="hidden lg:flex items-center gap-4">
-            {navLinks.map(renderDropdown)}
-          </div>
-
-          {/* Auth — gap 16px to match figma */}
-          <div className="hidden lg:flex items-center gap-4 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowLogin(true)}
-              className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
-              style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
-            >
-              Log in
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowLogin(true)}
-              className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
-              style={{
-                background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
-                border: "1px solid rgba(120,158,187,0.5)",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Post Property
-            </button>
-          </div>
-
-          {/* Mobile toggle — opens the right-side drawer */}
-          <button className="lg:hidden p-2 text-[#121212]" onClick={() => setOpen(true)} aria-label="Open menu">
-            <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />
-          </button>
-        </nav>
+      {/* Desktop links — Figma: gap 16px, item padding 4px 12px, gap 4px between text and arrow */}
+      <div className="hidden lg:flex items-center gap-4">
+        {navLinks.map(renderDropdown)}
       </div>
-      <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
-      </>
+
+      {/* Auth — gap 16px to match figma */}
+      <div className="hidden lg:flex items-center gap-4 shrink-0">
+        <button
+          type="button"
+          onClick={() => setShowLogin(true)}
+          className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
+          style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
+        >
+          Log in
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowLogin(true)}
+          className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
+          style={{
+            background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+            border: "1px solid rgba(120,158,187,0.5)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Post Property
+        </button>
+      </div>
+
+      {/* Mobile toggle — opens the right-side drawer */}
+      <button className="lg:hidden p-2 text-[#121212]" onClick={() => setOpen(true)} aria-label="Open menu">
+        <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />
+      </button>
+    </>
+  );
+
+  // The glass card nav — translucent, rounded; floats over image heroes ("hero")
+  // or sits inside a white search card ("card"). Rounded underline via `.nav-gradient-border`.
+  const glassNav = (
+    <nav
+      className="nav-gradient-border flex items-center justify-between px-6 h-[72px] rounded-[20px]"
+      style={{ background: "rgba(255,255,255,0.50)" }}
+    >
+      {navInner}
+    </nav>
+  );
+
+  let header;
+  if (variant === "hero") {
+    // Floats over the hero image; the page supplies the relative hero container.
+    header = <div className="absolute top-0 left-0 right-0 z-50 px-6 pt-6">{glassNav}</div>;
+  } else if (variant === "card") {
+    // Bare glass nav; the page embeds it inside its own white card next to a search
+    // bar. `relative z-50` keeps it (and its dropdowns/drawer) above the content below.
+    header = <div className="relative z-50">{glassNav}</div>;
+  } else {
+    // "page" — solid, full-width white header for white pages with no image hero.
+    // Content + underline use the page gutter (16px mobile / 80px desktop) so the
+    // gradient line spans nearly the full width on mobile (see `.nav-gradient-border-bottom`).
+    header = (
+      <header className="bg-white nav-gradient-border-bottom relative z-50">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] flex items-center justify-between h-[72px] md:h-[96px]">
+          {navInner}
+        </div>
+      </header>
     );
   }
 
-  /* Plain navbar for white-bg pages — Figma: full-width with gradient bottom line, no rounded card */
   return (
     <>
-    <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
-    <header className="bg-white nav-gradient-border-bottom relative">
-      <div className="max-w-[1440px] mx-auto px-[80px] flex items-center justify-between h-[96px]">
-        {/* Logo — same 166x48 */}
-        <Link href="/" className="shrink-0">
-          <Image src="/images/logo.svg" alt="RentBuyStay" width={166} height={48} className="h-12 w-auto" priority />
-        </Link>
-
-        {/* Desktop links — same as transparent */}
-        <div className="hidden lg:flex items-center gap-4">
-          {navLinks.map(renderDropdown)}
-        </div>
-
-        {/* Auth */}
-        <div className="hidden lg:flex items-center gap-4 shrink-0">
-          <button
-            type="button"
-            onClick={() => setShowLogin(true)}
-            className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
-            style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
-          >
-            Log in
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowLogin(true)}
-            className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
-            style={{
-              background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
-              border: "1px solid rgba(120,158,187,0.5)",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Post Property
-          </button>
-        </div>
-
-        {/* Mobile toggle — opens the right-side drawer */}
-        <button className="lg:hidden p-2" onClick={() => setOpen(true)} aria-label="Open menu">
-          <Image src="/icons/tabler-menu-4.svg" alt="Menu" width={24} height={24} />
-        </button>
-      </div>
-    </header>
-    <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
+      {header}
+      <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
     </>
   );
 }
@@ -185,6 +177,12 @@ function MobileDrawer({
   onClose: () => void;
   onLogin: () => void;
 }) {
+  // Render through a portal to <body> so the drawer escapes any ancestor stacking,
+  // overflow or transform context — it's mounted deep inside the navbar tree (e.g.
+  // inside the property card). Portals need the DOM, so wait for client mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Lock body scroll + close on Escape while the drawer is open
   useEffect(() => {
     if (!open) return;
@@ -200,23 +198,24 @@ function MobileDrawer({
     };
   }, [open, onClose]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div className="lg:hidden" aria-hidden={!open}>
-      {/* Backdrop — dims and blurs the page, tap to close */}
+      {/* Backdrop — dims the page, tap to close. Inline opacity/pointer-events so it
+          never depends on JIT-generated classes. */}
       <div
         onClick={onClose}
-        className={`fixed inset-0 z-[60] bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className="fixed inset-0 z-[10010] bg-black/40 backdrop-blur-[2px] transition-opacity duration-300"
+        style={{ opacity: open ? 1 : 0, pointerEvents: open ? "auto" : "none" }}
       />
 
-      {/* Drawer panel */}
+      {/* Drawer panel — slides in from the right via an inline transform. */}
       <aside
         role="dialog"
         aria-modal="true"
-        className={`fixed top-0 right-0 z-[70] flex h-full w-[82%] max-w-[320px] flex-col bg-white shadow-2xl transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : "translate-x-full"
-        }`}
+        className="fixed top-0 right-0 z-[10020] flex h-full w-[82%] max-w-[320px] flex-col bg-white shadow-2xl transition-transform duration-300 ease-out"
+        style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
       >
         {/* Header — logo + close (X sits exactly where the hamburger was) */}
         <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#ededed] px-5">
@@ -304,7 +303,8 @@ function MobileDrawer({
           </button>
         </div>
       </aside>
-    </div>
+    </div>,
+    document.body
   );
 }
 

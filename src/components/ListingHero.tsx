@@ -33,7 +33,7 @@ export default function ListingHero({
             <div className="absolute inset-0 bg-black/55" />
           </div>
 
-          <Navbar transparent />
+          <Navbar variant="hero" />
 
           {/* Content — heading/paragraph centered vertically, search pinned to bottom */}
           <div className="absolute inset-0 z-10 flex flex-col px-4 pt-[100px] pb-4 md:px-6 md:pt-[120px] md:pb-6">

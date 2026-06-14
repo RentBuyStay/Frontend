@@ -15,7 +15,7 @@ export default function AllAgenciesPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* HERO — Figma node 252:32515: plain white navbar + search bar, no border anywhere */}
-      <Navbar />
+      <Navbar variant="page" />
       <section className="bg-white" style={{ padding: "40px 0" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
           {/* Search — shared realtor search (state + keyword + Search) */}

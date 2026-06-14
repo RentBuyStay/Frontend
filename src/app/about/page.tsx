@@ -169,7 +169,7 @@ export default function AboutPage() {
           {/* Solid dark overlay 0.2 — Figma second fill */}
           <div className="absolute inset-0 z-1" style={{ background: "rgba(0,0,0,0.2)" }} />
 
-          <Navbar transparent />
+          <Navbar variant="hero" />
 
           {/* Title block — Figma 280:11081: 641 wide, x:64 y:540, column gap 16 */}
           <div
