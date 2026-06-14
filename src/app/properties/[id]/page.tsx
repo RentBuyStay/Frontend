@@ -27,6 +27,21 @@ const amenities = [
   "High-Speed Internet",
 ];
 
+// Other Related Properties — Figma 133:18632 / 743:70045 (sidebar bullet list)
+const otherCategories = [
+  "Serviced Properties for sale",
+  "Furnished Properties for sale",
+  "Newly Built Properties for sale",
+  "Cheap Properties for sale",
+  "Luxury Properties for sale",
+  "Property for sale between 20milion and 40milion",
+  "Property for sale between 40milion and 60milion",
+  "Property for sale between 60milion and 80milion",
+  "Property for sale between 80milion and 100milion",
+  "Property for sale between 100milion and 120milion",
+  "Property for sale between 120milion and 150milion",
+];
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -302,54 +317,82 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             {/* Interested CTA — desktop sidebar only (mobile copy sits after price) */}
             <div className="hidden lg:block">{interestedCard}</div>
 
-            {/* Agent card — Figma 133:18593: 411 wide r:20 1px #F6F6F6 border, padding 24
-                Avatar 56x56, name + verify badge, "Propper." text + AGENT pill
-                Call (white) + Message (blue) buttons, ratings/listings row, View all link */}
+            {/* Agent card — Figma 133:18593: "Listed by" heading, avatar 64 + name + agency,
+                location/joined rows (desktop), rating + View all between dividers,
+                then Call (white) + Message (blue) buttons */}
             <div
               className="bg-white"
               style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
             >
-              <div className="flex items-center" style={{ gap: "16px" }}>
+              {/* Listed by heading */}
+              <h3 style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+                Listed by
+              </h3>
+
+              {/* Avatar + name + agency */}
+              <div className="flex items-center" style={{ gap: "16px", marginTop: "24px" }}>
                 <div
                   className="rounded-full flex items-center justify-center text-white shrink-0"
-                  style={{
-                    width: "56px",
-                    height: "56px",
-                    background: "#305E82",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                  }}
+                  style={{ width: "64px", height: "64px", background: "#305E82", fontSize: "18px", fontWeight: 600 }}
                 >
                   {property.agentInitials}
                 </div>
                 <div className="flex flex-col" style={{ gap: "4px" }}>
-                  <div className="flex items-center" style={{ gap: "4px" }}>
+                  <div className="flex items-center" style={{ gap: "8px" }}>
                     <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                       {property.agentName}
                     </span>
                     <Image src="/icons/verify-figma.svg" alt="" width={20} height={20} />
                   </div>
-                  <div className="flex items-center" style={{ gap: "8px" }}>
-                    <span style={{ fontSize: "12px", lineHeight: "16px", fontWeight: 500, color: "#807E7E" }}>
-                      Propper.
-                    </span>
-                    <span
-                      style={{
-                        background: "#305E82",
-                        color: "#FFFFFF",
-                        padding: "2px 8px",
-                        borderRadius: "100px",
-                        fontSize: "10px",
-                        fontWeight: 600,
-                        letterSpacing: "0.05em",
-                      }}
-                    >
-                      AGENT
-                    </span>
-                  </div>
+                  <span style={{ fontSize: "12px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>
+                    Prime Estates
+                  </span>
                 </div>
               </div>
 
+              {/* Location + Joined — desktop only (Figma mobile omits these) */}
+              <div className="hidden lg:flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
+                <div className="flex items-center" style={{ gap: "8px" }}>
+                  <Image src="/icons/location-detail.svg" alt="" width={20} height={20} />
+                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
+                    {property.location}
+                  </span>
+                </div>
+                <div className="flex items-center" style={{ gap: "8px" }}>
+                  <Image src="/icons/user-profile.svg" alt="" width={20} height={20} />
+                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
+                    Joined 2 years ago
+                  </span>
+                </div>
+              </div>
+
+              {/* Rating + listings + View all — between full-width dividers */}
+              <div className="flex items-center justify-between gap-2 border-t border-b border-[#F6F6F6] py-4" style={{ marginTop: "24px" }}>
+                <div className="flex items-center" style={{ gap: "16px" }}>
+                  <div className="flex items-center" style={{ gap: "8px" }}>
+                    <Image src="/icons/star.svg" alt="" width={20} height={20} />
+                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>
+                      4.3
+                    </span>
+                  </div>
+                  <span style={{ width: "1px", height: "14px", background: "#EDEDED" }} />
+                  <div className="flex items-center" style={{ gap: "8px" }}>
+                    <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
+                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>
+                      8 listings
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href={`/agents/${property.agentInitials.toLowerCase()}`}
+                  className="hover:opacity-80 shrink-0 whitespace-nowrap text-[12px] md:text-[14px]"
+                  style={{ lineHeight: "20px", fontWeight: 500, color: "#305E82" }}
+                >
+                  View all Properties
+                </Link>
+              </div>
+
+              {/* Call + Message buttons */}
               <div className="flex" style={{ gap: "12px", marginTop: "24px" }}>
                 <button
                   className="flex items-center justify-center hover:opacity-90 transition-opacity flex-1"
@@ -384,30 +427,30 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   </span>
                 </button>
               </div>
+            </div>
 
-              <div className="flex items-center justify-between" style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid #F6F6F6" }}>
-                <div className="flex items-center" style={{ gap: "8px" }}>
-                  <Image src="/icons/star.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>
-                    4.3
-                  </span>
-                </div>
-                <span style={{ width: "1px", height: "20px", background: "#EDEDED" }} />
-                <div className="flex items-center" style={{ gap: "8px" }}>
-                  <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>
-                    8 listings
-                  </span>
-                </div>
-                <span style={{ width: "1px", height: "20px", background: "#EDEDED" }} />
-                <Link
-                  href={`/agents/${property.agentInitials.toLowerCase()}`}
-                  className="hover:opacity-80"
-                  style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#305E82" }}
-                >
-                  View all Properties
-                </Link>
-              </div>
+            {/* Other Related Properties — Figma 133:18632: bordered card, bullet list */}
+            <div
+              className="bg-white"
+              style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
+            >
+              <h3 className="mb-6" style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>
+                Other Related Properties
+              </h3>
+              <ul className="flex flex-col gap-2">
+                {otherCategories.map((c) => (
+                  <li
+                    key={c}
+                    className="flex items-start gap-2 min-w-0"
+                    style={{ fontSize: "14px", lineHeight: "24px", color: "#305E82" }}
+                  >
+                    <span className="shrink-0">•</span>
+                    <Link href="#" className="hover:underline break-words min-w-0">
+                      {c}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
