@@ -79,16 +79,20 @@ export default function PlaceBannerAdModal({
   if (submitted) {
     return (
       <div
-        className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+        className="fixed inset-0 z-[10000] overflow-y-auto md:flex md:items-center md:justify-center md:p-4"
         style={{ background: "rgba(0,0,0,0.5)" }}
         onClick={close}
       >
         <div
-          className="bg-white rounded-[24px] w-full"
+          className="bg-white w-full min-h-full md:min-h-0 md:max-w-[497px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto flex flex-col"
           onClick={(e) => e.stopPropagation()}
-          style={{ maxWidth: "497px", maxHeight: "90vh", overflowY: "auto" }}
         >
-          <div className="flex flex-col items-center text-center p-6 md:p-10" style={{ gap: "40px" }}>
+          {/* Mobile: full-screen page with a top navbar bar */}
+          <div className="md:hidden flex items-center justify-between px-4 h-20 border-b border-[#f6f6f6] shrink-0">
+            <Image src="/images/logo.svg" alt="RentBuyStay" width={140} height={40} className="h-10 w-auto" />
+            <Image src="/icons/tabler-menu-4.svg" alt="" width={24} height={24} aria-hidden="true" />
+          </div>
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-10" style={{ gap: "40px" }}>
             <div className="flex flex-col items-center" style={{ gap: "24px" }}>
               <Image src="/icons/payment-success.svg" alt="" width={113} height={113} />
               <div className="flex flex-col items-center" style={{ gap: "8px" }}>
@@ -124,31 +128,24 @@ export default function PlaceBannerAdModal({
 
   return (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10000] overflow-y-auto md:flex md:items-center md:justify-center md:p-4"
       style={{ background: "rgba(0,0,0,0.5)" }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[24px] relative"
+        className="bg-white w-full min-h-full md:min-h-0 md:max-w-[751px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto relative flex flex-col"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: "751px",
-          maxWidth: "100%",
-          maxHeight: "90vh",
-          overflowY: "auto",
-        }}
       >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute hover:opacity-70 transition-opacity top-4 right-4 md:top-10 md:right-10"
-          style={{ width: "24px", height: "24px" }}
-        >
-          <Image src="/icons/cancel.svg" alt="" width={24} height={24} />
-        </button>
+        {/* Mobile: full-screen page with a top navbar bar */}
+        <div className="md:hidden flex items-center justify-between px-4 h-20 border-b border-[#f6f6f6] shrink-0">
+          <Image src="/images/logo.svg" alt="RentBuyStay" width={140} height={40} className="h-10 w-auto" />
+          <Image src="/icons/tabler-menu-4.svg" alt="" width={24} height={24} aria-hidden="true" />
+        </div>
 
         <div className="p-4 md:p-10">
-          <div className="flex flex-col pr-8 md:pr-0" style={{ gap: "8px", maxWidth: "497px" }}>
+          {/* Header — title + close, inline at the top-right */}
+          <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-col" style={{ gap: "8px", maxWidth: "497px" }}>
             <h2
               style={{
                 fontSize: "20px",
@@ -172,6 +169,15 @@ export default function PlaceBannerAdModal({
               Select a strategic media placement option and take note of the technical
               requirement for each ad placement below.
             </p>
+          </div>
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="shrink-0 hover:opacity-70 transition-opacity"
+              style={{ width: "24px", height: "24px" }}
+            >
+              <Image src="/icons/cancel.svg" alt="" width={24} height={24} />
+            </button>
           </div>
 
           {/* Placement Option */}
