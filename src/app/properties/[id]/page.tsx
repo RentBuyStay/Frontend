@@ -197,7 +197,9 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center hover:opacity-90 transition-opacity"
                 style={{ background: "rgba(18,18,18,0.2)", borderRadius: "10px", padding: "5px" }}
               >
-                <Image src="/icons/arrow-right-white.svg" alt="" width={24} height={24} className="rotate-180" />
+                <span className="w-6 h-6 flex items-center justify-center">
+                  <Image src="/icons/gallery-arrow.svg" alt="" width={9} height={18} />
+                </span>
               </button>
               <button
                 type="button"
@@ -205,7 +207,9 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center hover:opacity-90 transition-opacity"
                 style={{ background: "rgba(18,18,18,0.2)", borderRadius: "10px", padding: "5px" }}
               >
-                <Image src="/icons/arrow-right-white.svg" alt="" width={24} height={24} />
+                <span className="w-6 h-6 flex items-center justify-center rotate-180">
+                  <Image src="/icons/gallery-arrow.svg" alt="" width={9} height={18} />
+                </span>
               </button>
             </div>
 
