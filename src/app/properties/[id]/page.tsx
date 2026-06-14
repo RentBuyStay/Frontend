@@ -175,13 +175,15 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 style={{ objectFit: "cover" }}
                 priority
               />
-              {/* Image counter — Figma mobile (743:70919) bottom-left; desktop bottom-right */}
+              {/* Image counter — Figma 64x32 pill, bottom-left on BOTH mobile (743:70919)
+                  and desktop (133:18670); gallery icon 16 + "2/11" 15px */}
               <div
-                className="absolute flex items-center bottom-4 left-4 md:left-auto md:right-4"
+                className="absolute flex items-center justify-center bottom-4 left-4"
                 style={{
+                  width: "64px",
+                  height: "32px",
                   background: "rgba(18,18,18,0.5)",
                   borderRadius: "8px",
-                  padding: "8px 12px",
                   gap: "5px",
                 }}
               >
