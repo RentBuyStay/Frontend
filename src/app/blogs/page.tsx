@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import RealtorSearch from "@/components/RealtorSearch";
+import BlogCard from "@/components/BlogCard";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -84,74 +85,6 @@ function FeaturedDateBadge({ date }: { date: string }) {
     <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#FFFFFF" }}>
       {date}
     </span>
-  );
-}
-
-function PostCard({ p }: { p: Post }) {
-  return (
-    <Link
-      href={`/blogs/${p.slug}`}
-      className="bg-white overflow-hidden flex flex-col group transition-shadow w-full rounded-[20px]"
-    >
-      <div className="relative shrink-0 w-full" style={{ height: "260px" }}>
-        <Image src={p.image} alt={p.title} fill sizes="(min-width:1024px) 411px, 100vw" style={{ objectFit: "cover" }} />
-      </div>
-      <div className="flex flex-col flex-1" style={{ padding: "24px", gap: "16px" }}>
-        {/* Figma 268:37893 — smaller cards show ONLY the date, not "RBS | date" */}
-        <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-          {p.date}
-        </span>
-        <div className="flex flex-col" style={{ gap: "8px", flex: 1 }}>
-          <h3
-            className="group-hover:text-[#305E82] transition-colors"
-            style={{
-              fontSize: "20px",
-              lineHeight: "32px",
-              fontWeight: 600,
-              color: "#121212",
-              letterSpacing: "-0.02em",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {p.title}
-          </h3>
-          <p
-            style={{
-              fontSize: "15px",
-              lineHeight: "24px",
-              fontWeight: 400,
-              color: "#807E7E",
-              letterSpacing: "-0.02em",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {p.excerpt}
-          </p>
-        </div>
-        {/* Read more button — Figma: 103x40, r=12, transparent bg, #305E82 text + arrow */}
-        <span
-          className="inline-flex items-center group-hover:gap-3 transition-all"
-          style={{
-            gap: "8px",
-            height: "40px",
-            fontSize: "14px",
-            lineHeight: "18px",
-            fontWeight: 500,
-            color: "#305E82",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Read more
-          <Image src="/icons/arrow-right.svg" alt="" width={16} height={16} />
-        </span>
-      </div>
-    </Link>
   );
 }
 
@@ -257,7 +190,7 @@ export default function BlogsPage() {
             style={{ gap: "40px 24px", marginTop: "40px" }}
           >
             {posts.map((p) => (
-              <PostCard key={p.slug} p={p} />
+              <BlogCard key={p.slug} p={p} />
             ))}
           </div>
         </div>
