@@ -77,6 +77,30 @@ const faqs = [
   },
 ];
 
+// Pill label used above each section heading (icon + uppercase text on a grey rounded chip)
+function SectionPill({ icon, label, centered }: { icon: string; label: string; centered?: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 px-2 py-2 rounded-[50px] ${centered ? "self-center" : "self-start"}`}
+      style={{ background: "#F6F6F6", boxShadow: "0px 10px 30px -8px rgba(176,176,176,0.15)" }}
+    >
+      <Image src={icon} alt="" width={20} height={20} />
+      <span
+        className="uppercase"
+        style={{
+          fontSize: "14px",
+          lineHeight: "24px",
+          fontWeight: 500,
+          color: "#305E82",
+          letterSpacing: "-0.01em",
+        }}
+      >
+        {label}
+      </span>
+    </span>
+  );
+}
+
 function FAQItem({ q, a }: { q: string; a: string }) {
   return (
     <details
@@ -143,12 +167,11 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* HERO — Figma 280:11076: 1440x900; inner card 1392x852 r=24.91; dark gradient overlay, centered title + bottom stats */}
-      <section className="bg-white" style={{ paddingLeft: "24px", paddingRight: "24px", paddingTop: "24px" }}>
-        <div
-          className="relative overflow-hidden bg-[#F3FEFE]"
-          style={{ borderRadius: "24.91px", width: "100%", height: "852px" }}
-        >
+      {/* HERO — Figma 280:11076 (desktop) / 803:61294 (mobile).
+          Desktop: 852px card, title at x64 y540, stats at x921 y718.
+          Mobile: shorter card, title + stats stacked at the bottom-left. */}
+      <section className="bg-white px-4 md:px-6 pt-4 md:pt-6">
+        <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] lg:rounded-[24.91px] min-h-[calc(100svh-32px)] lg:min-h-0 lg:h-[852px]">
           <Image
             src="/images/about-hero.png"
             alt="One platform. Every property need."
@@ -156,257 +179,176 @@ export default function AboutPage() {
             className="object-cover"
             priority
           />
-          {/* Dark gradient overlay — Figma fill_T5DA0V */}
-          {/* Gradient overlay — Figma 280:11080 Rectangle 43: gradient stops at 0/7/13/18/32/69/100%, fill opacity 0.65 */}
+          {/* Gradient overlay — Figma fill; dark at the bottom for legibility */}
           <div
-            className="absolute inset-0 z-1"
+            className="absolute inset-0"
             style={{
               background:
                 "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
               opacity: 0.65,
             }}
           />
-          {/* Solid dark overlay 0.2 — Figma second fill */}
-          <div className="absolute inset-0 z-1" style={{ background: "rgba(0,0,0,0.2)" }} />
+          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.2)" }} />
 
           <Navbar variant="hero" />
 
-          {/* Title block — Figma 280:11081: 641 wide, x:64 y:540, column gap 16 */}
-          <div
-            className="absolute z-10 flex flex-col"
-            style={{
-              left: "64px",
-              top: "540px",
-              width: "641px",
-              maxWidth: "calc(100% - 128px)",
-              gap: "16px",
-            }}
-          >
-            <h1
-              className="text-white"
-              style={{
-                fontSize: "clamp(30px, 6.5vw, 64px)",
-                lineHeight: "1.2",
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              One Platform.
-              <br />
-              Every Property Need.
-            </h1>
-            <p
-              className="text-white"
-              style={{
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Whether you&rsquo;re looking for a furnished apartment this weekend, signing
-              a 12-month lease, or taking the big step of owning your first home, we&rsquo;ve
-              built the tools, the listings, and the support to make it seamless.
-            </p>
-          </div>
-
-          {/* Stats — Figma 791:92392: right-bottom, x:921 y:718, row gap 40 */}
-          <div
-            className="absolute z-10 flex items-center text-white"
-            style={{
-              left: "921px",
-              top: "718px",
-              gap: "40px",
-            }}
-          >
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="flex flex-col items-center justify-center whitespace-nowrap"
-                style={{ gap: "8px" }}
+          {/* Title + stats: stacked at the bottom on mobile. On desktop this wrapper
+              dissolves (lg:contents) so each block takes its absolute Figma position. */}
+          <div className="absolute z-10 inset-x-4 bottom-8 flex flex-col gap-10 lg:contents">
+            {/* Title block */}
+            <div className="flex flex-col gap-2 lg:gap-4 lg:absolute lg:z-10 lg:left-[64px] lg:top-[540px] lg:w-[641px] lg:max-w-[calc(100%-128px)]">
+              <h1
+                className="text-white text-[32px] leading-[40px] lg:text-[64px] lg:leading-[1.2]"
+                style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
               >
-                <span
-                  style={{
-                    fontSize: "clamp(26px, 6vw, 48px)",
-                    fontWeight: 600,
-                    letterSpacing: "-0.02em",
-                    textAlign: "center",
-                  }}
+                One Platform.
+                <br />
+                Every Property Need.
+              </h1>
+              <p
+                className="text-white text-[14px] leading-[24px] lg:text-[18px] lg:leading-[32px]"
+                style={{ fontWeight: 400, letterSpacing: "-0.02em" }}
+              >
+                Whether you&rsquo;re looking for a furnished apartment this weekend, signing
+                a 12-month lease, or taking the big step of owning your first home, we&rsquo;ve
+                built the tools, the listings, and the support to make it seamless.
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="flex items-center text-white gap-6 lg:gap-10 lg:absolute lg:z-10 lg:left-[921px] lg:top-[718px]">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex flex-col items-center justify-center whitespace-nowrap gap-2"
                 >
-                  {s.value}
-                </span>
-                <span
-                  style={{
-                    fontSize: "16px",
-                    lineHeight: "24px",
-                    fontWeight: 400,
-                    color: "rgba(255,255,255,0.75)",
-                    textAlign: "center",
-                  }}
-                >
-                  {s.label}
-                </span>
-              </div>
-            ))}
+                  <span
+                    className="text-[24px] lg:text-[48px]"
+                    style={{ fontWeight: 600, letterSpacing: "-0.02em", textAlign: "center" }}
+                  >
+                    {s.value}
+                  </span>
+                  <span
+                    className="text-[13px] leading-[20px] lg:text-[16px] lg:leading-[24px]"
+                    style={{ fontWeight: 400, color: "rgba(255,255,255,0.75)", textAlign: "center" }}
+                  >
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 1 — Figma 276:9228: 1440x629, content x:80 y:80 w:1280 column gap 40 center
-          Image cards OVERLAP with negative gap -24px (Figma layout_1FIJ7I gap: -24px) */}
-      <section className="bg-white" style={{ height: "629px" }}>
+      {/* SECTION 1 — overlapping image cards + big quote. Figma 276:9228 (desktop) /
+          803:61332 top (mobile, quote 24px). Centered column on both. */}
+      <section className="bg-white lg:h-[629px]">
         <div
-          className="mx-auto flex flex-col items-center"
-          style={{
-            width: "1280px",
-            maxWidth: "calc(100% - 160px)",
-            paddingTop: "80px",
-            gap: "40px",
-          }}
+          className="mx-auto flex flex-col items-center px-4 lg:px-0 py-12 lg:py-0 lg:pt-20 gap-8 lg:gap-10 lg:w-[1280px] lg:max-w-[calc(100%-160px)]"
         >
-          {/* 3 overlapping image cards — Figma 795:61267 component.
-              Container layout: row, gap -24px (cards overlap).
-              Each card: 179.6x172.79 white r:24 shadow.
-              Each card has inner frame 159.3x138.87 r:20 bg #F8F8F8 with a positioned image inside (image bleeds outside inner frame, clipped by overflow). */}
-          <div className="flex items-center" style={{ gap: "-24px" }}>
-            {[
-              {
-                src: "/images/about-mi-1.png",
-                inner: { x: 9.04, y: 9.04 },
-                img: { x: -21.64, y: -5.09, w: 202.75, h: 149.64 },
-                rotate: -8,
-              },
-              {
-                src: "/images/about-mi-2.png",
-                inner: { x: 11.26, y: 9.04 },
-                img: { x: -35.33, y: -6.04, w: 230.24, h: 150.01 },
-                rotate: 8,
-              },
-              {
-                src: "/images/about-mi-3.png",
-                inner: { x: 9.04, y: 9.04 },
-                img: { x: -19.83, y: -3.53, w: 198.25, h: 145.14 },
-                rotate: -8,
-              },
-            ].map((card, i) => (
-              <div
-                key={i}
-                className="bg-white shrink-0 relative"
-                style={{
-                  width: "179.6px",
-                  height: "172.79px",
-                  borderRadius: "24px",
-                  marginLeft: i === 0 ? 0 : "-24px",
-                  zIndex: 3 - i,
-                  transform: `rotate(${card.rotate}deg)`,
-                  transformOrigin: "center center",
-                }}
-              >
+          {/* 3 overlapping photo cards — scaled down on mobile so the cluster fits. */}
+          <div className="flex w-full items-center justify-center overflow-hidden lg:overflow-visible">
+            <div className="flex items-center scale-[0.62] lg:scale-100 -my-8 lg:my-0 shrink-0">
+              {[
+                {
+                  src: "/images/about-mi-1.png",
+                  inner: { x: 9.04, y: 9.04 },
+                  img: { x: -21.64, y: -5.09, w: 202.75, h: 149.64 },
+                  rotate: -8,
+                },
+                {
+                  src: "/images/about-mi-2.png",
+                  inner: { x: 11.26, y: 9.04 },
+                  img: { x: -35.33, y: -6.04, w: 230.24, h: 150.01 },
+                  rotate: 8,
+                },
+                {
+                  src: "/images/about-mi-3.png",
+                  inner: { x: 9.04, y: 9.04 },
+                  img: { x: -19.83, y: -3.53, w: 198.25, h: 145.14 },
+                  rotate: -8,
+                },
+              ].map((card, i) => (
                 <div
-                  className="overflow-hidden bg-[#F8F8F8] absolute"
+                  key={i}
+                  className="bg-white shrink-0 relative"
                   style={{
-                    left: `${card.inner.x}px`,
-                    top: `${card.inner.y}px`,
-                    width: "159.3px",
-                    height: "138.87px",
-                    borderRadius: "20px",
+                    width: "179.6px",
+                    height: "172.79px",
+                    borderRadius: "24px",
+                    marginLeft: i === 0 ? 0 : "-24px",
+                    zIndex: 3 - i,
+                    transform: `rotate(${card.rotate}deg)`,
+                    transformOrigin: "center center",
                   }}
                 >
-                  <Image
-                    src={card.src}
-                    alt=""
-                    width={Math.round(card.img.w * 2)}
-                    height={Math.round(card.img.h * 2)}
+                  <div
+                    className="overflow-hidden bg-[#F8F8F8] absolute"
                     style={{
-                      position: "absolute",
-                      left: `${card.img.x}px`,
-                      top: `${card.img.y}px`,
-                      width: `${card.img.w}px`,
-                      height: `${card.img.h}px`,
-                      maxWidth: "none",
-                      objectFit: "cover",
+                      left: `${card.inner.x}px`,
+                      top: `${card.inner.y}px`,
+                      width: "159.3px",
+                      height: "138.87px",
+                      borderRadius: "20px",
                     }}
-                  />
+                  >
+                    <Image
+                      src={card.src}
+                      alt=""
+                      width={Math.round(card.img.w * 2)}
+                      height={Math.round(card.img.h * 2)}
+                      style={{
+                        position: "absolute",
+                        left: `${card.img.x}px`,
+                        top: `${card.img.y}px`,
+                        width: `${card.img.w}px`,
+                        height: `${card.img.h}px`,
+                        maxWidth: "none",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          {/* Quote — Figma 790:92349: 40px Geist Medium 500, line-height 64, letter-spacing -0.8px (-2%), CENTER.
-              Two-tone via styleOverrideTable: first 101 chars = #121212, then "space —..." = #807E7E.
-              Figma has an explicit \L line-separator after "platform." — reproduce as <br />. */}
+          {/* Quote — two-tone (first sentence dark, rest grey). 24px mobile / 40px desktop. */}
           <p
-            className="text-center"
+            className="text-center text-[24px] leading-[40px] lg:text-[40px] lg:leading-[1.3]"
             style={{
               maxWidth: "1280px",
-              fontSize: "clamp(22px, 4.5vw, 40px)",
-              lineHeight: "1.3",
               fontWeight: 500,
               color: "#121212",
               letterSpacing: "-0.02em",
             }}
           >
             We didn&rsquo;t just build a property platform.
-            <br />
-            We built the one we wished existed. Finding your perfect{" "}
+            <br className="hidden lg:inline" /> We built the one we wished existed. Finding your perfect space,{" "}
             <span style={{ color: "#807E7E" }}>
-              space — whether for a night, a year, or a lifetime should feel exciting, not exhausting.
+              whether for a night, a year, or a lifetime, should feel exciting, not exhausting.
             </span>
           </p>
         </div>
       </section>
 
-      {/* SECTION 2 — Figma 791:92393: 1440x616, two columns
-          Left text x:80 y:80 w:620 column gap 16
-          Right image card x:740 y:80 w:620 h:456 r:20 with DARK GRADIENT OVERLAY + QUOTE at bottom */}
-      <section className="bg-white" style={{ height: "616px" }}>
-        <div className="relative mx-auto" style={{ width: "1440px", maxWidth: "100%", height: "616px" }}>
+      {/* SECTION 2 — OUR STORY. Figma 791:92393 (desktop two-column) / 803:61881 (mobile stacked). */}
+      <section className="bg-white">
+        <div className="relative mx-auto flex flex-col gap-8 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[616px]">
           {/* Left text */}
-          <div
-            className="absolute flex flex-col justify-center"
-            style={{ left: "80px", top: "80px", width: "620px", gap: "16px" }}
-          >
-            {/* OUR STORY pill — Figma 791:92456: bg #F6F6F6 r:50 padding 8 gap 8 + tag-user icon */}
-            <span
-              className="inline-flex items-center self-start"
-              style={{
-                padding: "8px",
-                background: "#F6F6F6",
-                borderRadius: "50px",
-                gap: "8px",
-              }}
-            >
-              <Image src="/icons/tag-user.svg" alt="" width={20} height={20} />
-              <span
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
-                  color: "#305E82",
-                  letterSpacing: "-0.01em",
-                  textTransform: "uppercase",
-                }}
-              >
-                OUR STORY
-              </span>
-            </span>
+          <div className="flex flex-col gap-4 lg:gap-4 lg:absolute lg:left-[80px] lg:top-[80px] lg:w-[620px] lg:justify-center">
+            <SectionPill icon="/icons/tag-user.svg" label="OUR STORY" />
             <h2
-              style={{
-                fontSize: "clamp(22px, 4.5vw, 40px)",
-                lineHeight: "1.3",
-                fontWeight: 600,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-              }}
+              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               Born from a very
-              <br />
-              real frustration
+              <br className="hidden lg:inline" /> real frustration
             </h2>
             <p
+              className="text-[14px] leading-[32px] lg:text-[18px] lg:leading-[32px]"
               style={{
-                fontSize: "18px",
-                lineHeight: "32px",
                 fontWeight: 400,
                 color: "rgba(46, 46, 46, 0.6)",
                 letterSpacing: "-0.02em",
@@ -426,19 +368,17 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Right image card with overlay + quote — Figma 791:92514: 620x456 r:20 */}
+          {/* Right image card with overlay + quote */}
           <div
-            className="absolute overflow-hidden bg-[#F6F6F6]"
-            style={{ left: "740px", top: "80px", width: "620px", height: "456px", borderRadius: "20px" }}
+            className="relative overflow-hidden bg-[#F6F6F6] w-full h-[320px] rounded-[20px] lg:absolute lg:left-[740px] lg:top-[80px] lg:w-[620px] lg:h-[456px]"
           >
             <Image
               src="/images/about-frustration.png"
               alt="Modern country house"
               fill
-              sizes="620px"
+              sizes="(min-width: 1024px) 620px, 100vw"
               style={{ objectFit: "cover" }}
             />
-            {/* Gradient overlay — Figma 795:61280 Rectangle 43: same gradient as hero but fill opacity 0.68 (no extra solid layer) */}
             <div
               className="absolute inset-0"
               style={{
@@ -447,19 +387,11 @@ export default function AboutPage() {
                 opacity: 0.68,
               }}
             />
-            {/* Quote overlay — Figma 795:61278: x:24 y:320, w:500, column gap 16, total height 112.
-                Quote 791:92516 — Cormorant Garamond SemiBold Italic 24/32, letter-spacing -0.48px, h:64 (2 lines, TITLE case)
-                Subtitle 791:92518 — Geist Regular 14/32, letter-spacing 0, h:32 */}
-            <div
-              className="absolute z-10 flex flex-col"
-              style={{ left: "24px", top: "320px", width: "500px", gap: "16px" }}
-            >
+            <div className="absolute z-10 flex flex-col gap-4 inset-x-6 bottom-6 lg:left-[24px] lg:top-[320px] lg:inset-x-auto lg:bottom-auto lg:w-[500px]">
               <p
-                className="text-white"
+                className="text-white text-[18px] leading-[26px] lg:text-[24px] lg:leading-[32px]"
                 style={{
                   fontFamily: "var(--font-cormorant), Georgia, serif",
-                  fontSize: "24px",
-                  lineHeight: "32px",
                   fontWeight: 600,
                   letterSpacing: "-0.48px",
                   fontStyle: "italic",
@@ -469,14 +401,8 @@ export default function AboutPage() {
                 deal. That changes here.&rdquo;
               </p>
               <p
-                className="text-white"
-                style={{
-                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                  fontSize: "14px",
-                  lineHeight: "32px",
-                  fontWeight: 400,
-                  letterSpacing: 0,
-                }}
+                className="text-white text-[14px] leading-[32px]"
+                style={{ fontFamily: "var(--font-geist-sans), system-ui, sans-serif", fontWeight: 400 }}
               >
                 - THE RENTBUYSTAY TEAM
               </p>
@@ -485,92 +411,39 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* SECTION 3 — Figma 793:61154: 1440x632 column
-          Title block x:406 y:80 w:628 centered
-          Cards row x:80 y:384 row gap 24, each 302x168 */}
-      <section className="bg-white" style={{ height: "632px" }}>
-        <div className="relative mx-auto" style={{ width: "1440px", maxWidth: "100%", height: "632px" }}>
+      {/* SECTION 3 — OUR VALUES. Figma 793:61154 (desktop) / 803:61770 (mobile, cards stack). */}
+      <section className="bg-white">
+        <div className="relative mx-auto flex flex-col gap-10 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[632px]">
           {/* Title block */}
-          <div
-            className="absolute flex flex-col items-center text-center"
-            style={{ left: "406px", top: "80px", width: "628px", gap: "16px" }}
-          >
-            {/* OUR VALUES pill — Figma 793:61156 with octicon:goal-24 icon */}
-            <span
-              className="inline-flex items-center"
-              style={{
-                padding: "8px",
-                background: "#F6F6F6",
-                borderRadius: "50px",
-                gap: "8px",
-              }}
-            >
-              <Image src="/icons/octicon-goal.svg" alt="" width={20} height={20} />
-              <span
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
-                  color: "#305E82",
-                  letterSpacing: "-0.01em",
-                  textTransform: "uppercase",
-                }}
-              >
-                OUR vALUES
-              </span>
-            </span>
+          <div className="flex flex-col items-center text-center gap-4 lg:absolute lg:left-[406px] lg:top-[80px] lg:w-[628px]">
+            <SectionPill icon="/icons/octicon-goal.svg" label="OUR VALUES" centered />
             <h2
-              style={{
-                fontSize: "clamp(22px, 4.5vw, 40px)",
-                lineHeight: "1.3",
-                fontWeight: 600,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-              }}
+              className="text-[28px] leading-[36px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               We earn trust the
-              <br />
-              old-fashioned way
+              <br className="hidden lg:inline" /> old-fashioned way
             </h2>
             <p
-              style={{
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                color: "rgba(46,46,46,0.6)",
-                letterSpacing: "-0.02em",
-              }}
+              className="text-[14px] leading-[32px] lg:text-[18px] lg:leading-[32px]"
+              style={{ fontWeight: 400, color: "rgba(46,46,46,0.6)", letterSpacing: "-0.02em" }}
             >
               At RentBuyStay, everything we do is shaped by a simple commitment: to put the
               person before the property.
             </p>
           </div>
 
-          {/* 4 cards row — Figma 795:61216: x:80 y:384, row gap 24 */}
-          <div
-            className="absolute flex items-center"
-            style={{ left: "80px", top: "384px", gap: "24px" }}
-          >
+          {/* Cards — stacked full-width on mobile, row on desktop */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:absolute lg:left-[80px] lg:top-[384px]">
             {trustCards.map((card) => (
               <div
                 key={card.title}
-                className="relative"
-                style={{
-                  width: "302px",
-                  height: "168px",
-                  borderRadius: "15px",
-                  background: card.color,
-                }}
+                className="relative w-full h-[168px] lg:w-[302px]"
+                style={{ borderRadius: "15px", background: card.color }}
               >
-                {/* Title row — x:8 y:16, gap 8 */}
-                <div
-                  className="absolute flex items-center"
-                  style={{ left: "8px", top: "16px", gap: "8px" }}
-                >
-                  <span
-                    className="inline-flex items-center justify-center shrink-0"
-                    style={{ width: "16px", height: "16px" }}
-                  >
+                {/* Title row */}
+                <div className="absolute flex items-center left-2 top-4 gap-2">
+                  <span className="inline-flex items-center justify-center shrink-0 w-4 h-4">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <circle cx="8" cy="8" r="8" fill="white" fillOpacity="0.15" />
                       <circle cx="7.977" cy="8.322" r="2.667" fill="white" />
@@ -589,24 +462,11 @@ export default function AboutPage() {
                   </span>
                 </div>
 
-                {/* Inner white box — x:8 y:56, 286x104, r:12, padding 16 */}
-                <div
-                  className="absolute bg-white"
-                  style={{
-                    left: "8px",
-                    top: "56px",
-                    width: "286px",
-                    height: "104px",
-                    borderRadius: "12px",
-                  }}
-                >
+                {/* Inner white box */}
+                <div className="absolute bg-white inset-x-2 top-14 h-[104px] rounded-[12px]">
                   <p
+                    className="absolute inset-x-4 top-4"
                     style={{
-                      position: "absolute",
-                      left: "16px",
-                      top: "16px",
-                      width: "254px",
-                      height: "72px",
                       fontSize: "12px",
                       lineHeight: "24px",
                       fontWeight: 400,
@@ -623,33 +483,67 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* WHY IT MATTER — Figma 1177:78267 (mobile: image on top + text; desktop: two columns). */}
+      <section className="bg-white">
+        <div className="mx-auto flex flex-col gap-6 px-4 py-12 lg:flex-row lg:items-center lg:gap-16 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
+          {/* Image */}
+          <div className="relative overflow-hidden bg-[#F6F6F6] w-full h-[400px] rounded-[20px] lg:w-[560px] lg:h-[456px] lg:shrink-0">
+            <Image
+              src="/images/about-fresh-voice-2a2d69.png"
+              alt="Aerial view of a modern city skyline"
+              fill
+              sizes="(min-width: 1024px) 560px, 100vw"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+
+          {/* Text */}
+          <div className="flex flex-col gap-4 lg:flex-1">
+            <SectionPill icon="/icons/emoji-normal.svg" label="WHY IT MATTER" />
+            <h2
+              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
+            >
+              The Market
+              <br /> Needed a Fresh Voice
+            </h2>
+            <p
+              className="text-[14px] leading-[32px] lg:text-[18px] lg:leading-[32px]"
+              style={{
+                fontWeight: 400,
+                color: "#807E7E",
+                letterSpacing: "-0.02em",
+                whiteSpace: "pre-line",
+              }}
+            >
+              The property industry had been running the same playbook for decades, with
+              complicated processes, opaque pricing, and too many middlemen taking a cut
+              while buyers, renters, and sellers were left confused.
+              {"\n"}
+              We entered the market with a different philosophy: radical clarity, smart
+              technology, and a genuine care for every person in every transaction. No
+              matter where you are in your property journey, RentBuyStay is built to walk
+              beside you, not ahead of you.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <ListPropertyCTA />
 
-      {/* FAQ — Figma 280:11201: 1440x1248
-          Title block x:406 y:80 w:628, gap 8
-          FAQ list x:297 y:288 w:846 gap 24, each 72 tall r:12 bg #F6F6F6 with tabler:plus icon */}
-      <section className="bg-white" style={{ height: "1248px" }}>
-        <div className="relative mx-auto" style={{ width: "1440px", maxWidth: "100%", height: "1248px" }}>
-          <div
-            className="absolute flex flex-col text-center"
-            style={{ left: "406px", top: "80px", width: "628px", gap: "8px" }}
-          >
+      {/* FAQ — Figma 280:11201 (desktop) / 803:61837 (mobile, full-width accordion). */}
+      <section className="bg-white">
+        <div className="relative mx-auto flex flex-col gap-10 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[1248px]">
+          <div className="flex flex-col text-center gap-2 lg:absolute lg:left-[406px] lg:top-[80px] lg:w-[628px]">
             <h2
-              style={{
-                fontSize: "clamp(22px, 4.5vw, 40px)",
-                lineHeight: "1.3",
-                fontWeight: 600,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-                textAlign: "center",
-              }}
+              className="text-[28px] leading-[36px] lg:text-[40px] lg:leading-[1.3]"
+              style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em", textAlign: "center" }}
             >
               Frequently Asked Questions
             </h2>
             <p
+              className="text-[14px] leading-[28px] lg:text-[18px] lg:leading-[32px]"
               style={{
-                fontSize: "18px",
-                lineHeight: "32px",
                 fontWeight: 400,
                 color: "rgba(46,46,46,0.6)",
                 letterSpacing: "-0.02em",
@@ -662,10 +556,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div
-            className="absolute flex flex-col"
-            style={{ left: "297px", top: "288px", width: "846px", gap: "24px" }}
-          >
+          <div className="flex flex-col gap-4 lg:gap-6 lg:absolute lg:left-[297px] lg:top-[288px] lg:w-[846px]">
             {faqs.map((f) => (
               <FAQItem key={f.q} q={f.q} a={f.a} />
             ))}
