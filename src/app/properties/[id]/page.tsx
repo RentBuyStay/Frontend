@@ -101,15 +101,14 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* Navbar — Figma 133:18507 / 743:69606: navbar + search strip at the top */}
-      <section className="bg-white" style={{ paddingTop: "24px", paddingLeft: "24px", paddingRight: "24px" }}>
-        <Navbar />
-      </section>
-
-      {/* Search strip — same compact search used on the listing pages */}
+      {/* Hero — Figma 216:21621 / 743:69607: navbar (glass) + search inside a rounded
+          white card, inset 24px (desktop) / 16px (mobile) from the page edges */}
       <section className="bg-white">
-        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-[80px] pt-6">
-          <SearchBar defaultTab="Rent" />
+        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 pt-4 md:pt-6">
+          <div className="rounded-[20px] md:rounded-[25px] bg-white p-4 md:p-6 flex flex-col gap-10">
+            <Navbar transparent floating={false} />
+            <SearchBar defaultTab="Rent" />
+          </div>
         </div>
       </section>
 

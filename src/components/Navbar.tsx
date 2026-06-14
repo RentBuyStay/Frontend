@@ -30,11 +30,14 @@ const navLinks: NavLink[] = [
 ];
 
 interface NavbarProps {
-  /** When true the navbar floats over the hero with glass background */
+  /** When true the navbar uses the glass card background */
   transparent?: boolean;
+  /** When transparent: position the glass nav absolutely over a hero image (true),
+      or render it in normal flow, e.g. inside a card on a white page (false). */
+  floating?: boolean;
 }
 
-export default function Navbar({ transparent = false }: NavbarProps) {
+export default function Navbar({ transparent = false, floating = true }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
@@ -61,8 +64,8 @@ export default function Navbar({ transparent = false }: NavbarProps) {
     return (
       <>
       <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
-      <div className="absolute top-0 left-0 right-0 z-50 px-6 pt-6">
-        {/* Floating glass card */}
+      <div className={floating ? "absolute top-0 left-0 right-0 z-50 px-6 pt-6" : ""}>
+        {/* Glass card */}
         <nav
           className="nav-gradient-border flex items-center justify-between px-6 h-[72px] rounded-[20px]"
           style={{ background: "rgba(255,255,255,0.50)" }}
