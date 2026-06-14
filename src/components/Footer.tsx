@@ -1,12 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const explore = [
-  { label: "Properties for Rent", href: "/for-rent" },
-  { label: "Properties for Sale", href: "/for-sale" },
-  { label: "Shortlets", href: "/shortlet" },
-  { label: "Agents", href: "/agents" },
-  { label: "Property Requests", href: "/property-requests" },
+const company = [
+  { label: "About Us", href: "/about" },
+  { label: "Blog", href: "/blogs" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const legal = [
@@ -69,10 +67,10 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row gap-6 w-full lg:w-auto">
             <div className="flex flex-col gap-4 w-full sm:w-[180px] shrink-0">
               <h4 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#ffffff" }}>
-                EXPLORE
+                COMPANY
               </h4>
               <ul className="flex flex-col">
-                {explore.map((l) => (
+                {company.map((l) => (
                   <li key={l.href} style={{ height: "35px" }}>
                     <Link href={l.href} className="hover:underline" style={{ fontSize: "16px", lineHeight: "35px", color: "rgba(255,255,255,0.8)" }}>
                       {l.label}

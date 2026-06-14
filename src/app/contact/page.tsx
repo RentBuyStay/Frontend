@@ -7,6 +7,54 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+const inputCls =
+  "w-full h-12 bg-[#F6F6F6] rounded-[12px] px-4 text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] tracking-[-0.02em] outline-none";
+
+// Labelled field wrapper (label + control). `className` lets the First/Last row split into equal columns on desktop.
+function Field({
+  label,
+  className = "",
+  children,
+}: {
+  label: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`flex flex-col gap-2 ${className}`}>
+      <label className="text-[14px] leading-[24px] font-medium text-[#121212] tracking-[-0.02em]">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+// One contact detail row (icon + title + value) in the info card.
+function ContactRow({
+  icon,
+  title,
+  children,
+}: {
+  icon: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-4">
+      <div className="relative shrink-0 w-12 h-12 lg:w-[72px] lg:h-[72px]">
+        <Image src={icon} alt="" fill className="object-contain" />
+      </div>
+      <div className="flex flex-col justify-center gap-2 lg:gap-4">
+        <span className="text-[16px] leading-[24px] lg:text-[20px] font-semibold text-[#121212]">
+          {title}
+        </span>
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -17,293 +65,114 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* HERO — Figma 280:10873: 1440x900, inner card 1392x852 r=24.91 at x:24 y:24
-          bg #F3FEFE, imageRef eafecfe1251862b1e7a8e26d92f6de3f1893e174 (cityscape)
-          dark gradient + 0.2 black overlay
-          Title block at x:327 y:282 w:738 column gap 16 (centered text) */}
-      <section className="bg-white" style={{ paddingLeft: "24px", paddingRight: "24px", paddingTop: "24px" }}>
-        <div
-          className="relative overflow-hidden bg-[#F3FEFE]"
-          style={{ borderRadius: "24.91px", width: "100%", height: "852px" }}
-        >
-          <Image
-            src="/images/banner-ad-hero.png"
-            alt="Contact RentBuyStay"
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Gradient overlay — Figma 280:10876 Rectangle 43: same gradient stops, fill opacity 0.65 */}
-          <div
-            className="absolute inset-0 z-1"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
-              opacity: 0.65,
-            }}
-          />
-          {/* Solid dark overlay 0.2 — Figma second fill */}
-          <div className="absolute inset-0 z-1" style={{ background: "rgba(0,0,0,0.2)" }} />
-
-          <Navbar variant="hero" />
-
-          {/* Title block — Figma 280:10877: x:327 y:282 w:738 column gap 16 */}
-          <div
-            className="absolute z-10 flex flex-col"
-            style={{ left: "327px", top: "282px", width: "738px", maxWidth: "calc(100% - 654px)", gap: "16px" }}
-          >
-            <h1
-              className="text-white text-center"
+    <div className="min-h-screen flex flex-col bg-white overflow-x-clip">
+      {/* HERO — Figma 280:10873 (desktop). Title centred; fills the viewport on mobile,
+          852px card capped at 1440 on desktop (matches the home/about hero). */}
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
+          <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)] lg:min-h-0 lg:h-[852px]">
+            <Image
+              src="/images/banner-ad-hero.png"
+              alt="Contact RentBuyStay"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div
+              className="absolute inset-0"
               style={{
-                fontSize: "clamp(30px, 6.5vw, 64px)",
-                lineHeight: "1.2",
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
+                background:
+                  "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
+                opacity: 0.65,
               }}
-            >
-              We&rsquo;re Here to Help You Find Your Dream Home or Property
-            </h1>
-            <p
-              className="text-white text-center"
-              style={{
-                width: "735px",
-                maxWidth: "100%",
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Get in touch with us for personalized guidance, and solutions tailored to your unique needs.
-            </p>
+            />
+            <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.2)" }} />
+
+            <Navbar variant="hero" />
+
+            {/* Title — vertically centred on mobile, placed at y=282 on desktop. */}
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center lg:justify-start lg:pt-[282px] lg:px-0">
+              <div className="flex flex-col items-center gap-2 lg:gap-4 w-full lg:w-[738px] lg:max-w-[calc(100%-128px)]">
+                <h1
+                  className="text-white text-[30px] leading-[40px] lg:text-[64px] lg:leading-[1.2]"
+                  style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
+                >
+                  We&rsquo;re Here to Help You Find Your Dream Home or Property
+                </h1>
+                <p
+                  className="text-white text-[14px] leading-[24px] lg:text-[18px] lg:leading-[32px]"
+                  style={{ fontWeight: 400, letterSpacing: "-0.02em" }}
+                >
+                  Get in touch with us for personalized guidance, and solutions tailored to
+                  your unique needs.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 2 — Figma 276:9774: 1440x940, two cards side-by-side
-          Form left (280:10915): x:80 y:80 w:628 h:780, white bg, 1px #F6F6F6 border, r:20
-          Info right (280:10978): x:732 y:80 w:628 h:780, white bg, 1px #F6F6F6 border, r:20 */}
-      <section className="bg-white" style={{ height: "940px" }}>
-        <div className="relative mx-auto" style={{ width: "1440px", maxWidth: "100%", height: "940px" }}>
-          {/* FORM CARD */}
-          <div
-            className="absolute bg-white"
-            style={{
-              left: "80px",
-              top: "80px",
-              width: "628px",
-              height: "780px",
-              border: "1px solid #F6F6F6",
-              borderRadius: "20px",
-            }}
-          >
-            {/* Title block — x:40 y:40 w:548 column gap 8 */}
-            <div className="absolute flex flex-col" style={{ left: "40px", top: "40px", width: "548px", gap: "8px" }}>
-              <h2 style={{ fontSize: "20px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+      {/* FORM + INFO — Figma 276:9774 (desktop two cards) / 785:90148 (mobile stacked).
+          Mobile: borderless form, then bordered info card. Desktop: two bordered cards. */}
+      <section className="bg-white">
+        <div className="mx-auto flex flex-col gap-10 px-4 py-12 lg:flex-row lg:items-stretch lg:gap-6 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
+          {/* FORM CARD — borderless on mobile, bordered + padded on desktop */}
+          <div className="lg:flex-1 flex flex-col gap-8 lg:border lg:border-[#F6F6F6] lg:rounded-[20px] lg:p-10">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-[16px] leading-[24px] lg:text-[20px] font-semibold text-[#121212]">
                 Send us a message
               </h2>
-              <p style={{ fontSize: "12px", lineHeight: "20px", fontWeight: 400, color: "#807E7E" }}>
+              <p className="text-[12px] leading-[20px] text-[#807E7E]">
                 Fill out the form below and our team will get back to you as soon as possible.
               </p>
             </div>
 
-            {/* Form fields — x:40 y:132 w:548 column gap 16 */}
-            <form
-              onSubmit={handleSubmit}
-              className="absolute flex flex-col"
-              style={{ left: "40px", top: "132px", width: "548px", gap: "16px" }}
-            >
-              {/* First / Last name row — gap 16, each 266 */}
-              <div className="flex" style={{ gap: "16px" }}>
-                <div className="flex flex-col" style={{ width: "266px", gap: "8px" }}>
-                  <label
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      fontWeight: 500,
-                      color: "#121212",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter your first name here"
-                    className="outline-none"
-                    style={{
-                      width: "100%",
-                      background: "#F6F6F6",
-                      borderRadius: "12px",
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      fontWeight: 400,
-                      color: "#121212",
-                      letterSpacing: "-0.02em",
-                    }}
-                  />
-                </div>
-                <div className="flex flex-col" style={{ width: "266px", gap: "8px" }}>
-                  <label
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      fontWeight: 500,
-                      color: "#121212",
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter your last name here"
-                    className="outline-none"
-                    style={{
-                      width: "100%",
-                      background: "#F6F6F6",
-                      borderRadius: "12px",
-                      padding: "8px 16px",
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      fontWeight: 400,
-                      color: "#121212",
-                      letterSpacing: "-0.02em",
-                    }}
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              {/* First / Last — stacked on mobile, side-by-side on desktop */}
+              <div className="flex flex-col gap-4 lg:flex-row">
+                <Field label="First Name" className="lg:flex-1">
+                  <input type="text" required placeholder="Enter your first name here" className={inputCls} />
+                </Field>
+                <Field label="Last Name" className="lg:flex-1">
+                  <input type="text" required placeholder="Enter your last name here" className={inputCls} />
+                </Field>
               </div>
 
-              {/* Phone Number — with country code + chevron */}
-              <div className="flex flex-col" style={{ gap: "8px" }}>
-                <label
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 500,
-                    color: "#121212",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  Phone Number
-                </label>
-                <div
-                  className="flex items-center"
-                  style={{
-                    background: "#F6F6F6",
-                    borderRadius: "12px",
-                    padding: "8px 16px",
-                    gap: "16px",
-                  }}
-                >
-                  <div className="flex items-center" style={{ gap: "4px" }}>
+              <Field label="Phone Number">
+                <div className="flex items-center h-12 bg-[#F6F6F6] rounded-[12px] px-4 gap-4">
+                  <div className="flex items-center gap-1 shrink-0">
                     <Image src="/icons/flag-us.svg" alt="" width={24} height={24} />
-                    <span
-                      style={{
-                        fontSize: "14px",
-                        lineHeight: "140%",
-                        fontWeight: 500,
-                        color: "#121212",
-                      }}
-                    >
-                      +1
-                    </span>
+                    <span className="text-[14px] font-medium text-[#121212]">+1</span>
                     <Image src="/icons/chevron-down.svg" alt="" width={16} height={16} />
                   </div>
                   <input
                     type="tel"
                     placeholder="phone number"
-                    className="outline-none flex-1 bg-transparent"
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      fontWeight: 400,
-                      color: "#121212",
-                    }}
+                    className="flex-1 min-w-0 bg-transparent text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] outline-none"
                   />
                 </div>
-              </div>
+              </Field>
 
-              {/* Email */}
-              <div className="flex flex-col" style={{ gap: "8px" }}>
-                <label
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 500,
-                    color: "#121212",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="Enter your email address here"
-                  className="outline-none"
-                  style={{
-                    width: "100%",
-                    background: "#F6F6F6",
-                    borderRadius: "12px",
-                    padding: "8px 16px",
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 400,
-                    color: "#121212",
-                    letterSpacing: "-0.02em",
-                  }}
-                />
-              </div>
+              <Field label="Email">
+                <input type="email" required placeholder="Enter your email address here" className={inputCls} />
+              </Field>
 
-              {/* Message — taller field with padding 16, gap 8 (layout_68DLZ5) */}
-              <div className="flex flex-col" style={{ gap: "8px" }}>
-                <label
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 500,
-                    color: "#121212",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  Message
-                </label>
+              <Field label="Message">
                 <textarea
                   required
-                  rows={4}
                   placeholder="Enter your message here"
-                  className="outline-none resize-none"
-                  style={{
-                    width: "100%",
-                    background: "#F6F6F6",
-                    borderRadius: "12px",
-                    padding: "16px",
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 400,
-                    color: "#121212",
-                    letterSpacing: "-0.02em",
-                  }}
+                  className="w-full min-h-[160px] bg-[#F6F6F6] rounded-[12px] p-4 text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] tracking-[-0.02em] outline-none resize-none"
                 />
-              </div>
+              </Field>
 
-              {/* Checkbox + agreement — Figma 280:11018 row align-center gap 8 width 369
-                  ts1 override: SemiBold underline #305E82 */}
-              <label
-                className="flex items-center cursor-pointer"
-                style={{ width: "369px", maxWidth: "100%", gap: "8px" }}
-              >
+              {/* Agreement checkbox */}
+              <label className="flex items-center cursor-pointer gap-2">
                 <span
                   className="shrink-0 flex items-center justify-center"
                   style={{
                     width: "20px",
                     height: "20px",
-                    border: "1.5px solid #807E7E",
+                    border: "1.5px solid",
                     borderRadius: "5px",
                     background: agreed ? "#305E82" : "transparent",
                     borderColor: agreed ? "#305E82" : "#807E7E",
@@ -322,126 +191,49 @@ export default function ContactPage() {
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
                 />
-                <span
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontWeight: 400,
-                    color: "#807E7E",
-                  }}
-                >
+                <span className="text-[12px] leading-[24px] lg:text-[14px] text-[#807E7E]">
                   By reaching out to us, you agree to our{" "}
-                  <Link
-                    href="/privacy-policy"
-                    style={{
-                      fontWeight: 600,
-                      color: "#305E82",
-                      textDecoration: "underline",
-                    }}
-                  >
+                  <Link href="/privacy" className="font-semibold text-[#305E82] underline">
                     Privacy Policy
                   </Link>
                   .
                 </span>
               </label>
-            </form>
 
-            {/* Proceed button — Figma 280:11024: x:40 y:692 w:548 h:48
-                Background: BLUE gradient (175deg #75A3C7 0% → #305E82 100%) — NOT orange.
-                Border: gradient. Text: Geist Medium 14 with white gradient fill */}
-            <button
-              type="submit"
-              onClick={() => {
-                // Form submit fallback
-                const form = document.querySelector("form");
-                if (form && (form as HTMLFormElement).reportValidity()) {
-                  (form as HTMLFormElement).requestSubmit();
-                }
-              }}
-              className="absolute flex items-center justify-center text-white hover:opacity-90 transition-opacity"
-              style={{
-                left: "40px",
-                top: "692px",
-                width: "548px",
-                height: "48px",
-                background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)",
-                border: "1px solid rgba(120, 158, 187, 0.5)",
-                borderRadius: "12px",
-                padding: "8px 24px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              {submitted ? "Message Sent ✓" : "Proceed"}
-            </button>
+              {/* Submit — blue gradient, full width */}
+              <button
+                type="submit"
+                className="flex items-center justify-center h-12 px-6 rounded-[12px] text-[14px] font-medium text-white hover:opacity-90 transition-opacity mt-2"
+                style={{
+                  background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)",
+                  border: "1px solid rgba(120, 158, 187, 0.5)",
+                }}
+              >
+                {submitted ? "Message Sent ✓" : "Submit Report"}
+              </button>
+            </form>
           </div>
 
-          {/* INFO CARD — Figma 280:10978: x:732 y:80 w:628 h:780, white, 1px #F6F6F6, r:20 */}
-          <div
-            className="absolute bg-white"
-            style={{
-              left: "732px",
-              top: "80px",
-              width: "628px",
-              height: "780px",
-              border: "1px solid #F6F6F6",
-              borderRadius: "20px",
-            }}
-          >
-            {/* Decorative gray block — Figma 280:11027: x:16 y:16 w:596 h:400 r:16 bg #F6F6F6 */}
-            <div
-              className="absolute"
-              style={{
-                left: "16px",
-                top: "16px",
-                width: "596px",
-                height: "400px",
-                background: "#F6F6F6",
-                borderRadius: "16px",
-              }}
-            />
+          {/* INFO CARD — bordered on both; gray block + email + phone */}
+          <div className="lg:flex-1 flex flex-col gap-6 lg:gap-14 border border-[#F6F6F6] rounded-[20px] p-4">
+            {/* Decorative block (map placeholder) */}
+            <div className="w-full h-[250px] lg:h-[400px] bg-[#F6F6F6] rounded-[16px]" />
 
-            {/* Contact details — Figma 280:11073: x:16 y:472 w:497 column gap 24 */}
-            <div
-              className="absolute flex flex-col"
-              style={{ left: "16px", top: "472px", width: "497px", gap: "24px" }}
-            >
-              {/* Email — Figma 280:11045: row align-center gap 16 */}
-              <div className="flex items-center" style={{ gap: "16px" }}>
-                <div className="shrink-0" style={{ width: "72px", height: "72px" }}>
-                  <Image src="/icons/contact-sms.svg" alt="" width={72} height={72} />
-                </div>
-                <div className="flex flex-col justify-center" style={{ width: "409px", gap: "16px" }}>
-                  <span style={{ fontSize: "20px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
-                    Email
-                  </span>
-                  <div className="flex items-center" style={{ gap: "10px" }}>
-                    <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                      contact@rentbuystay.com
-                    </span>
-                    <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#305E82" }}>
-                      (24/7 Response within 24 hours)
-                    </span>
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col gap-6">
+              <ContactRow icon="/icons/contact-sms.svg" title="Email">
+                <span className="text-[14px] leading-[24px] lg:text-[16px] text-[#807E7E]">
+                  contact@rentbuystay.com
+                </span>
+                <span className="text-[14px] leading-[24px] text-[#305E82]">
+                  (24/7 Response within 24 hours)
+                </span>
+              </ContactRow>
 
-              {/* Phone — Figma 280:11053: row align-center gap 16 */}
-              <div className="flex items-center" style={{ gap: "16px" }}>
-                <div className="shrink-0" style={{ width: "72px", height: "72px" }}>
-                  <Image src="/icons/contact-call.svg" alt="" width={72} height={72} />
-                </div>
-                <div className="flex flex-col justify-center" style={{ width: "343px", gap: "16px" }}>
-                  <span style={{ fontSize: "20px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
-                    Phone
-                  </span>
-                  <div className="flex items-center" style={{ gap: "10px" }}>
-                    <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                      +234 818 123 4567, +234 705 632 0710
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <ContactRow icon="/icons/contact-call.svg" title="Phone">
+                <span className="text-[14px] leading-[24px] lg:text-[16px] text-[#807E7E]">
+                  +234 818 123 4567, +234 705 632 0710
+                </span>
+              </ContactRow>
             </div>
           </div>
         </div>
