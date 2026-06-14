@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import RequestSearchFilter from "@/components/RequestSearchFilter";
+import SearchBar from "@/components/SearchBar";
 import Pagination from "@/components/Pagination";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import Image from "next/image";
@@ -56,11 +56,14 @@ export default function PropertyRequestsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
 
-      {/* HERO — Figma: WHITE bg, plain navbar with dropdowns + inline search row + filter dropdowns row */}
-      <Navbar />
-
+      {/* HERO — Figma 769:79786: navbar + search inside a rounded card (same as property detail) */}
       <section className="bg-white">
-        <RequestSearchFilter />
+        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 pt-4 md:pt-6">
+          <div className="rounded-[20px] md:rounded-[25px] bg-white md:p-6 flex flex-col gap-10">
+            <Navbar transparent floating={false} />
+            <SearchBar defaultTab="Rent" />
+          </div>
+        </div>
       </section>
 
       {/* PROPERTY REQUESTS + SIDEBAR */}
@@ -70,76 +73,84 @@ export default function PropertyRequestsPage() {
 
             {/* LEFT */}
             <div className="flex flex-col gap-6 min-w-0">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+              {/* Header — Figma 769:80964: title + count, then Sort row (left, stacked on mobile) */}
+              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-4">
+                <div className="flex flex-col gap-2">
+                  <h2 className="text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]" style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                     Property Requests
                   </h2>
-                  <p style={{ fontSize: "14px", color: "#7f7e7e", marginTop: "4px" }}>
-                    Showing 1 - 10 of 27
+                  <p style={{ fontSize: "14px", lineHeight: "24px", color: "#807E7E", letterSpacing: "-0.02em" }}>
+                    Showing 1 - 10 of 37
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span style={{ fontSize: "14px", color: "#7f7e7e" }}>Sort</span>
-                  <select className="px-4 py-2 border border-[#ededed] rounded-[8px] text-sm bg-white">
-                    <option>Newest</option>
-                    <option>Budget: Low to High</option>
-                    <option>Budget: High to Low</option>
-                  </select>
+                <div className="flex items-center gap-3">
+                  <span style={{ fontSize: "14px", fontWeight: 500, color: "#121212" }}>Sort:</span>
+                  <div className="relative">
+                    <select
+                      defaultValue="Newest"
+                      className="appearance-none bg-[#F6F6F6] rounded-[12px] h-10 pl-4 pr-9 text-[14px] text-[#121212] outline-none cursor-pointer"
+                    >
+                      <option>Newest</option>
+                      <option>Budget: Low to High</option>
+                      <option>Budget: High to Low</option>
+                    </select>
+                    <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
                 </div>
               </div>
 
               {/* Request cards — 2 column grid, exact Figma 411x368 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {requests.map((r) => (
-                  <div key={r.id} className="bg-white border border-[#ededed] rounded-[16px] p-6 flex flex-col gap-4">
-                    {/* Top row: Seeking | Bedroom (2 columns) */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="flex flex-col gap-1">
-                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Seeking</p>
-                        <p style={{ fontSize: "16px", fontWeight: 600, color: "#121212" }}>{r.lookingFor}</p>
+                  <div key={r.id} className="bg-white border border-[#f6f6f6] rounded-[20px] flex flex-col">
+                    <div className="flex flex-col gap-4 px-4 pt-6 pb-4">
+                      {/* Seeking | Bedroom — two columns */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-1 min-w-0">
+                          <p style={{ fontSize: "12px", color: "#807e7e" }}>Seeking</p>
+                          <p className="truncate" style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.lookingFor}</p>
+                        </div>
+                        <div className="flex flex-col gap-1 min-w-0">
+                          <p style={{ fontSize: "12px", color: "#807e7e" }}>Bedroom</p>
+                          <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.beds}</p>
+                        </div>
                       </div>
+
+                      {/* Budget — 16px Bold blue, suffix smaller */}
                       <div className="flex flex-col gap-1">
-                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Bedroom</p>
-                        <p style={{ fontSize: "16px", fontWeight: 600, color: "#121212" }}>{r.beds}</p>
+                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Budget</p>
+                        <p style={{ color: "#305e82", lineHeight: "24px" }}>
+                          <span style={{ fontSize: "16px", fontWeight: 700 }}>{r.budget.split("/")[0]}</span>
+                          {r.budget.includes("/") && <span style={{ fontSize: "14px", fontWeight: 400 }}>/{r.budget.split("/")[1]}</span>}
+                        </p>
+                      </div>
+
+                      {/* Area */}
+                      <div className="flex flex-col gap-1">
+                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Area</p>
+                        <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.area}</p>
+                      </div>
+
+                      {/* Request by */}
+                      <div className="flex flex-col gap-1">
+                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Request by</p>
+                        <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.requestBy}</p>
                       </div>
                     </div>
 
-                    {/* Budget — Figma: 20px Geist SemiBold blue, /year smaller */}
-                    <div className="flex flex-col gap-1">
-                      <p style={{ fontSize: "12px", color: "#807e7e" }}>Budget</p>
-                      <p style={{ color: "#305e82" }}>
-                        <span style={{ fontSize: "20px", fontWeight: 600 }}>{r.budget.split('/')[0]}</span>
-                        {r.budget.includes('/') && <span style={{ fontSize: "14px", fontWeight: 400 }}>/{r.budget.split('/')[1]}</span>}
-                      </p>
-                    </div>
+                    {/* Divider — full width */}
+                    <div className="h-px bg-[#f6f6f6] mt-auto" />
 
-                    {/* Area */}
-                    <div className="flex flex-col gap-1">
-                      <p style={{ fontSize: "12px", color: "#807e7e" }}>Area</p>
-                      <p style={{ fontSize: "16px", fontWeight: 500, color: "#121212" }}>{r.area}</p>
-                    </div>
-
-                    {/* Request by */}
-                    <div className="flex flex-col gap-1">
-                      <p style={{ fontSize: "12px", color: "#807e7e" }}>Request by</p>
-                      <p style={{ fontSize: "16px", fontWeight: 500, color: "#121212" }}>{r.requestBy}</p>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="border-t border-[#ededed] mt-auto" />
-
-                    {/* Bottom: Agent (left) + Date in blue (right) */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "12px", fontWeight: 600, color: "#305e82" }}>
+                    {/* Bottom: Agent (left) + Listed-on date (right) */}
+                    <div className="flex items-center justify-between gap-2 px-4 py-4">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(48,94,130,0.05)", fontSize: "14px", fontWeight: 600, color: "#305e82" }}>
                           {r.agentInitials}
                         </div>
-                        <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{r.agent}</span>
-                        <Image src="/icons/verify.svg" alt="" width={18} height={18} />
+                        <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{r.agent}</span>
+                        <Image src="/icons/verify.svg" alt="" width={20} height={20} className="shrink-0" />
                       </div>
-                      <span style={{ fontSize: "12px", color: "#305e82" }}>{r.date}</span>
+                      <span className="shrink-0" style={{ fontSize: "12px", fontWeight: 500, color: "#305e82" }}>{r.date}</span>
                     </div>
                   </div>
                 ))}
