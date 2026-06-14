@@ -28,11 +28,12 @@ export default function AllAgenciesPage() {
               gap: "16px",
             }}
           >
+            <div className="flex items-center gap-2 md:contents">
             <div
-              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-full md:w-[199px]"
+              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-[93px] md:w-[199px]"
               style={{ height: "48px", padding: "0 16px" }}
             >
-              <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+              <select className="appearance-none truncate text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
                 <option>Select state</option>
                 <option>Lagos</option>
                 <option>Abuja</option>
@@ -42,15 +43,16 @@ export default function AllAgenciesPage() {
             </div>
 
             <div
-              className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px]"
+              className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px]"
               style={{ height: "48px", padding: "0 16px" }}
             >
               <Search size={20} className="text-[#807E7E] shrink-0" />
               <input
                 type="text"
-                placeholder="Enter name, location, area or keyword..."
-                className="flex-1 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
+                placeholder="Enter location, area or keyword..."
+                className="flex-1 min-w-0 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
               />
+            </div>
             </div>
 
             <button
