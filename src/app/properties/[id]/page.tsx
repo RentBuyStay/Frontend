@@ -133,8 +133,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
 
             {/* Price + Stats row — Figma 133:18673 */}
-            <div className="flex items-center justify-between" style={{ paddingTop: "8px", paddingBottom: "8px", borderBottom: "1px solid #F6F6F6" }}>
-              <span style={{ fontSize: "28px", lineHeight: "36px", fontWeight: 700, color: "#305E82" }}>
+            <div className="flex flex-col gap-4 py-4 border-t border-b border-[#f6f6f6] md:flex-row md:items-center md:justify-between md:gap-0 md:py-2 md:border-t-0">
+              <span className="text-[20px] leading-[32px] md:text-[28px] md:leading-[36px]" style={{ fontWeight: 700, color: "#305E82" }}>
                 {property.price}
               </span>
               <div className="flex items-center" style={{ gap: "16px" }}>
