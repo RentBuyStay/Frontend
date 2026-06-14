@@ -48,8 +48,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           Right: Report Listing button at x:1117.8 y:31 w:162.2 h:48 */}
       <section className="bg-white" style={{ paddingTop: "40px" }}>
         <div className="relative mx-auto w-full max-w-[1440px] px-4 md:px-[80px]">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col" style={{ gap: "16px" }}>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col min-w-0 flex-1" style={{ gap: "16px" }}>
               {/* Back — Figma 133:18648 */}
               <Link
                 href="/"
@@ -63,7 +63,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </Link>
               {/* Title — Figma 133:18652: 24/600 line-height 32, TITLE case */}
               <h1
-                className="text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]"
+                className="truncate text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]"
                 style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
               >
                 {property.beds} Bedroom Flat for Sale in {property.location}
