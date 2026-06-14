@@ -175,13 +175,11 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 style={{ objectFit: "cover" }}
                 priority
               />
-              {/* Image counter — bottom-right pill bg rgba(0,0,0,0.5) r:8 */}
+              {/* Image counter — Figma mobile (743:70919) bottom-left; desktop bottom-right */}
               <div
-                className="absolute flex items-center"
+                className="absolute flex items-center bottom-4 left-4 md:left-auto md:right-4"
                 style={{
-                  bottom: "16px",
-                  right: "16px",
-                  background: "rgba(0,0,0,0.5)",
+                  background: "rgba(18,18,18,0.5)",
                   borderRadius: "8px",
                   padding: "6px 12px",
                   gap: "8px",
@@ -192,6 +190,23 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   2/11
                 </span>
               </div>
+              {/* Nav arrows — mobile only, vertically centered (Figma 743:70963) */}
+              <button
+                type="button"
+                aria-label="Previous photo"
+                className="md:hidden absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center hover:opacity-90 transition-opacity"
+                style={{ background: "rgba(18,18,18,0.2)", borderRadius: "10px", padding: "5px" }}
+              >
+                <Image src="/icons/arrow-right-white.svg" alt="" width={24} height={24} className="rotate-180" />
+              </button>
+              <button
+                type="button"
+                aria-label="Next photo"
+                className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center hover:opacity-90 transition-opacity"
+                style={{ background: "rgba(18,18,18,0.2)", borderRadius: "10px", padding: "5px" }}
+              >
+                <Image src="/icons/arrow-right-white.svg" alt="" width={24} height={24} />
+              </button>
             </div>
 
             {/* Price + Stats row — Figma 133:18673 */}
