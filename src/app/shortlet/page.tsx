@@ -125,7 +125,54 @@ export default function ShortletPage() {
 
               <div className="flex flex-col gap-6">
                 {listings.map((p) => (
-                  <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 transition-shadow">
+                <div key={p.id} className="contents">
+
+                  {/* ===== MOBILE: vertical card — Figma ===== */}
+                  <Link href={`/properties/${p.id}`} className="sm:hidden bg-white border border-[#f6f6f6] rounded-[20px] overflow-hidden flex flex-col">
+                    <div className="relative w-full h-[224px] bg-[#ededed]">
+                      <Image src={p.image} alt={p.title} fill className="object-cover" />
+                      <span className="absolute uppercase text-white" style={{ top: "16px", left: "16px", fontSize: "12px", lineHeight: "20px", fontWeight: 600, padding: "4px 8px", borderRadius: "8px", background: "#FFAE00" }}>
+                        Shortlet
+                      </span>
+                      <div className="absolute flex items-center gap-[5px] text-white" style={{ left: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px 8px" }}>
+                        <Image src="/icons/gallery.svg" alt="" width={16} height={16} />
+                        <span style={{ fontSize: "14px" }}>3</span>
+                      </div>
+                      <div className="absolute flex items-center gap-2" style={{ right: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px" }}>
+                        <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} className="rotate-180" />
+                        <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} />
+                      </div>
+                    </div>
+                    <div className="px-4 pt-4 flex flex-col gap-4">
+                      <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 700, color: "#305E82" }}>{p.price}</p>
+                      <div className="flex flex-col gap-2">
+                        <p className="line-clamp-1" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>{p.title}</p>
+                        <div className="flex items-center gap-2">
+                          <Image src="/icons/location.svg" alt="" width={20} height={20} />
+                          <span style={{ fontSize: "12px", lineHeight: "20px", color: "#305E82" }}>{p.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="h-px bg-[#f6f6f6] mt-4" />
+                    <div className="flex items-center gap-4 px-4 py-4" style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
+                      <span className="flex items-center gap-2"><Image src="/icons/prop-maximize.svg" alt="" width={20} height={20} />{p.area}</span>
+                      <span className="w-px h-3.5 bg-[#f6f6f6]" />
+                      <span className="flex items-center gap-2"><Image src="/icons/prop-bed.svg" alt="" width={20} height={20} />{p.beds} Beds</span>
+                      <span className="w-px h-3.5 bg-[#f6f6f6]" />
+                      <span className="flex items-center gap-2"><Image src="/icons/prop-bath.svg" alt="" width={20} height={20} />{p.baths} Baths</span>
+                    </div>
+                    <div className="h-px bg-[#f6f6f6]" />
+                    <div className="flex items-center gap-3 px-4 py-4">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(48,94,130,0.05)", color: "#305E82", fontSize: "14px", fontWeight: 600 }}>
+                        {p.agentInitials}
+                      </div>
+                      <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
+                      <Image src="/icons/verify.svg" alt="" width={20} height={20} />
+                    </div>
+                  </Link>
+
+                  {/* ===== DESKTOP: horizontal card ===== */}
+                  <Link href={`/properties/${p.id}`} className="hidden sm:flex flex-col bg-white border border-[#f6f6f6] rounded-[20px] p-5 gap-4 transition-shadow">
 
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
                       <div className="relative w-full h-[200px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
@@ -217,6 +264,8 @@ export default function ShortletPage() {
                       </div>
                     </div>
                   </Link>
+
+                </div>
                 ))}
               </div>
 
