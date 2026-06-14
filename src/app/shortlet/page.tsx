@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Phone, MessageCircle } from "lucide-react";
 import Pagination from "@/components/Pagination";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
+import ListingCard from "@/components/ListingCard";
 
 export const metadata = {
   title: "Shortlet Apartments in Nigeria | RentBuyStay",
@@ -126,147 +127,7 @@ export default function ShortletPage() {
 
               <div className="flex flex-col gap-6">
                 {listings.map((p) => (
-                <div key={p.id} className="contents">
-
-                  {/* ===== MOBILE: vertical card — Figma ===== */}
-                  <Link href={`/properties/${p.id}`} className="sm:hidden bg-white border border-[#f6f6f6] rounded-[20px] overflow-hidden flex flex-col">
-                    <div className="relative w-full h-[224px] bg-[#ededed]">
-                      <Image src={p.image} alt={p.title} fill className="object-cover" />
-                      <span className="absolute uppercase text-white" style={{ top: "16px", left: "16px", fontSize: "12px", lineHeight: "20px", fontWeight: 600, padding: "4px 8px", borderRadius: "8px", background: "#FFAE00" }}>
-                        Shortlet
-                      </span>
-                      <div className="absolute flex items-center gap-[5px] text-white" style={{ left: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px 8px" }}>
-                        <Image src="/icons/gallery.svg" alt="" width={16} height={16} />
-                        <span style={{ fontSize: "14px" }}>3</span>
-                      </div>
-                      <div className="absolute flex items-center gap-2" style={{ right: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px" }}>
-                        <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} className="rotate-180" />
-                        <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} />
-                      </div>
-                    </div>
-                    <div className="px-4 pt-4 flex flex-col gap-4">
-                      <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 700, color: "#305E82" }}>{p.price}</p>
-                      <div className="flex flex-col gap-2">
-                        <p className="line-clamp-1" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>{p.title}</p>
-                        <div className="flex items-center gap-2">
-                          <Image src="/icons/location.svg" alt="" width={20} height={20} />
-                          <span style={{ fontSize: "12px", lineHeight: "20px", color: "#305E82" }}>{p.location}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-px bg-[#f6f6f6] mt-4" />
-                    <div className="flex items-center gap-4 px-4 py-4" style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
-                      <span className="flex items-center gap-2"><Image src="/icons/prop-maximize.svg" alt="" width={20} height={20} />{p.area}</span>
-                      <span className="w-px h-3.5 bg-[#f6f6f6]" />
-                      <span className="flex items-center gap-2"><Image src="/icons/prop-bed.svg" alt="" width={20} height={20} />{p.beds} Beds</span>
-                      <span className="w-px h-3.5 bg-[#f6f6f6]" />
-                      <span className="flex items-center gap-2"><Image src="/icons/prop-bath.svg" alt="" width={20} height={20} />{p.baths} Baths</span>
-                    </div>
-                    <div className="h-px bg-[#f6f6f6]" />
-                    <div className="flex items-center gap-3 px-4 py-4">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(48,94,130,0.05)", color: "#305E82", fontSize: "14px", fontWeight: 600 }}>
-                        {p.agentInitials}
-                      </div>
-                      <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-                      <Image src="/icons/verify.svg" alt="" width={20} height={20} />
-                    </div>
-                  </Link>
-
-                  {/* ===== DESKTOP: horizontal card ===== */}
-                  <Link href={`/properties/${p.id}`} className="hidden sm:flex flex-col bg-white border border-[#f6f6f6] rounded-[20px] p-5 gap-4 transition-shadow">
-
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-                      <div className="relative w-full h-[200px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
-                        <Image src={p.image} alt={p.title} fill className="object-cover" />
-                        {/* SHORTLET badge — Figma: top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
-                        <span
-                          className="absolute uppercase text-white rounded-full"
-                          style={{
-                            top: "8px",
-                            left: "8px",
-                            fontSize: "10px",
-                            lineHeight: "20px",
-                            fontWeight: 600,
-                            padding: "4px 8px",
-                            letterSpacing: 0,
-                            background: "#FFAE00",
-                          }}
-                        >
-                          Shortlet
-                        </span>
-                        <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white" style={{ fontSize: "12px" }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
-                          </svg>
-                          <span>3</span>
-                        </div>
-                        <div className="absolute bottom-2 right-2 flex items-center gap-1 text-white">
-                          <button className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">‹</button>
-                          <button className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">›</button>
-                        </div>
-                      </div>
-
-                      <div className="flex-1 min-w-0 flex flex-col gap-2">
-                        <div className="flex items-start justify-between gap-3">
-                          <p style={{ fontSize: "20px", fontWeight: 600, color: "#121212", lineHeight: "28px" }} className="truncate flex-1">
-                            {p.title}
-                          </p>
-                          <p style={{ fontSize: "20px", fontWeight: 700, color: "#305e82" }} className="shrink-0">
-                            {p.price}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-3" style={{ fontSize: "13px" }}>
-                          <span className="flex items-center gap-1.5" style={{ color: "#305e82" }}>
-                            <Image src="/icons/location.svg" alt="" width={16} height={16} />
-                            {p.location}
-                          </span>
-                          <span className="w-px h-3 bg-[#ededed]" />
-                          <span style={{ color: "#807e7e", fontWeight: 500 }}>{p.date}</span>
-                        </div>
-
-                        <p style={{ fontSize: "14px", color: "#807e7e", lineHeight: "24px" }} className="line-clamp-2 mt-1">
-                          {p.desc}
-                        </p>
-
-                        <div className="flex items-center gap-2 flex-wrap mt-1">
-                          {p.tags.map((tag) => (
-                            <span key={tag} className="bg-[#f3fefe] px-3 py-1.5 rounded-[8px] whitespace-nowrap" style={{ fontSize: "12px", fontWeight: 500, color: "#305e82" }}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t border-[#ededed] pt-4 -mx-5 px-5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
-                          {p.agentInitials}
-                        </div>
-                        <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-                        <Image src="/icons/verify.svg" alt="" width={16} height={16} />
-                      </div>
-                      <div className="flex items-center gap-4" style={{ fontSize: "13px", color: "#807e7e" }}>
-                        <span className="flex items-center gap-1.5">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 8V3h5M21 8V3h-5M3 16v5h5M21 16v5h-5"/></svg>
-                          {p.area}
-                        </span>
-                        <span className="w-px h-3 bg-[#ededed]" />
-                        <span className="flex items-center gap-1.5">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 22V8.5h20V22M2 13h20M6 13V8.5M2 18h20"/></svg>
-                          {p.beds} Beds
-                        </span>
-                        <span className="w-px h-3 bg-[#ededed]" />
-                        <span className="flex items-center gap-1.5">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3M3 11h18v6a4 4 0 01-4 4H7a4 4 0 01-4-4v-6z"/></svg>
-                          {p.baths} Baths
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-
-                </div>
+                  <ListingCard key={p.id} listing={p} tag="Shortlet" />
                 ))}
               </div>
 
