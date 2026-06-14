@@ -133,12 +133,12 @@ export default function ForSalePage() {
               {/* Listings cards */}
               <div className="flex flex-col gap-6">
               {listings.map((p) => (
-                <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#ededed] rounded-[16px] p-5 flex flex-col gap-4 transition-shadow">
+                <Link key={p.id} href={`/properties/${p.id}`} className="bg-white border border-[#f6f6f6] rounded-[20px] p-5 flex flex-col gap-4 transition-shadow">
 
                   {/* TOP SECTION: image left + content right */}
                   <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
                     {/* Image — Figma: 184x184 SQUARE on left with FOR SALE pill, counter, nav arrows */}
-                    <div className="relative w-full h-[200px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#f6f6f6]">
+                    <div className="relative w-full h-[224px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#ededed]">
                       <Image src={p.image} alt={p.title} fill className="object-cover" />
                       {/* FOR SALE badge — Figma: top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
                       <span
