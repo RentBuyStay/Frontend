@@ -282,7 +282,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Amenities &amp; Features
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3" style={{ gap: "16px 24px" }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 md:gap-x-[72px] md:gap-y-6">
                 {amenities.map((a) => (
                   <div key={a} className="flex items-center" style={{ gap: "8px" }}>
                     <Image src="/icons/tick-circle.svg" alt="" width={20} height={20} />
