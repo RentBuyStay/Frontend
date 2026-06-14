@@ -34,12 +34,14 @@ export default function PlaceBannerAdModal({
   const [endDate, setEndDate] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    setSubmitted(false);
     if (initialPlacement) {
       const match = placementOptions.find((p) => p.value === initialPlacement);
       if (match) setPlacement(match);
@@ -68,6 +70,58 @@ export default function PlaceBannerAdModal({
     if (f) setFile(f);
   }
 
+  function close() {
+    setSubmitted(false);
+    onClose();
+  }
+
+  // Success state — Figma 769:82930: centered check illustration + message + full-width button
+  if (submitted) {
+    return (
+      <div
+        className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+        style={{ background: "rgba(0,0,0,0.5)" }}
+        onClick={close}
+      >
+        <div
+          className="bg-white rounded-[24px] w-full"
+          onClick={(e) => e.stopPropagation()}
+          style={{ maxWidth: "497px", maxHeight: "90vh", overflowY: "auto" }}
+        >
+          <div className="flex flex-col items-center text-center p-6 md:p-10" style={{ gap: "40px" }}>
+            <div className="flex flex-col items-center" style={{ gap: "24px" }}>
+              <Image src="/icons/payment-success.svg" alt="" width={113} height={113} />
+              <div className="flex flex-col items-center" style={{ gap: "8px" }}>
+                <h2 style={{ fontSize: "20px", lineHeight: "30px", fontWeight: 600, color: "#121212" }}>
+                  Payment Successful
+                </h2>
+                <p style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
+                  Great! Your payment for banner ad placement on RentBuyStay platform is successful.
+                  You will be notified when your ad has been placed.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={close}
+              className="w-full text-white rounded-[12px] hover:opacity-90 transition-opacity"
+              style={{
+                height: "48px",
+                padding: "8px 24px",
+                fontSize: "14px",
+                fontWeight: 500,
+                background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
+                border: "1px solid rgba(120,158,187,0.5)",
+              }}
+            >
+              Okay, proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
@@ -87,14 +141,14 @@ export default function PlaceBannerAdModal({
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute hover:opacity-70 transition-opacity"
-          style={{ top: "40px", right: "40px", width: "24px", height: "24px" }}
+          className="absolute hover:opacity-70 transition-opacity top-4 right-4 md:top-10 md:right-10"
+          style={{ width: "24px", height: "24px" }}
         >
           <Image src="/icons/cancel.svg" alt="" width={24} height={24} />
         </button>
 
-        <div style={{ padding: "40px" }}>
-          <div className="flex flex-col" style={{ gap: "8px", maxWidth: "497px" }}>
+        <div className="p-4 md:p-10">
+          <div className="flex flex-col pr-8 md:pr-0" style={{ gap: "8px", maxWidth: "497px" }}>
             <h2
               style={{
                 fontSize: "20px",
@@ -191,7 +245,7 @@ export default function PlaceBannerAdModal({
           </div>
 
           {/* Start date / End date */}
-          <div className="flex" style={{ gap: "24px", marginTop: "24px" }}>
+          <div className="flex flex-col md:flex-row" style={{ gap: "24px", marginTop: "24px" }}>
             <div className="flex-1 flex flex-col" style={{ gap: "8px" }}>
               <label
                 style={{
@@ -355,7 +409,7 @@ export default function PlaceBannerAdModal({
             </div>
           </div>
 
-          <div className="flex items-center justify-end" style={{ gap: "16px", marginTop: "40px" }}>
+          <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-end" style={{ gap: "16px", marginTop: "40px" }}>
             <button
               type="button"
               onClick={onClose}
@@ -366,13 +420,14 @@ export default function PlaceBannerAdModal({
                 color: "#121212",
                 letterSpacing: "-0.02em",
               }}
-              className="hover:opacity-70 transition-opacity"
+              className="w-full md:w-auto hover:opacity-70 transition-opacity"
             >
               Cancel
             </button>
             <button
               type="button"
-              className="text-white rounded-[12px] hover:opacity-90 transition-opacity"
+              onClick={() => setSubmitted(true)}
+              className="w-full md:w-auto flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
               style={{
                 height: "48px",
                 padding: "8px 24px",
