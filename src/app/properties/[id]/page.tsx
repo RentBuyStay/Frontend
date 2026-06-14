@@ -35,6 +35,54 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   const { id } = await params;
   const property = mockProperties.find((p) => p.id === id) ?? mockProperties[0];
 
+  // "Interested in this Property?" card — Figma 133:18584. Rendered twice:
+  // after the price on mobile (Figma order) and in the sidebar on desktop.
+  const interestedCard = (
+    <div
+      className="bg-white"
+      style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
+    >
+      <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+        Interested in this Property?
+      </h3>
+      <div className="flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
+        {/* Request Inspection — blue gradient bg */}
+        <button
+          className="flex items-center justify-center text-white hover:opacity-90 transition-opacity"
+          style={{
+            height: "56px",
+            padding: "16px 24px",
+            gap: "8px",
+            background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)",
+            borderRadius: "12px",
+          }}
+        >
+          <Image src="/icons/calendar-detail.svg" alt="" width={24} height={24} />
+          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>
+            Request Inspection
+          </span>
+        </button>
+        {/* Save for Later — white bg, gray border */}
+        <button
+          className="flex items-center justify-center hover:opacity-90 transition-opacity"
+          style={{
+            height: "56px",
+            padding: "16px 24px",
+            gap: "8px",
+            background: "#FFFFFF",
+            border: "1px solid #F6F6F6",
+            borderRadius: "12px",
+          }}
+        >
+          <Image src="/icons/heart.svg" alt="" width={24} height={24} />
+          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>
+            Save for Later
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Navbar — Figma uses a search/filter strip here; using regular Navbar for now */}
@@ -160,6 +208,9 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               </div>
             </div>
 
+            {/* Interested CTA — mobile only, sits right after the price (Figma order) */}
+            <div className="lg:hidden">{interestedCard}</div>
+
             {/* Description — Figma 133:18697 */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
               <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
@@ -248,50 +299,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
           {/* RIGHT SIDEBAR — Figma 133:18583 */}
           <div className="flex flex-col w-full min-w-0 lg:w-[411px] lg:shrink-0" style={{ gap: "24px" }}>
-            {/* Interested CTA — Figma 133:18584: 411x232 r:20 1px #F6F6F6 border */}
-            <div
-              className="bg-white"
-              style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
-            >
-              <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
-                Interested in this Property?
-              </h3>
-              <div className="flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
-                {/* Request Inspection — blue gradient bg */}
-                <button
-                  className="flex items-center justify-center text-white hover:opacity-90 transition-opacity"
-                  style={{
-                    height: "56px",
-                    padding: "16px 24px",
-                    gap: "8px",
-                    background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)",
-                    borderRadius: "12px",
-                  }}
-                >
-                  <Image src="/icons/calendar-detail.svg" alt="" width={24} height={24} />
-                  <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>
-                    Request Inspection
-                  </span>
-                </button>
-                {/* Save for Later — white bg, gray border */}
-                <button
-                  className="flex items-center justify-center hover:opacity-90 transition-opacity"
-                  style={{
-                    height: "56px",
-                    padding: "16px 24px",
-                    gap: "8px",
-                    background: "#FFFFFF",
-                    border: "1px solid #F6F6F6",
-                    borderRadius: "12px",
-                  }}
-                >
-                  <Image src="/icons/heart.svg" alt="" width={24} height={24} />
-                  <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>
-                    Save for Later
-                  </span>
-                </button>
-              </div>
-            </div>
+            {/* Interested CTA — desktop sidebar only (mobile copy sits after price) */}
+            <div className="hidden lg:block">{interestedCard}</div>
 
             {/* Agent card — Figma 133:18593: 411 wide r:20 1px #F6F6F6 border, padding 24
                 Avatar 56x56, name + verify badge, "Propper." text + AGENT pill
