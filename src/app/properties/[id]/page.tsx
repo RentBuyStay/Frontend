@@ -105,7 +105,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           white card, inset 24px (desktop) / 16px (mobile) from the page edges */}
       <section className="bg-white">
         <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 pt-4 md:pt-6">
-          <div className="rounded-[20px] md:rounded-[25px] bg-white p-4 md:p-6 flex flex-col gap-10">
+          <div className="rounded-[20px] md:rounded-[25px] bg-white md:p-6 flex flex-col gap-10">
             <Navbar transparent floating={false} />
             <SearchBar defaultTab="Rent" />
           </div>
