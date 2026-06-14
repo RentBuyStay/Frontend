@@ -365,16 +365,29 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 >
                   {property.agentInitials}
                 </div>
-                <div className="flex flex-col" style={{ gap: "4px" }}>
+                <div className="flex flex-col" style={{ gap: "8px" }}>
                   <div className="flex items-center" style={{ gap: "8px" }}>
-                    <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
+                    <span className="text-[16px] lg:text-[18px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                       {property.agentName}
                     </span>
                     <Image src="/icons/verify-figma.svg" alt="" width={20} height={20} />
                   </div>
-                  <span style={{ fontSize: "12px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>
+                  {/* Mobile: agency line — Figma 743:71200 */}
+                  <span className="lg:hidden" style={{ fontSize: "11px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>
                     Prime Estates
                   </span>
+                  {/* Desktop: "Propper." + AGENT pill — Figma 216:21683 */}
+                  <div className="hidden lg:flex items-center" style={{ gap: "16px" }}>
+                    <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>
+                      Propper.
+                    </span>
+                    <span
+                      className="inline-flex items-center text-white"
+                      style={{ background: "#305E82", borderRadius: "100px", padding: "3px 12px", fontSize: "12px", fontWeight: 500 }}
+                    >
+                      AGENT
+                    </span>
+                  </div>
                 </div>
               </div>
 
