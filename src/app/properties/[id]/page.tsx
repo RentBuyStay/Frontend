@@ -170,7 +170,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       <section className="bg-white" style={{ paddingTop: "48px", paddingBottom: "80px" }}>
         <div className="mx-auto w-full max-w-[1440px] px-4 md:px-[80px] flex flex-col lg:flex-row gap-6">
           {/* LEFT CONTENT */}
-          <div className="flex flex-col w-full min-w-0 lg:w-[846px] lg:shrink-0" style={{ gap: "32px" }}>
+          <div className="flex flex-col w-full min-w-0 lg:flex-1" style={{ gap: "32px" }}>
             {/* Gallery — Figma 133:18667: 846x450 r:20 bg #F6F6F6 with main image + thumb + counter */}
             <div
               className="relative overflow-hidden bg-[#F6F6F6] w-full h-[300px] md:h-[450px]"
