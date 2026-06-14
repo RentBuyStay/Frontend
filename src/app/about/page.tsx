@@ -166,12 +166,13 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white overflow-x-clip">
       {/* HERO — Figma 280:11076 (desktop) / 803:61294 (mobile).
           Desktop: 852px card, title at x64 y540, stats at x921 y718.
           Mobile: shorter card, title + stats stacked at the bottom-left. */}
-      <section className="bg-white px-4 md:px-6 pt-4 md:pt-6">
-        <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] lg:rounded-[24.91px] min-h-[calc(100svh-32px)] lg:min-h-0 lg:h-[852px]">
+      <section className="bg-white">
+        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
+          <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)] lg:min-h-0 lg:h-[852px]">
           <Image
             src="/images/about-hero.png"
             alt="One platform. Every property need."
@@ -216,7 +217,7 @@ export default function AboutPage() {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center text-white gap-6 lg:gap-10 lg:absolute lg:z-10 lg:left-[921px] lg:top-[718px]">
+            <div className="flex items-center text-white gap-6 lg:gap-10 lg:absolute lg:z-10 lg:right-[64px] lg:top-[718px]">
               {stats.map((s) => (
                 <div
                   key={s.label}
@@ -237,6 +238,7 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
+          </div>
           </div>
         </div>
       </section>
@@ -335,12 +337,12 @@ export default function AboutPage() {
 
       {/* SECTION 2 — OUR STORY. Figma 791:92393 (desktop two-column) / 803:61881 (mobile stacked). */}
       <section className="bg-white">
-        <div className="relative mx-auto flex flex-col gap-8 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[616px]">
+        <div className="mx-auto flex flex-col gap-8 px-4 py-12 lg:flex-row lg:items-center lg:gap-10 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
           {/* Left text */}
-          <div className="flex flex-col gap-4 lg:gap-4 lg:absolute lg:left-[80px] lg:top-[80px] lg:w-[620px] lg:justify-center">
+          <div className="flex flex-col gap-4 lg:flex-1">
             <SectionPill icon="/icons/tag-user.svg" label="OUR STORY" />
             <h2
-              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize"
               style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               Born from a very
@@ -359,18 +361,18 @@ export default function AboutPage() {
               point:&nbsp;why is finding a place to live so difficult?
               {"\n"}
               Endless agent calls. Listings that don&rsquo;t match the photos. Hidden
-              charges. Landlords who are impossible to reach. We know the story — because
+              charges. Landlords who are impossible to reach. We know the story because
               we&rsquo;ve lived it.
               {"\n"}
               RentBuyStay was founded by a team who believed the property market deserved
-              better. Not just a prettier website — but a smarter, more honest, more human
+              better. Not just a prettier website, but a smarter, more honest, more human
               experience from first search to final handshake.
             </p>
           </div>
 
           {/* Right image card with overlay + quote */}
           <div
-            className="relative overflow-hidden bg-[#F6F6F6] w-full h-[320px] rounded-[20px] lg:absolute lg:left-[740px] lg:top-[80px] lg:w-[620px] lg:h-[456px]"
+            className="relative overflow-hidden bg-[#F6F6F6] w-full h-[320px] rounded-[20px] lg:flex-1 lg:h-[456px]"
           >
             <Image
               src="/images/about-frustration.png"
@@ -387,7 +389,7 @@ export default function AboutPage() {
                 opacity: 0.68,
               }}
             />
-            <div className="absolute z-10 flex flex-col gap-4 inset-x-6 bottom-6 lg:left-[24px] lg:top-[320px] lg:inset-x-auto lg:bottom-auto lg:w-[500px]">
+            <div className="absolute z-10 flex flex-col gap-4 inset-x-6 bottom-6 lg:bottom-auto lg:top-[320px]">
               <p
                 className="text-white text-[18px] leading-[26px] lg:text-[24px] lg:leading-[32px]"
                 style={{
@@ -397,8 +399,8 @@ export default function AboutPage() {
                   fontStyle: "italic",
                 }}
               >
-                &ldquo;We built RentBuyStay because we kept seeing good people get a bad
-                deal. That changes here.&rdquo;
+                &ldquo;We Built RentBuyStay Because We Kept Seeing Good People Get A Bad
+                Deal. That Changes Here.&rdquo;
               </p>
               <p
                 className="text-white text-[14px] leading-[32px]"
@@ -413,12 +415,12 @@ export default function AboutPage() {
 
       {/* SECTION 3 — OUR VALUES. Figma 793:61154 (desktop) / 803:61770 (mobile, cards stack). */}
       <section className="bg-white">
-        <div className="relative mx-auto flex flex-col gap-10 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[632px]">
+        <div className="mx-auto flex flex-col gap-10 px-4 py-12 lg:gap-16 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
           {/* Title block */}
-          <div className="flex flex-col items-center text-center gap-4 lg:absolute lg:left-[406px] lg:top-[80px] lg:w-[628px]">
+          <div className="flex flex-col items-center text-center gap-4 lg:w-[628px] lg:max-w-full lg:mx-auto">
             <SectionPill icon="/icons/octicon-goal.svg" label="OUR VALUES" centered />
             <h2
-              className="text-[28px] leading-[36px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              className="text-[28px] leading-[36px] lg:text-[40px] lg:leading-[1.3] capitalize"
               style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               We earn trust the
@@ -433,16 +435,16 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Cards — stacked full-width on mobile, row on desktop */}
-          <div className="flex flex-col gap-6 lg:flex-row lg:absolute lg:left-[80px] lg:top-[384px]">
+          {/* Cards — stacked full-width on mobile, row of equal columns on desktop */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-6">
             {trustCards.map((card) => (
               <div
                 key={card.title}
-                className="relative w-full h-[168px] lg:w-[302px]"
-                style={{ borderRadius: "15px", background: card.color }}
+                className="w-full lg:flex-1 flex flex-col min-h-[168px] rounded-[15px]"
+                style={{ background: card.color, padding: "8px" }}
               >
                 {/* Title row */}
-                <div className="absolute flex items-center left-2 top-4 gap-2">
+                <div className="flex items-center gap-2" style={{ paddingTop: "8px", paddingBottom: "16px" }}>
                   <span className="inline-flex items-center justify-center shrink-0 w-4 h-4">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <circle cx="8" cy="8" r="8" fill="white" fillOpacity="0.15" />
@@ -462,10 +464,9 @@ export default function AboutPage() {
                   </span>
                 </div>
 
-                {/* Inner white box */}
-                <div className="absolute bg-white inset-x-2 top-14 h-[104px] rounded-[12px]">
+                {/* White box — grows with its text so it never overflows */}
+                <div className="bg-white rounded-[12px] flex-1" style={{ padding: "16px" }}>
                   <p
-                    className="absolute inset-x-4 top-4"
                     style={{
                       fontSize: "12px",
                       lineHeight: "24px",
@@ -485,14 +486,14 @@ export default function AboutPage() {
 
       {/* WHY IT MATTER — Figma 1177:78267 (mobile: image on top + text; desktop: two columns). */}
       <section className="bg-white">
-        <div className="mx-auto flex flex-col gap-6 px-4 py-12 lg:flex-row lg:items-center lg:gap-16 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
-          {/* Image */}
-          <div className="relative overflow-hidden bg-[#F6F6F6] w-full h-[400px] rounded-[20px] lg:w-[560px] lg:h-[456px] lg:shrink-0">
+        <div className="mx-auto flex flex-col gap-6 px-4 py-12 lg:flex-row lg:items-center lg:gap-10 lg:px-0 lg:py-20 lg:w-[1280px] lg:max-w-[calc(100%-160px)]">
+          {/* Image — desktop 620×424 (Figma 1177:78297) */}
+          <div className="relative overflow-hidden bg-[#F6F6F6] w-full h-[400px] rounded-[20px] lg:flex-1 lg:h-[424px]">
             <Image
               src="/images/about-fresh-voice-2a2d69.png"
               alt="Aerial view of a modern city skyline"
               fill
-              sizes="(min-width: 1024px) 560px, 100vw"
+              sizes="(min-width: 1024px) 620px, 100vw"
               style={{ objectFit: "cover" }}
             />
           </div>
@@ -501,7 +502,7 @@ export default function AboutPage() {
           <div className="flex flex-col gap-4 lg:flex-1">
             <SectionPill icon="/icons/emoji-normal.svg" label="WHY IT MATTER" />
             <h2
-              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize lg:normal-case"
+              className="text-[24px] leading-[32px] lg:text-[40px] lg:leading-[1.3] capitalize"
               style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
             >
               The Market
@@ -533,8 +534,8 @@ export default function AboutPage() {
 
       {/* FAQ — Figma 280:11201 (desktop) / 803:61837 (mobile, full-width accordion). */}
       <section className="bg-white">
-        <div className="relative mx-auto flex flex-col gap-10 px-4 py-12 lg:block lg:px-0 lg:py-0 lg:w-[1440px] lg:max-w-full lg:h-[1248px]">
-          <div className="flex flex-col text-center gap-2 lg:absolute lg:left-[406px] lg:top-[80px] lg:w-[628px]">
+        <div className="mx-auto flex flex-col items-center gap-8 px-4 py-12 lg:gap-16 lg:px-0 lg:py-20 lg:w-[846px] lg:max-w-[calc(100%-160px)]">
+          <div className="w-full flex flex-col text-center gap-2 lg:w-[628px] lg:max-w-full">
             <h2
               className="text-[28px] leading-[36px] lg:text-[40px] lg:leading-[1.3]"
               style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em", textAlign: "center" }}
@@ -556,7 +557,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 lg:gap-6 lg:absolute lg:left-[297px] lg:top-[288px] lg:w-[846px]">
+          <div className="flex flex-col gap-4 lg:gap-6 w-full">
             {faqs.map((f) => (
               <FAQItem key={f.q} q={f.q} a={f.a} />
             ))}
