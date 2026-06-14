@@ -43,35 +43,31 @@ export default function AgentsPage() {
 
           <Navbar variant="hero" />
 
-          {/* Title block — Figma: 738x208 at y=216 from card top */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 z-10 text-center flex flex-col"
-            style={{
-              top: "120px",
-              width: "738px",
-              maxWidth: "calc(100% - 48px)",
-              gap: "16px",
-            }}
-          >
-            <h1
-              className="text-white text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]"
-              style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
-            >
-              Find All Realtors
-              <br />
-              in One Place
-            </h1>
-            <p
-              className="text-white mx-auto text-[14px] leading-[24px] md:text-[18px] md:leading-[32px]"
-              style={{ fontWeight: 400, letterSpacing: "-0.02em", maxWidth: "735px" }}
-            >
-              Explore the list or search for real estate agents, agencies and developers
-              in our directory.
-            </p>
-          </div>
+          {/* Content — title vertically centred, search pinned at the bottom */}
+          <div className="absolute inset-0 z-10 flex flex-col px-4 md:px-6 pt-[100px] md:pt-[120px] pb-4 md:pb-6">
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center flex flex-col items-center" style={{ width: "738px", maxWidth: "100%", gap: "16px" }}>
+                <h1
+                  className="text-white text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]"
+                  style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
+                >
+                  Find All Realtors
+                  <br />
+                  in One Place
+                </h1>
+                <p
+                  className="text-white text-[14px] leading-[24px] md:text-[18px] md:leading-[32px]"
+                  style={{ fontWeight: 400, letterSpacing: "-0.02em", maxWidth: "735px" }}
+                >
+                  Explore the list or search for real estate agents, agencies and developers
+                  in our directory.
+                </p>
+              </div>
+            </div>
 
-          {/* Search — shared realtor search, pinned to the bottom of the hero */}
-          <RealtorSearch className="absolute left-1/2 -translate-x-1/2 bottom-4 z-10 w-[calc(100%-32px)] max-w-[1344px] bg-white rounded-[12px] p-4" />
+            {/* Search — shared realtor search, pinned to the bottom of the hero */}
+            <RealtorSearch className="w-full max-w-[1344px] mx-auto bg-white rounded-[12px] p-4" />
+          </div>
         </div>
         </div>
       </section>
