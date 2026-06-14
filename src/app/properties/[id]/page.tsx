@@ -56,27 +56,22 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 className="inline-flex items-center hover:opacity-80"
                 style={{ gap: "12px", color: "#525252" }}
               >
-                <Image src="/icons/arrow-back.svg" alt="" width={24} height={24} />
-                <span style={{ fontFamily: "Geist, sans-serif", fontSize: "16px", lineHeight: "24px", fontWeight: 400 }}>
+                <Image src="/icons/arrow-back.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6" />
+                <span className="text-[12px] md:text-[16px]" style={{ fontFamily: "Geist, sans-serif", lineHeight: "24px", fontWeight: 400 }}>
                   Back
                 </span>
               </Link>
               {/* Title — Figma 133:18652: 24/600 line-height 32, TITLE case */}
               <h1
-                style={{
-                  fontSize: "24px",
-                  lineHeight: "32px",
-                  fontWeight: 600,
-                  color: "#121212",
-                  letterSpacing: "-0.02em",
-                }}
+                className="text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]"
+                style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}
               >
                 {property.beds} Bedroom Flat for Sale in {property.location}
               </h1>
               <div className="flex items-center" style={{ gap: "16px" }}>
                 <div className="flex items-center" style={{ gap: "8px" }}>
                   <Image src="/icons/location-figma.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
+                  <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
                     {property.location}
                   </span>
                 </div>
