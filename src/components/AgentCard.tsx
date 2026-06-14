@@ -36,10 +36,8 @@ export function LocationIcon() {
 export default function AgentCard({ a }: { a: Agent }) {
   return (
     <div
-      className="bg-white overflow-hidden flex flex-col"
+      className="bg-white overflow-hidden flex flex-col w-full"
       style={{
-        width: "411px",
-        height: "284px",
         borderRadius: "20px",
         padding: "24px",
         border: "1px solid #F6F6F6",

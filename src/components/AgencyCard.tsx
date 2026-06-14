@@ -15,19 +15,17 @@ export type Agency = {
 export default function AgencyCard({ a }: { a: Agency }) {
   return (
     <div
-      className="bg-white overflow-hidden flex flex-col"
+      className="bg-white overflow-hidden flex flex-col w-full"
       style={{
-        width: "411px",
-        height: "456px",
         borderRadius: "20px",
         border: "1px solid #F6F6F6",
       }}
     >
       <div
-        className="relative shrink-0 overflow-hidden"
-        style={{ width: "411px", height: "200px", background: "#F4FBFF" }}
+        className="relative shrink-0 overflow-hidden w-full"
+        style={{ height: "200px", background: "#F4FBFF" }}
       >
-        <Image src={a.logo} alt={a.name} fill sizes="411px" style={{ objectFit: "cover" }} />
+        <Image src={a.logo} alt={a.name} fill sizes="(min-width:1024px) 411px, 100vw" style={{ objectFit: "cover" }} />
       </div>
 
       <div className="flex flex-col flex-1" style={{ padding: "24px 16px 24px 16px" }}>

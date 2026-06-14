@@ -22,11 +22,8 @@ export default function AgentsPage() {
     <div className="min-h-screen flex flex-col bg-white">
       {/* HERO — Figma node 248:30168: 1440x712, card 1392x664 r=25, city skyline bg */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-6">
-        <div
-          className="relative overflow-hidden bg-[#F3FEFE]"
-          style={{ borderRadius: "25px", minHeight: "560px" }}
-        >
+        <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6">
+        <div className="relative overflow-hidden bg-[#EBEBEB] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[560px]">
           <Image
             src="/images/for-sale-hero.png"
             alt=""
@@ -56,27 +53,16 @@ export default function AgentsPage() {
             }}
           >
             <h1
-              className="text-white"
-              style={{
-                fontSize: "clamp(30px, 6.5vw, 64px)",
-                lineHeight: "1.2",
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-              }}
+              className="text-white text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]"
+              style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
             >
-              Find All Realtors in
+              Find All Realtors
               <br />
-              One Place
+              in One Place
             </h1>
             <p
-              className="text-white mx-auto"
-              style={{
-                fontSize: "18px",
-                lineHeight: "32px",
-                fontWeight: 400,
-                letterSpacing: "-0.02em",
-                maxWidth: "735px",
-              }}
+              className="text-white mx-auto text-[14px] leading-[24px] md:text-[18px] md:leading-[32px]"
+              style={{ fontWeight: 400, letterSpacing: "-0.02em", maxWidth: "735px" }}
             >
               Explore the list or search for real estate agents, agencies and developers
               in our directory.
@@ -95,8 +81,9 @@ export default function AgentsPage() {
               gap: "12px",
             }}
           >
+            <div className="flex items-center md:contents" style={{ gap: "12px" }}>
             <div
-              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-full md:w-[199px]"
+              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-[130px] md:w-[199px]"
               style={{ height: "48px", padding: "0 16px" }}
             >
               <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
@@ -109,15 +96,16 @@ export default function AgentsPage() {
             </div>
 
             <div
-              className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px]"
+              className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px]"
               style={{ height: "48px", padding: "0 16px" }}
             >
               <Search size={20} className="text-[#807E7E] shrink-0" />
               <input
                 type="text"
                 placeholder="Enter name, location, area or keyword..."
-                className="flex-1 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
+                className="flex-1 min-w-0 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
               />
+            </div>
             </div>
 
             <button
@@ -139,11 +127,10 @@ export default function AgentsPage() {
       {/* ALL AGENCIES & DEVELOPERS — 3x2 grid, 411x456 cards, gap 24 */}
       <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "60px" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
-          <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
+          <div className="flex items-center justify-between mb-6 md:mb-10">
             <h2
+              className="text-[16px] leading-[32px] md:text-[32px] md:leading-[40px]"
               style={{
-                fontSize: "32px",
-                lineHeight: "40px",
                 fontWeight: 600,
                 color: "#121212",
                 letterSpacing: "-0.02em",
@@ -179,11 +166,10 @@ export default function AgentsPage() {
       {/* ALL AGENTS — 3x3 grid, 411x284 cards, gap 24 */}
       <section className="bg-white" style={{ paddingTop: "60px", paddingBottom: "80px" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
-          <div className="flex items-center justify-between" style={{ marginBottom: "40px" }}>
+          <div className="flex items-center justify-between mb-6 md:mb-10">
             <h2
+              className="text-[16px] leading-[32px] md:text-[32px] md:leading-[40px]"
               style={{
-                fontSize: "32px",
-                lineHeight: "40px",
                 fontWeight: 600,
                 color: "#121212",
                 letterSpacing: "-0.02em",
