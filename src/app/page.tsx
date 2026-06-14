@@ -1,10 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
-import PropertyCard from "@/components/PropertyCard";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import SectionHeader from "@/components/SectionHeader";
-import { mockProperties } from "@/lib/mockData";
+import FeaturedProperties from "@/components/FeaturedProperties";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -289,12 +288,8 @@ export default function HomePage() {
             viewAllHref="/search"
           />
 
-          {/* Cards — Figma: row gap 24px, 3 columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockProperties.slice(0, 3).map((p) => (
-              <PropertyCard key={p.id} property={p} />
-            ))}
-          </div>
+          {/* Cards — live from the backend (GET /properties), first 3 active listings */}
+          <FeaturedProperties />
         </div>
       </section>
 
