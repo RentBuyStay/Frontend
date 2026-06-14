@@ -61,7 +61,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
         Interested in this Property?
       </h3>
-      <div className="flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
+      <div className="flex flex-col" style={{ gap: "24px", marginTop: "24px" }}>
         {/* Request Inspection — blue gradient bg */}
         <button
           className="flex items-center justify-center text-white hover:opacity-90 transition-opacity"
@@ -223,8 +223,8 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
 
             {/* Price + Stats row — Figma 133:18673 */}
-            <div className="flex flex-col gap-4 py-4 border-t border-b border-[#f6f6f6] md:flex-row md:items-center md:justify-between md:gap-0 md:py-2 md:border-t-0">
-              <span className="text-[20px] leading-[32px] md:text-[28px] md:leading-[36px]" style={{ fontWeight: 700, color: "#305E82" }}>
+            <div className="flex flex-col gap-4 py-4 border-t border-b border-[#f6f6f6] md:flex-row md:items-center md:justify-between md:gap-0">
+              <span className="text-[20px] leading-[32px] md:text-[32px] md:leading-[56px]" style={{ fontWeight: 700, color: "#305E82" }}>
                 {property.price}
               </span>
               <div className="flex items-center" style={{ gap: "16px" }}>
@@ -259,7 +259,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <h2 className="text-[14px] leading-[24px] md:text-[20px] md:leading-[28px]" style={{ fontWeight: 600, color: "#305E82" }}>
                 Description
               </h2>
-              <p className="text-[16px] md:text-[14px]" style={{ lineHeight: "24px", fontWeight: 400, color: "#121212" }}>
+              <p className="text-[16px]" style={{ lineHeight: "24px", fontWeight: 400, color: "#121212" }}>
                 This stunning {property.beds}-bedroom apartment is situated in the heart of{" "}
                 {property.location}, offering breathtaking views and top-tier finishes throughout.
                 The property features an open-plan living and dining area, a fully fitted kitchen,
