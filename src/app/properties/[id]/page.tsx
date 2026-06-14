@@ -181,12 +181,12 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 style={{
                   background: "rgba(18,18,18,0.5)",
                   borderRadius: "8px",
-                  padding: "6px 12px",
-                  gap: "8px",
+                  padding: "8px 12px",
+                  gap: "5px",
                 }}
               >
                 <Image src="/icons/gallery-count.svg" alt="" width={16} height={16} />
-                <span style={{ fontSize: "12px", lineHeight: "16px", fontWeight: 500, color: "#FFFFFF" }}>
+                <span style={{ fontSize: "15px", lineHeight: "16px", fontWeight: 400, color: "#FFFFFF" }}>
                   2/11
                 </span>
               </div>
