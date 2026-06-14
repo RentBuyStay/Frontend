@@ -593,10 +593,7 @@ export default function HomePage() {
               background: "linear-gradient(174deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 96%), #305E82",
             }}
           >
-            <h2
-              className="font-semibold mb-2 md:mb-4 max-w-[500px]"
-              style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.33", letterSpacing: "-0.02em" }}
-            >
+            <h2 className="font-semibold mb-2 md:mb-4 max-w-[500px] text-[24px] leading-[32px] md:text-[48px] md:leading-[64px]">
               Ready to<br />List Your Property?
             </h2>
             <p

@@ -510,7 +510,7 @@ export default function ForSalePage() {
             className="rounded-[20px] h-[296px] md:h-[464px] flex flex-col items-center justify-center text-white text-center px-4 md:px-6"
             style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}
           >
-            <h2 className="font-semibold mb-2 md:mb-4 max-w-[500px]" style={{ fontSize: "clamp(24px, 6vw, 48px)", lineHeight: "1.33", letterSpacing: "-0.02em" }}>
+            <h2 className="font-semibold mb-2 md:mb-4 max-w-[500px] text-[24px] leading-[32px] md:text-[48px] md:leading-[64px]">
               Ready to<br />List Your Property?
             </h2>
             <p className="mb-6 md:mb-10 max-w-[600px] text-[12px] leading-[24px] md:text-[18px] md:leading-[35px] tracking-[-0.02em]">
