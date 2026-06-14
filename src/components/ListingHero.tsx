@@ -8,15 +8,21 @@ import SearchBar from "@/components/SearchBar";
 export default function ListingHero({
   image,
   imageAlt,
+  heading,
   headingSuffix,
   subtitle,
   defaultTab,
+  showSearch = true,
 }: {
   image: string;
   imageAlt: string;
-  headingSuffix: string; // "Sale" | "Rent" | "Shortlet"
+  /** Full heading override; when omitted, renders "Properties for {headingSuffix} in Nigeria". */
+  heading?: string;
+  headingSuffix?: string; // "Sale" | "Rent" | "Shortlet"
   subtitle: string;
   defaultTab: "Buy" | "Rent" | "Shortlet";
+  /** Set false to omit the search bar (e.g. banner-ad hero, where desktop has none). */
+  showSearch?: boolean;
 }) {
   return (
     <section className="bg-white">
@@ -34,16 +40,22 @@ export default function ListingHero({
             <div className="flex-1 flex items-center justify-center">
               <div className="w-[738px] max-w-full flex flex-col gap-2 md:gap-4 text-center">
                 <h1 className="text-white font-semibold text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]" style={{ letterSpacing: "-0.02em" }}>
-                  Properties for<br className="md:hidden" /> {headingSuffix} in Nigeria
+                  {heading ?? (
+                    <>
+                      Properties for<br className="md:hidden" /> {headingSuffix} in Nigeria
+                    </>
+                  )}
                 </h1>
                 <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
                   {subtitle}
                 </p>
               </div>
             </div>
-            <div className="w-full">
-              <SearchBar defaultTab={defaultTab} />
-            </div>
+            {showSearch && (
+              <div className="w-full">
+                <SearchBar defaultTab={defaultTab} />
+              </div>
+            )}
           </div>
         </div>
       </div>
