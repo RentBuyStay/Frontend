@@ -1,11 +1,9 @@
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import SearchBar from "@/components/SearchBar";
-import Image from "next/image";
 import Pagination from "@/components/Pagination";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import ListingCard from "@/components/ListingCard";
 import ListingSidebar from "@/components/ListingSidebar";
+import ListingHero from "@/components/ListingHero";
 
 export const metadata = {
   title: "Properties for Rent in Nigeria | RentBuyStay",
@@ -67,37 +65,13 @@ export default function ForRentPage() {
     <div className="min-h-screen flex flex-col bg-white">
 
       {/* HERO */}
-      <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
-        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[852px]">
-          <div className="absolute inset-0 z-0">
-            <Image src="/images/for-rent-hero.png" alt="Properties for Rent" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-black/55" />
-          </div>
-
-          <Navbar transparent />
-
-          <div className="absolute inset-0 z-10 flex flex-col px-4 pt-[100px] pb-4 md:px-6 md:pt-[120px] md:pb-6">
-            <div className="flex-1 flex items-center justify-center">
-              <div className="w-[738px] max-w-full flex flex-col gap-2 md:gap-4 text-center">
-                <h1 className="text-white font-semibold text-[32px] leading-[48px] md:text-[64px] md:leading-[80px]" style={{ letterSpacing: "-0.02em" }}>
-                  Properties for<br className="md:hidden" /> Rent in Nigeria
-                </h1>
-                <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-                  The properties have been listed by verified estate agents who can be contacted using
-                  the contact information provided for each property listing. We have 25,141 available
-                  flats, houses, and commercial property for rent in Nigeria. Refine your property
-                  search by price, number of beds and type of property, etc.
-                </p>
-              </div>
-            </div>
-            <div className="w-full">
-              <SearchBar defaultTab="Rent" />
-            </div>
-          </div>
-        </div>
-        </div>
-      </section>
+      <ListingHero
+        image="/images/for-rent-hero.png"
+        imageAlt="Properties for Rent"
+        headingSuffix="Rent"
+        defaultTab="Rent"
+        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have 25,141 available flats, houses, and commercial property for rent in Nigeria. Refine your property search by price, number of beds and type of property, etc."
+      />
 
       {/* LISTINGS + SIDEBAR */}
       <section className="bg-white">
