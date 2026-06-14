@@ -47,7 +47,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           Left column: Back link + Title + Location/Listed
           Right: Report Listing button at x:1117.8 y:31 w:162.2 h:48 */}
       <section className="bg-white" style={{ paddingTop: "40px" }}>
-        <div className="relative mx-auto" style={{ width: "1280px", maxWidth: "calc(100% - 160px)" }}>
+        <div className="relative mx-auto w-full max-w-[1440px] px-4 md:px-[80px]">
           <div className="flex items-start justify-between">
             <div className="flex flex-col" style={{ gap: "16px" }}>
               {/* Back — Figma 133:18648 */}
@@ -112,13 +112,13 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           Left content (133:18666): x:79 y:192 w:846 column gap 32
           Right sidebar (133:18583): x:949 y:192 w:411 column gap 24 */}
       <section className="bg-white" style={{ paddingTop: "48px", paddingBottom: "80px" }}>
-        <div className="mx-auto flex" style={{ width: "1280px", maxWidth: "calc(100% - 160px)", gap: "24px" }}>
+        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-[80px] flex flex-col lg:flex-row gap-6">
           {/* LEFT CONTENT */}
-          <div className="flex flex-col" style={{ width: "846px", flexShrink: 0, gap: "32px" }}>
+          <div className="flex flex-col w-full min-w-0 lg:w-[846px] lg:shrink-0" style={{ gap: "32px" }}>
             {/* Gallery — Figma 133:18667: 846x450 r:20 bg #F6F6F6 with main image + thumb + counter */}
             <div
-              className="relative overflow-hidden bg-[#F6F6F6]"
-              style={{ width: "846px", maxWidth: "100%", height: "450px", borderRadius: "20px" }}
+              className="relative overflow-hidden bg-[#F6F6F6] w-full h-[300px] md:h-[450px]"
+              style={{ borderRadius: "20px" }}
             >
               <Image
                 src={property.image ?? "/images/pd-main.png"}
@@ -262,11 +262,11 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           </div>
 
           {/* RIGHT SIDEBAR — Figma 133:18583 */}
-          <div className="flex flex-col" style={{ width: "411px", flexShrink: 0, gap: "24px" }}>
+          <div className="flex flex-col w-full min-w-0 lg:w-[411px] lg:shrink-0" style={{ gap: "24px" }}>
             {/* Interested CTA — Figma 133:18584: 411x232 r:20 1px #F6F6F6 border */}
             <div
               className="bg-white"
-              style={{ width: "411px", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
+              style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
             >
               <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
                 Interested in this Property?
@@ -313,7 +313,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 Call (white) + Message (blue) buttons, ratings/listings row, View all link */}
             <div
               className="bg-white"
-              style={{ width: "411px", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
+              style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}
             >
               <div className="flex items-center" style={{ gap: "16px" }}>
                 <div
@@ -422,16 +422,16 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       {/* RELATED LISTINGS — Figma 218:25720: x:79 y:2028 w:1282 column gap 24
           Title 24/600 line-height 32 + subtitle, then row of 3 cards (411 each, gap 24) */}
       <section className="bg-white" style={{ paddingBottom: "80px" }}>
-        <div className="mx-auto" style={{ width: "1282px", maxWidth: "calc(100% - 158px)" }}>
+        <div className="mx-auto w-full max-w-[1440px] px-4 md:px-[80px]">
           <div className="flex flex-col" style={{ gap: "8px", marginBottom: "24px" }}>
-            <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
+            <h2 className="text-[20px] leading-[24px] md:text-[24px] md:leading-[32px]" style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
               Related Listings
             </h2>
             <p style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
               See similar property listings that you might like
             </p>
           </div>
-          <div className="grid" style={{ gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: "24px" }}>
             {mockProperties.filter((p) => p.id !== property.id).slice(0, 3).map((p) => (
               <PropertyCard key={p.id} property={p} />
             ))}
