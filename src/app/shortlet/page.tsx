@@ -4,6 +4,7 @@ import ListPropertyCTA from "@/components/ListPropertyCTA";
 import ListingCard from "@/components/ListingCard";
 import ListingSidebar from "@/components/ListingSidebar";
 import ListingHero from "@/components/ListingHero";
+import ListingsHeader from "@/components/ListingsHeader";
 
 export const metadata = {
   title: "Shortlet Apartments in Nigeria | RentBuyStay",
@@ -79,24 +80,10 @@ export default function ShortletPage() {
 
             {/* LEFT */}
             <div className="flex flex-col gap-6 min-w-0">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>
-                    All Properties for Shortlet in Nigeria
-                  </h2>
-                  <p style={{ fontSize: "14px", color: "#7f7e7e", marginTop: "4px" }}>
-                    Showing 1 - 10 of 27
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span style={{ fontSize: "14px", color: "#7f7e7e" }}>Sort</span>
-                  <select className="px-4 py-2 border border-[#ededed] rounded-[8px] text-sm bg-white">
-                    <option>Newest</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                  </select>
-                </div>
-              </div>
+              <ListingsHeader
+                title="All Properties for Shortlet in Nigeria"
+                count="Showing 1 - 10 of 37"
+              />
 
               <div className="flex flex-col gap-6">
                 {listings.map((p) => (
