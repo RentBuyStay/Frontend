@@ -41,11 +41,10 @@ function RelatedCard({ p }: { p: (typeof related)[number] }) {
   return (
     <Link
       href={`/blogs/${p.slug}`}
-      className="bg-white overflow-hidden flex flex-col group transition-shadow"
-      style={{ width: "411px", height: "500px", borderRadius: "20px" }}
+      className="bg-white overflow-hidden flex flex-col group transition-shadow w-full rounded-[20px]"
     >
-      <div className="relative shrink-0" style={{ width: "411px", height: "260px" }}>
-        <Image src={p.image} alt={p.title} fill sizes="411px" style={{ objectFit: "cover" }} />
+      <div className="relative shrink-0 w-full" style={{ height: "260px" }}>
+        <Image src={p.image} alt={p.title} fill sizes="(min-width:1024px) 411px, 100vw" style={{ objectFit: "cover" }} />
       </div>
       <div className="flex flex-col flex-1" style={{ padding: "24px", gap: "16px" }}>
         <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
@@ -110,13 +109,10 @@ export default function BlogPostPage() {
       <Navbar />
 
       {/* MAIN — Figma node 268:38037: 1440x2372, padding 80 top/bottom */}
-      <section className="bg-white" style={{ paddingTop: "80px", paddingBottom: "80px" }}>
+      <section className="bg-white pt-10 md:pt-20 pb-20">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
-          {/* Hero image — Figma: 1280x600, r=25 */}
-          <div
-            className="relative overflow-hidden"
-            style={{ width: "100%", height: "600px", borderRadius: "25px" }}
-          >
+          {/* Hero image — Figma: 1280x600 desktop / 350 mobile, r=25 */}
+          <div className="relative overflow-hidden w-full h-[350px] md:h-[600px] rounded-[20px] md:rounded-[25px]">
             <Image
               src="/images/blog-featured.png"
               alt="Navigating Lagos Property Titles"
@@ -127,10 +123,10 @@ export default function BlogPostPage() {
             />
           </div>
 
-          {/* Article body + sidebar — Figma: 845 body + gap + 299 sidebar */}
-          <div className="flex" style={{ marginTop: "40px", gap: "136px" }}>
+          {/* Article body + sidebar — Figma: 845 body + gap + 299 sidebar (stacks on mobile) */}
+          <div className="flex flex-col lg:flex-row mt-8 md:mt-10 gap-10 lg:gap-[136px]">
             {/* Article content */}
-            <article className="flex flex-col" style={{ width: "845px", gap: "40px" }}>
+            <article className="flex flex-col w-full lg:w-[845px]" style={{ gap: "40px" }}>
               <div className="flex flex-col" style={{ gap: "8px" }}>
                 <h1
                   style={{
@@ -149,9 +145,8 @@ export default function BlogPostPage() {
               </div>
 
               <div
+                className="text-[14px] leading-[32px] md:text-[18px] md:leading-[40px]"
                 style={{
-                  fontSize: "18px",
-                  lineHeight: "40px",
                   fontWeight: 400,
                   color: "#807E7E",
                   letterSpacing: "-0.02em",
@@ -189,8 +184,8 @@ export default function BlogPostPage() {
               </div>
             </article>
 
-            {/* Sidebar — Figma: 299x800, ADS banner placeholder */}
-            <aside style={{ width: "299px" }}>
+            {/* Sidebar — Figma: 299x800, ADS banner placeholder (desktop only) */}
+            <aside className="hidden lg:block" style={{ width: "299px" }}>
               <div
                 className="flex flex-col items-center justify-between text-center"
                 style={{
@@ -240,12 +235,11 @@ export default function BlogPostPage() {
           </div>
 
           {/* Read More section — Figma: 1282x612, heading + 3 related cards */}
-          <div className="flex flex-col" style={{ marginTop: "80px", gap: "24px" }}>
+          <div className="flex flex-col mt-12 md:mt-20" style={{ gap: "24px" }}>
             <div className="flex flex-col" style={{ gap: "8px" }}>
               <h2
+                className="text-[20px] leading-[28px] md:text-[24px] md:leading-[32px]"
                 style={{
-                  fontSize: "24px",
-                  lineHeight: "32px",
                   fontWeight: 600,
                   color: "#121212",
                   letterSpacing: "-0.02em",
