@@ -85,16 +85,16 @@ export default function PropertyRequestsPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span style={{ fontSize: "14px", fontWeight: 500, color: "#121212" }}>Sort:</span>
-                  <div className="relative">
+                  <div className="relative w-[89px]">
                     <select
                       defaultValue="Newest"
-                      className="appearance-none bg-[#F6F6F6] rounded-[12px] h-10 pl-4 pr-9 text-[14px] text-[#121212] outline-none cursor-pointer"
+                      className="appearance-none w-full truncate bg-[#F6F6F6] rounded-[12px] h-10 pl-3 pr-7 text-[14px] text-[#121212] outline-none cursor-pointer"
                     >
                       <option>Newest</option>
                       <option>Budget: Low to High</option>
                       <option>Budget: High to Low</option>
                     </select>
-                    <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                 </div>
               </div>
