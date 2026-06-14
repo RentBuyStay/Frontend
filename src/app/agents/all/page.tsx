@@ -1,9 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ListPropertyCTA from "@/components/ListPropertyCTA";
 import AgentCard from "@/components/AgentCard";
 import { agents } from "@/lib/agentsData";
 import Image from "next/image";
-import Link from "next/link";
 import { Search, ChevronDown } from "lucide-react";
 
 export const metadata = {
@@ -181,61 +181,7 @@ export default function AllAgentsPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-white" style={{ padding: "24px" }}>
-        <div
-          className="relative overflow-hidden mx-auto flex flex-col items-center justify-center text-center"
-          style={{
-            maxWidth: "1392px",
-            height: "464px",
-            borderRadius: "20px",
-            background: "linear-gradient(186deg, #75A3C7 0%, #305E82 100%)",
-            padding: "0 80px",
-          }}
-        >
-          <div className="flex flex-col" style={{ gap: "40px", maxWidth: "640px" }}>
-            <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2 className="text-white" style={{ fontSize: "48px", lineHeight: "64px", fontWeight: 600, letterSpacing: "-0.02em" }}>
-                Ready to<br />List Your Property?
-              </h2>
-              <p className="text-white" style={{ fontSize: "18px", lineHeight: "32px", fontWeight: 400, letterSpacing: "-0.02em" }}>
-                Join thousands of owners and agents on Nigeria&rsquo;s fastest-growing
-                property platform. Get verified, list your property, and reach millions
-                of seekers.
-              </p>
-            </div>
-            <div className="flex items-center justify-center" style={{ gap: "16px" }}>
-              <Link
-                href="/post-property"
-                className="flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
-                style={{
-                  height: "48px",
-                  padding: "8px 24px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  background: "#FFAE00",
-                  border: "1px solid rgba(120, 158, 187, 0.5)",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Get Started Free
-              </Link>
-              <Link
-                href="/login"
-                className="flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-                style={{
-                  padding: "16px 32px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Log in
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ListPropertyCTA />
 
       <Footer />
     </div>

@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import GetStartedFreeButton from "@/components/GetStartedFreeButton";
-import LogInButton from "@/components/LogInButton";
+import ListPropertyCTA from "@/components/ListPropertyCTA";
 import Image from "next/image";
 
 export const metadata = {
@@ -624,73 +623,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA — Figma 276:9329: 1440x512, card 1392x464 at x:24 y:24 r:20
-          Gradient 174deg #75A3C7 0% → #305E82 96% */}
-      <section className="bg-white" style={{ height: "512px", padding: "24px" }}>
-        <div
-          className="relative overflow-hidden mx-auto flex flex-col items-center justify-center text-center"
-          style={{
-            width: "1392px",
-            maxWidth: "calc(100% - 48px)",
-            height: "464px",
-            borderRadius: "20px",
-            background:
-              "linear-gradient(174deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 96%), #FFFFFF",
-          }}
-        >
-          <div className="flex flex-col" style={{ width: "640px", maxWidth: "calc(100% - 96px)", gap: "40px" }}>
-            <div className="flex flex-col" style={{ gap: "16px" }}>
-              <h2
-                className="text-white"
-                style={{ fontSize: "clamp(26px, 6vw, 48px)", lineHeight: "1.3", fontWeight: 600, textAlign: "center" }}
-              >
-                Ready to
-                <br />
-                List Your Property?
-              </h2>
-              <p
-                className="text-white"
-                style={{
-                  fontSize: "18px",
-                  lineHeight: "35px",
-                  fontWeight: 400,
-                  letterSpacing: "-0.02em",
-                  textAlign: "center",
-                }}
-              >
-                Join thousands of owners and agents on Nigeria&rsquo;s fastest-growing
-                property platform. Get verified, list your property, and reach millions
-                of seekers.
-              </p>
-            </div>
-            <div className="flex items-center justify-center" style={{ gap: "16px" }}>
-              <GetStartedFreeButton
-                className="flex items-center justify-center text-white hover:opacity-90 transition-opacity"
-                style={{
-                  height: "48px",
-                  padding: "8px 24px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  background: "#FFAE00",
-                  borderRadius: "12px",
-                  border: "1px solid rgba(120,158,187,0.5)",
-                  letterSpacing: "-0.02em",
-                }}
-              />
-              <LogInButton
-                className="flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-                style={{
-                  height: "48px",
-                  padding: "16px 32px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  letterSpacing: "-0.02em",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <ListPropertyCTA />
 
       {/* FAQ — Figma 280:11201: 1440x1248
           Title block x:406 y:80 w:628, gap 8

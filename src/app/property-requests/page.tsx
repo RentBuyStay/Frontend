@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RequestSearchFilter from "@/components/RequestSearchFilter";
 import Pagination from "@/components/Pagination";
+import ListPropertyCTA from "@/components/ListPropertyCTA";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -239,28 +240,7 @@ export default function PropertyRequestsPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-6 py-6">
-          <div className="rounded-[20px] h-[464px] flex flex-col items-center justify-center text-white text-center px-6" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
-            <h2 className="font-semibold mb-4 max-w-[500px]" style={{ fontSize: "clamp(26px, 6vw, 48px)", lineHeight: "1.25", letterSpacing: "-0.02em" }}>
-              Ready to<br />List Your Property?
-            </h2>
-            <p className="mb-8 max-w-[600px] text-white/85" style={{ fontSize: "16px", lineHeight: "150%" }}>
-              Join thousands of owners and agents on Nigeria&apos;s fastest-growing property
-              platform. Get verified, list your property, and reach millions of seekers.
-            </p>
-            <div className="flex items-center gap-6">
-              <Link href="/post-property" className="bg-[#FFAE00] text-white font-semibold px-7 py-3 rounded-[12px] hover:bg-[#E69A00] transition-colors" style={{ fontSize: "14px" }}>
-                Get Started Free
-              </Link>
-              <Link href="/login" className="text-white hover:underline" style={{ fontSize: "14px" }}>
-                Log in
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ListPropertyCTA />
 
       <Footer />
     </div>

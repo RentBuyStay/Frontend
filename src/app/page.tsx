@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import PropertyCard from "@/components/PropertyCard";
+import ListPropertyCTA from "@/components/ListPropertyCTA";
 import { mockProperties } from "@/lib/mockData";
 import Image from "next/image";
 import Link from "next/link";
@@ -584,43 +585,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── READY TO LIST CTA — Figma: section 512h white, inner card 1392x464 with gradient bg, rounded-20, 24px page padding ── */}
-      <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6">
-          <div
-            className="rounded-[20px] h-[296px] md:h-[464px] flex flex-col items-center justify-center text-white text-center px-4 md:px-6"
-            style={{
-              background: "linear-gradient(174deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 96%), #305E82",
-            }}
-          >
-            <h2 className="font-semibold mb-2 md:mb-4 max-w-[500px] text-[24px] leading-[32px] md:text-[48px] md:leading-[64px]">
-              Ready to<br />List Your Property?
-            </h2>
-            <p
-              className="mb-6 md:mb-10 max-w-[600px] text-[12px] leading-[24px] md:text-[18px] md:leading-[35px] tracking-[-0.02em]"
-            >
-              Join thousands of owners and agents on Nigeria&apos;s fastest-growing property
-              platform. Get verified, list your property, and reach millions of seekers.
-            </p>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/post-property"
-                className="bg-[#FFAE00] text-white font-medium h-12 px-6 rounded-[12px] flex items-center justify-center hover:opacity-90 transition-opacity whitespace-nowrap"
-                style={{ fontSize: "14px", border: "1px solid rgba(120,158,187,0.5)" }}
-              >
-                Get Started Free
-              </Link>
-              <Link
-                href="/login"
-                className="flex items-center justify-center h-12 px-8 text-white font-medium hover:underline whitespace-nowrap"
-                style={{ fontSize: "14px" }}
-              >
-                Log in
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ListPropertyCTA />
 
       {/* ── BROWSE BY LOCATION — Figma: section 1702h, white bg, header at y=80 (centered, w=628), grid at y=224, 1280 wide ── */}
       <section className="bg-white">
