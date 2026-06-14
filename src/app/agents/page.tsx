@@ -3,10 +3,11 @@ import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import AgencyCard from "@/components/AgencyCard";
 import AgentCard from "@/components/AgentCard";
+import RealtorSearch from "@/components/RealtorSearch";
 import { agencies, agents } from "@/lib/agentsData";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Search, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Agents & Agencies | RentBuyStay",
@@ -69,57 +70,8 @@ export default function AgentsPage() {
             </p>
           </div>
 
-          {/* Search bar — Figma: 1344x96 at y=544 from card top, r=12, white, padding 24 */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 z-10 bg-white flex flex-col md:flex-row md:items-center"
-            style={{
-              bottom: "16px",
-              width: "calc(100% - 32px)",
-              maxWidth: "1344px",
-              borderRadius: "12px",
-              padding: "16px",
-              gap: "12px",
-            }}
-          >
-            <div className="flex items-center md:contents" style={{ gap: "12px" }}>
-            <div
-              className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] flex items-center w-[130px] md:w-[199px]"
-              style={{ height: "48px", padding: "0 16px" }}
-            >
-              <select className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                <option>Select state</option>
-                <option>Lagos</option>
-                <option>Abuja</option>
-                <option>Port Harcourt</option>
-              </select>
-              <ChevronDown size={16} className="absolute right-4 text-[#121212] pointer-events-none" />
-            </div>
-
-            <div
-              className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px]"
-              style={{ height: "48px", padding: "0 16px" }}
-            >
-              <Search size={20} className="text-[#807E7E] shrink-0" />
-              <input
-                type="text"
-                placeholder="Enter name, location, area or keyword..."
-                className="flex-1 min-w-0 text-[14px] outline-none placeholder:text-[#807E7E] text-[#121212] bg-transparent"
-              />
-            </div>
-            </div>
-
-            <button
-              className="shrink-0 text-white text-[14px] font-medium rounded-[12px] hover:opacity-90 transition-opacity w-full md:w-[160px]"
-              style={{
-                height: "48px",
-                background:
-                  "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
-                border: "1px solid rgba(120, 158, 187, 0.5)",
-              }}
-            >
-              Search
-            </button>
-          </div>
+          {/* Search — shared realtor search, pinned to the bottom of the hero */}
+          <RealtorSearch className="absolute left-1/2 -translate-x-1/2 bottom-4 z-10 w-[calc(100%-32px)] max-w-[1344px] bg-white rounded-[12px] p-4" />
         </div>
         </div>
       </section>
