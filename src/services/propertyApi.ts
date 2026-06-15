@@ -18,6 +18,36 @@ const toQuery = (params: PageParams = {}) => {
   return sp.toString();
 };
 
+/** Full filter set the public GET /properties endpoint supports (PropertyController). */
+export type PropertyQuery = PageParams & {
+  listingType?: "RENT" | "BUY" | "SHORTLET";
+  propertyTypeId?: number;
+  bedrooms?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  state?: string;
+  city?: string;
+  isFurnished?: boolean;
+  sort?: "newest" | "priceAsc" | "priceDesc";
+};
+
+const toSearchQuery = (p: PropertyQuery = {}) => {
+  const sp = new URLSearchParams();
+  sp.set("page", String(p.page ?? 0));
+  sp.set("size", String(p.size ?? 12));
+  if (p.q) sp.set("q", p.q);
+  if (p.listingType) sp.set("listingType", p.listingType);
+  if (p.propertyTypeId != null) sp.set("propertyTypeId", String(p.propertyTypeId));
+  if (p.bedrooms != null) sp.set("bedrooms", String(p.bedrooms));
+  if (p.minPrice != null) sp.set("minPrice", String(p.minPrice));
+  if (p.maxPrice != null) sp.set("maxPrice", String(p.maxPrice));
+  if (p.state) sp.set("state", p.state);
+  if (p.city) sp.set("city", p.city);
+  if (p.isFurnished != null) sp.set("isFurnished", String(p.isFurnished));
+  if (p.sort) sp.set("sort", p.sort);
+  return sp.toString();
+};
+
 export const propertyApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // The current owner/agent's own listings (all statuses).
@@ -36,11 +66,12 @@ export const propertyApi = api.injectEndpoints({
           : [{ type: "Properties" as const, id: "MINE" }],
     }),
 
-    // Public directory of ACTIVE (approved) listings — used e.g. to pick a
-    // property to request an inspection on.
-    getActiveProperties: builder.query<Page<PropertyResponse>, PageParams | void>({
+    // Public directory of listings (GET /properties) with server-side filters:
+    // q, listingType, propertyTypeId, bedrooms, minPrice, maxPrice, state, city,
+    // isFurnished, sort. Used by Featured Properties (no filters) and the listings.
+    getActiveProperties: builder.query<Page<PropertyResponse>, PropertyQuery | void>({
       query: (params) => ({
-        url: `${endpoints.properties}?${toQuery(params ?? {})}`,
+        url: `${endpoints.properties}?${toSearchQuery(params ?? {})}`,
         method: "GET",
       }),
       transformResponse: (res: ApiEnvelope<Page<PropertyResponse>>) => res.data,

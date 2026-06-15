@@ -1,32 +1,43 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Search, ChevronDown } from "lucide-react";
+import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 
 const bedrooms = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-const propertyTypes = [
-  "All",
-  "Semi-detached Bungalow",
-  "Warehouse",
-  "Shop in a Mall",
-  "Lands",
-  "Detached Bungalow",
-  "Office Spaces",
-  "Flats & Apartments",
-  "Self Contain",
-  "Commercial Properties",
-  "Houses",
-  "Mini Flats",
-  "Co-working Space",
-  "Duplex",
-  "Terraced Bungalow",
-];
+export type AppliedFilters = {
+  q?: string;
+  propertyTypeId?: number;
+  bedrooms?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  isFurnished?: boolean;
+};
 
-export default function FilterModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [activeBed, setActiveBed] = useState("1");
+export default function FilterModal({
+  open,
+  onClose,
+  onApply,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onApply?: (filters: AppliedFilters) => void;
+}) {
+  const [activeBed, setActiveBed] = useState(""); // "" = no bedroom filter
   const [activeType, setActiveType] = useState("All");
+  const [loc, setLoc] = useState("");
+  const [minP, setMinP] = useState("");
+  const [maxP, setMaxP] = useState("");
+  const [furn, setFurn] = useState("");
+  // Real property types from the backend (GET /property-types).
+  const { data: propertyTypes } = useGetPropertyTypesQuery();
+  // Portal to <body> so the modal escapes any ancestor stacking context (e.g. the
+  // hero's z-10 content wrapper, which otherwise lets the navbar paint over it).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Lock body scroll when modal is open + ESC to close
   useEffect(() => {
@@ -42,20 +53,20 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10000] overflow-y-auto md:flex md:items-center md:justify-center md:p-4"
       style={{ background: "rgba(0,0,0,0.5)" }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[24px] w-full max-w-[628px] max-h-[90vh] flex flex-col"
+        className="bg-white w-full min-h-full md:min-h-0 md:max-w-[628px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header — sticky at top */}
-        <div className="flex items-center justify-between" style={{ padding: "40px 40px 16px 40px" }}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 pt-10 pb-4 md:px-10">
           <h2 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
             Filters
           </h2>
@@ -64,8 +75,8 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
           </button>
         </div>
 
-        {/* Sections — Figma: column gap 16px, scrollable middle */}
-        <div className="flex flex-col flex-1 overflow-y-auto" style={{ gap: "16px", padding: "8px 40px" }}>
+        {/* Sections — column gap 16px; the content area scrolls on desktop, the page scrolls on mobile */}
+        <div className="flex flex-col flex-1 md:overflow-y-auto px-4 md:px-10" style={{ gap: "16px", paddingTop: "8px", paddingBottom: "8px" }}>
           {/* Location */}
           <div className="flex flex-col gap-2">
             <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
@@ -76,6 +87,8 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
                 <Search size={18} className="text-[#807e7e] shrink-0" />
                 <input
                   type="text"
+                  value={loc}
+                  onChange={(e) => setLoc(e.target.value)}
                   placeholder="Search address, neighbourhood..."
                   className="flex-1 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
                 />
@@ -89,7 +102,7 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
                   <line x1="2" y1="12" x2="6" y2="12" />
                   <line x1="18" y1="12" x2="22" y2="12" />
                 </svg>
-                Mark location on map
+                <span className="hidden md:inline">Mark location on map</span>
               </button>
             </div>
           </div>
@@ -101,20 +114,20 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
             </label>
             <div className="grid grid-cols-2 gap-4">
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                  <option value="" disabled>Min. price</option>
-                  <option>₦100,000</option>
-                  <option>₦500,000</option>
-                  <option>₦1 million</option>
+                <select value={minP} onChange={(e) => setMinP(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                  <option value="">Min. price</option>
+                  <option value="100000">₦100,000</option>
+                  <option value="500000">₦500,000</option>
+                  <option value="1000000">₦1 million</option>
                 </select>
                 <ChevronDown size={16} className="absolute right-4 text-[#807e7e] pointer-events-none" />
               </div>
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                  <option value="" disabled>Max. price</option>
-                  <option>₦1 million</option>
-                  <option>₦5 million</option>
-                  <option>₦10 million</option>
+                <select value={maxP} onChange={(e) => setMaxP(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                  <option value="">Max. price</option>
+                  <option value="1000000">₦1 million</option>
+                  <option value="5000000">₦5 million</option>
+                  <option value="10000000">₦10 million</option>
                 </select>
                 <ChevronDown size={16} className="absolute right-4 text-[#807e7e] pointer-events-none" />
               </div>
@@ -156,12 +169,15 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
               Property Type
             </label>
             <div className="flex items-center gap-2 flex-wrap">
-              {propertyTypes.map((t) => {
-                const active = activeType === t;
+              {[
+                { id: "All", displayName: "All" },
+                ...(propertyTypes ?? []).map((t) => ({ id: String(t.id), displayName: t.displayName })),
+              ].map((t) => {
+                const active = activeType === t.id;
                 return (
                   <button
-                    key={t}
-                    onClick={() => setActiveType(t)}
+                    key={t.id}
+                    onClick={() => setActiveType(t.id)}
                     className="px-4 py-2 rounded-[8px] transition-colors whitespace-nowrap"
                     style={{
                       background: active ? "#E6EEF6" : "#F6F6F6",
@@ -170,7 +186,7 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
                       fontWeight: active ? 600 : 400,
                     }}
                   >
-                    {t}
+                    {t.displayName}
                   </button>
                 );
               })}
@@ -184,10 +200,10 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
                 Furnished
               </label>
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="Any" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                  <option>Any</option>
-                  <option>Furnished</option>
-                  <option>Unfurnished</option>
+                <select value={furn} onChange={(e) => setFurn(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                  <option value="">Any</option>
+                  <option value="furnished">Furnished</option>
+                  <option value="unfurnished">Unfurnished</option>
                 </select>
                 <ChevronDown size={16} className="absolute right-4 text-[#807e7e] pointer-events-none" />
               </div>
@@ -239,18 +255,28 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
           </div>
         </div>
 
-        {/* Footer — Figma: 40px top space from content, 40px bottom & 40px right */}
-        <div className="flex items-center justify-end" style={{ gap: "16px", padding: "24px 40px 40px 40px" }}>
+        {/* Footer — full-width buttons on mobile, right-aligned on desktop */}
+        <div className="flex items-center gap-4 md:justify-end px-4 pt-4 pb-10 md:px-10">
           <button
-            onClick={() => { setActiveBed("1"); setActiveType("All"); }}
-            className="hover:opacity-70 transition-opacity"
-            style={{ fontSize: "14px", fontWeight: 500, color: "#121212", padding: "8px 16px" }}
+            onClick={() => { setActiveBed(""); setActiveType("All"); setLoc(""); setMinP(""); setMaxP(""); setFurn(""); }}
+            className="flex-1 md:flex-none flex items-center justify-center hover:opacity-70 transition-opacity"
+            style={{ height: "48px", fontSize: "14px", fontWeight: 500, color: "#121212", padding: "8px 16px" }}
           >
             Reset
           </button>
           <button
-            onClick={onClose}
-            className="text-white rounded-[12px] hover:opacity-90 transition-opacity"
+            onClick={() => {
+              onApply?.({
+                q: loc.trim() || undefined,
+                propertyTypeId: activeType !== "All" ? Number(activeType) : undefined,
+                bedrooms: activeBed ? Number(activeBed) : undefined,
+                minPrice: minP ? Number(minP) : undefined,
+                maxPrice: maxP ? Number(maxP) : undefined,
+                isFurnished: furn === "furnished" ? true : furn === "unfurnished" ? false : undefined,
+              });
+              onClose();
+            }}
+            className="flex-1 md:flex-none flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
             style={{
               height: "48px",
               padding: "8px 24px",
@@ -264,6 +290,7 @@ export default function FilterModal({ open, onClose }: { open: boolean; onClose:
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

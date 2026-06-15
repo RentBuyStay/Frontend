@@ -1,10 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
-import AgencyCard from "@/components/AgencyCard";
-import AgentCard from "@/components/AgentCard";
 import RealtorSearch from "@/components/RealtorSearch";
-import { agencies, agents } from "@/lib/agentsData";
+import AgenciesGrid from "@/components/AgenciesGrid";
+import AgentsGrid from "@/components/AgentsGrid";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -13,10 +12,6 @@ export const metadata = {
   title: "Agents & Agencies | RentBuyStay",
   description: "Find all verified real estate agents and agencies across Nigeria.",
 };
-
-// Homepage shows first 6 agencies and first 9 agents (top of each list)
-const featuredAgencies = agencies.slice(0, 6);
-const featuredAgents = agents.slice(0, 9);
 
 export default function AgentsPage() {
   return (
@@ -100,14 +95,7 @@ export default function AgentsPage() {
             </Link>
           </div>
 
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            style={{ gap: "40px 24px" }}
-          >
-            {featuredAgencies.map((a) => (
-              <AgencyCard key={a.id} a={a} />
-            ))}
-          </div>
+          <AgenciesGrid limit={6} />
         </div>
       </section>
 
@@ -139,14 +127,7 @@ export default function AgentsPage() {
             </Link>
           </div>
 
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            style={{ gap: "40px 24px" }}
-          >
-            {featuredAgents.map((a, i) => (
-              <AgentCard key={i} a={a} />
-            ))}
-          </div>
+          <AgentsGrid limit={9} />
         </div>
       </section>
 

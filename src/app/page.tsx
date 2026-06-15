@@ -4,6 +4,7 @@ import SearchBar from "@/components/SearchBar";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import SectionHeader from "@/components/SectionHeader";
 import FeaturedProperties from "@/components/FeaturedProperties";
+import TopAgents from "@/components/TopAgents";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -33,15 +34,6 @@ const steps = [
     title: "Close the Deal",
     desc: "Schedule viewings, negotiate, and finalise your transaction securely through the platform.",
   },
-];
-
-const agents = [
-  { name: "Ibrahim Fashola", avatar: "/images/agent-1.png", initials: "IF", agency: "Jaskaro Properties", location: "Lagos", rating: 5.0, listings: 9 },
-  { name: "Pascaline Okonkwo", avatar: "/images/agent-2.png", initials: "PO", agency: "Prime Realty & Co.", location: "Abuja", rating: 4.9, listings: 24 },
-  { name: "Chioma Idris", avatar: "", initials: "CI", agency: "Royal Realtors", location: "Port-Harcourt", rating: 4.7, listings: 27 },
-  { name: "Olamide Adesokan", avatar: "/images/agent-4.png", initials: "OA", agency: "Nexus Property Hub", location: "Ogun", rating: 4.6, listings: 11 },
-  { name: "Olaitan Badejo", avatar: "", initials: "OB", agency: "Prime Realty & Co.", location: "Lagos", rating: 4.6, listings: 13 },
-  { name: "Lade Oyetola", avatar: "/images/agent-6.png", initials: "LO", agency: "Propex", location: "Lagos", rating: 4.3, listings: 8 },
 ];
 
 const propertyTypes = [
@@ -245,34 +237,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Search — 2-row white card (Rent dropdown + input / filter + Search) */}
-            <div className="bg-white rounded-[15px] p-2 flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center justify-between bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 px-4 shrink-0">
-                  <span style={{ fontSize: "12px", color: "#121212" }}>Rent</span>
-                  <Image src="/icons/hero-arrow-down.svg" alt="" width={16} height={16} />
-                </div>
-                <div className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
-                  <Image src="/icons/hero-search.svg" alt="" width={16} height={16} className="shrink-0" />
-                  <input
-                    placeholder="Enter location, area or keyword..."
-                    className="flex-1 min-w-0 bg-transparent outline-none placeholder:text-[#807e7ebf]"
-                    style={{ fontSize: "10px", color: "#121212" }}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button aria-label="Filters" className="flex items-center justify-center bg-[#F6F6F6] rounded-[12px] w-12 h-12 shrink-0">
-                  <Image src="/icons/hero-setting-5.svg" alt="" width={16} height={16} />
-                </button>
-                <button
-                  className="flex-1 h-12 rounded-[12px] text-white text-[14px] font-medium"
-                  style={{ background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)", border: "1px solid rgba(120,158,187,0.5)" }}
-                >
-                  Search
-                </button>
-              </div>
-            </div>
+            {/* Search — shared SearchBar (its mobile variant has the working filter button → modal) */}
+            <SearchBar />
           </div>
         </div>
         </div>
@@ -376,99 +342,7 @@ export default function HomePage() {
             viewAllHref="/agents"
           />
 
-          {/* Cards — 3 per row, gap 24 */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {agents.map((agent) => (
-              <div
-                key={agent.name}
-                className="bg-white rounded-[20px] p-6 flex flex-col gap-5"
-                style={{ border: "1px solid #f6f6f6" }}
-              >
-                {/* 1. Avatar + Name/Agency/Location */}
-                <div className="flex items-center gap-4">
-                  {/* Avatar 64x64 */}
-                  <div className="w-16 h-16 rounded-full overflow-hidden bg-[#f3fefe] border border-[#ededed] flex items-center justify-center shrink-0">
-                    {agent.avatar ? (
-                      <Image src={agent.avatar} alt={agent.name} width={64} height={64} className="object-cover w-full h-full" />
-                    ) : (
-                      <span className="text-[#305e82] font-semibold" style={{ fontSize: "18px" }}>
-                        {agent.initials}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-w-0 flex flex-col gap-1">
-                    {/* Name + verify */}
-                    <div className="flex items-center gap-2">
-                      <p style={{ fontSize: "18px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="truncate">
-                        {agent.name}
-                      </p>
-                      <Image src="/icons/verify.svg" alt="" width={20} height={20} className="shrink-0" />
-                    </div>
-                    {/* Agency */}
-                    <p style={{ fontSize: "12px", color: "#807e7e" }} className="truncate">
-                      {agent.agency}
-                    </p>
-                    {/* Location with bigger pin */}
-                    <div className="flex items-center gap-2 mt-1">
-                      <Image src="/icons/location.svg" alt="" width={20} height={20} />
-                      <span style={{ fontSize: "14px", color: "#305e82" }}>{agent.location}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Divider */}
-                <div className="h-px bg-[#f6f6f6] -mx-6" />
-
-                {/* 2. Rating + Listings (LEFT) | View all Properties (RIGHT) — same row */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
-                    <div className="flex items-center gap-1.5">
-                      <Image src="/icons/star.svg" alt="" width={20} height={20} />
-                      <span>{agent.rating.toFixed(1)}</span>
-                    </div>
-                    <div className="w-px h-4 bg-[#807e7e]/40" />
-                    <div className="flex items-center gap-1.5">
-                      <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
-                      <span>{agent.listings} listings</span>
-                    </div>
-                  </div>
-                  <Link
-                    href="/agents"
-                    className="hover:underline"
-                    style={{ fontSize: "14px", fontWeight: 500, color: "#305e82" }}
-                  >
-                    View all Properties
-                  </Link>
-                </div>
-
-                {/* Divider */}
-                <div className="h-px bg-[#f6f6f6] -mx-6" />
-
-                {/* 3. Call + Message buttons */}
-                <div className="flex gap-4">
-                  <button
-                    className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors"
-                    style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}
-                  >
-                    <Image src="/icons/call.svg" alt="" width={20} height={20} /> Call
-                  </button>
-                  <button
-                    className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity"
-                    style={{
-                      height: "48px",
-                      padding: "8px 24px",
-                      fontSize: "14px",
-                      fontWeight: 500,
-                      background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
-                    }}
-                  >
-                    <Image src="/icons/messages-2.svg" alt="" width={20} height={20} /> Message
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TopAgents />
         </div>
       </section>
 

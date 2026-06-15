@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import FilterModal, { type AppliedFilters } from "./FilterModal";
+import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 
 const tabs = ["Rent", "Buy", "Shortlet"] as const;
 type Tab = (typeof tabs)[number];
@@ -43,7 +45,8 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [furnished, setFurnished] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const { data: propertyTypes } = useGetPropertyTypesQuery();
 
   function handleSearch() {
     const params = new URLSearchParams();
@@ -52,6 +55,19 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
     if (bedrooms) params.set("beds", bedrooms);
     if (minPrice) params.set("minPrice", minPrice);
     if (maxPrice) params.set("maxPrice", maxPrice);
+    if (furnished) params.set("furnished", furnished);
+    router.push(`${tabRoutes[activeTab]}?${params.toString()}`);
+  }
+
+  // FilterModal "Apply" → navigate to the active tab's listing page with its filters.
+  function applyModalFilters(f: AppliedFilters) {
+    const params = new URLSearchParams();
+    if (f.q) params.set("q", f.q);
+    if (f.propertyTypeId != null) params.set("type", String(f.propertyTypeId));
+    if (f.bedrooms != null) params.set("beds", String(f.bedrooms));
+    if (f.minPrice != null) params.set("minPrice", String(f.minPrice));
+    if (f.maxPrice != null) params.set("maxPrice", String(f.maxPrice));
+    if (f.isFurnished != null) params.set("furnished", f.isFurnished ? "furnished" : "unfurnished");
     router.push(`${tabRoutes[activeTab]}?${params.toString()}`);
   }
 
@@ -63,10 +79,9 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
       <FilterField label="Property Type">
         <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)} className={selectClass}>
           <option value="">All types</option>
-          <option value="house">House</option>
-          <option value="apartment">Apartment</option>
-          <option value="land">Land</option>
-          <option value="commercial">Commercial</option>
+          {(propertyTypes ?? []).map((t) => (
+            <option key={t.id} value={t.id}>{t.displayName}</option>
+          ))}
         </select>
       </FilterField>
       <FilterField label="Bedrooms">
@@ -106,6 +121,7 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   );
 
   return (
+    <>
     <div className="w-full">
 
       {/* ===== MOBILE: compact 2-row card (Figma 329x128, r=15) — filters behind the filter button ===== */}
@@ -136,12 +152,12 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
             />
           </div>
         </div>
-        {/* Row 2: filter toggle + Search button */}
+        {/* Row 2: filter button (opens the filter page) + Search button */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             aria-label="Filters"
-            onClick={() => setShowFilters((s) => !s)}
+            onClick={() => setShowFilterModal(true)}
             className="flex items-center justify-center bg-[#F6F6F6] rounded-[12px] w-12 h-12 shrink-0"
           >
             <Image src="/icons/hero-setting-5.svg" alt="" width={16} height={16} />
@@ -155,8 +171,6 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
             Search
           </button>
         </div>
-        {/* Expanded filters (toggled by the filter button) */}
-        {showFilters && <div className="grid grid-cols-2 gap-3 pt-1">{filters}</div>}
       </div>
 
       {/* ===== DESKTOP: full row + 5-filter grid (Figma 1344 wide) ===== */}
@@ -194,10 +208,21 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
           >
             Search
           </button>
+          {/* Filter button — opens the advanced filter modal (Figma 77:1176) */}
+          <button
+            type="button"
+            onClick={() => setShowFilterModal(true)}
+            className="shrink-0 flex items-center gap-2 bg-[#F6F6F6] rounded-[12px] h-12 px-4 text-[14px] text-[#121212] hover:bg-[#ededed] transition-colors"
+          >
+            <Image src="/icons/hero-setting-5.svg" alt="" width={16} height={16} />
+            Filter
+          </button>
         </div>
         {/* Filter row */}
         <div className="flex items-start gap-4">{filters}</div>
       </div>
     </div>
+    <FilterModal open={showFilterModal} onClose={() => setShowFilterModal(false)} onApply={applyModalFilters} />
+    </>
   );
 }

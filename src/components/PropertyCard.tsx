@@ -26,15 +26,12 @@ export default function PropertyCard({ property }: { property: Property }) {
     >
       {/* Image with badge — Figma: 224h, badge bottom-right r=8, 12px/600 white uppercase, pad 4/8 */}
       <div className="relative h-[224px] bg-[#ededed]">
-        {property.image ? (
-          <Image src={property.image} alt={property.title} fill className="object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#d7d7d7]">
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M3 9.5L12 3l9 6.5V21H3V9.5z" />
-            </svg>
-          </div>
-        )}
+        <Image
+          src={property.image || "/images/property-placeholder.png"}
+          alt={property.title}
+          fill
+          className="object-cover"
+        />
         <span
           className="absolute uppercase text-white inline-flex items-center"
           style={{

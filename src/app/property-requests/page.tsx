@@ -1,8 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
-import ListingsHeader from "@/components/ListingsHeader";
-import Pagination from "@/components/Pagination";
+import RequestResults from "@/components/RequestResults";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,17 +10,6 @@ export const metadata = {
   title: "Property Requests | RentBuyStay",
   description: "Browse what people are looking for and connect with verified seekers.",
 };
-
-const requests = [
-  { id: "1", lookingFor: "House for Rent", beds: 1, area: "Lekki Phase 1, Lagos", requestBy: "Individual", budget: "₦800,000/year", agent: "Chioma Okeke", agentInitials: "CO", date: "Listed on 15 Apr 2026" },
-  { id: "2", lookingFor: "Apartment for Sale", beds: 3, area: "Ikoyi, Lagos", requestBy: "Real Estate Agent", budget: "₦45,000,000", agent: "Emeka Nwosu", agentInitials: "EN", date: "Listed on 10 May 2026" },
-  { id: "3", lookingFor: "Studio Apartment", beds: 1, area: "Yaba, Lagos", requestBy: "Student", budget: "₦300,000/year", agent: "Tunde Bello", agentInitials: "TB", date: "Listed on 22 Mar 2026" },
-  { id: "4", lookingFor: "Commercial Space", beds: 2, area: "Victoria Island, Lagos", requestBy: "Company", budget: "₦10,000,000/year", agent: "Aisha Bello", agentInitials: "AB", date: "Listed on 03 May 2026" },
-  { id: "5", lookingFor: "Duplex for Rent", beds: 4, area: "Surulere, Lagos", requestBy: "Family of 4", budget: "₦2,500,000/year", agent: "Femi Olajide", agentInitials: "FO", date: "Listed on 18 Apr 2026" },
-  { id: "6", lookingFor: "Bungalow for Sale", beds: 3, area: "Ajah, Lagos", requestBy: "Couple", budget: "₦18,000,000", agent: "Chinwe Umeh", agentInitials: "CU", date: "Listed on 02 May 2026" },
-  { id: "7", lookingFor: "Penthouse Apartment", beds: 5, area: "Banana Island, Lagos", requestBy: "Business Executive", budget: "₦120,000,000", agent: "Tunde Balogun", agentInitials: "TB", date: "Listed on 14 Apr 2026" },
-  { id: "8", lookingFor: "Shared Accommodation", beds: 1, area: "Mushin, Lagos", requestBy: "Individual", budget: "₦250,000/year", agent: "Nkechi Okafor", agentInitials: "NO", date: "Listed on 26 Apr 2026" },
-];
 
 const propertyTypes = [
   { name: "Flats/Apartments", count: 5032 },
@@ -72,76 +60,8 @@ export default function PropertyRequestsPage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-[60px]">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
 
-            {/* LEFT */}
-            <div className="flex flex-col gap-6 min-w-0">
-              <ListingsHeader
-                title="Property Requests"
-                count="Showing 1 - 10 of 37"
-                sortOptions={["Newest", "Budget: Low to High", "Budget: High to Low"]}
-              />
-
-              {/* Request cards — 2 column grid, exact Figma 411x368 */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {requests.map((r) => (
-                  <div key={r.id} className="bg-white border border-[#f6f6f6] rounded-[20px] flex flex-col">
-                    <div className="flex flex-col gap-4 px-4 pt-6 pb-4">
-                      {/* Seeking | Bedroom — two columns */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1 min-w-0">
-                          <p style={{ fontSize: "12px", color: "#807e7e" }}>Seeking</p>
-                          <p className="truncate" style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.lookingFor}</p>
-                        </div>
-                        <div className="flex flex-col gap-1 min-w-0">
-                          <p style={{ fontSize: "12px", color: "#807e7e" }}>Bedroom</p>
-                          <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.beds}</p>
-                        </div>
-                      </div>
-
-                      {/* Budget — 16px Bold blue, suffix smaller */}
-                      <div className="flex flex-col gap-1">
-                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Budget</p>
-                        <p style={{ color: "#305e82", lineHeight: "24px" }}>
-                          <span style={{ fontSize: "16px", fontWeight: 700 }}>{r.budget.split("/")[0]}</span>
-                          {r.budget.includes("/") && <span style={{ fontSize: "14px", fontWeight: 400 }}>/{r.budget.split("/")[1]}</span>}
-                        </p>
-                      </div>
-
-                      {/* Area */}
-                      <div className="flex flex-col gap-1">
-                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Area</p>
-                        <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.area}</p>
-                      </div>
-
-                      {/* Request by */}
-                      <div className="flex flex-col gap-1">
-                        <p style={{ fontSize: "12px", color: "#807e7e" }}>Request by</p>
-                        <p style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#121212" }}>{r.requestBy}</p>
-                      </div>
-                    </div>
-
-                    {/* Divider — full width */}
-                    <div className="h-px bg-[#f6f6f6] mt-auto" />
-
-                    {/* Bottom: Agent (left) + Listed-on date (right) */}
-                    <div className="flex items-center justify-between gap-2 px-4 py-4">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(48,94,130,0.05)", fontSize: "14px", fontWeight: 600, color: "#305e82" }}>
-                          {r.agentInitials}
-                        </div>
-                        <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{r.agent}</span>
-                        <Image src="/icons/verify.svg" alt="" width={20} height={20} className="shrink-0" />
-                      </div>
-                      <span className="shrink-0" style={{ fontSize: "12px", fontWeight: 500, color: "#305e82" }}>{r.date}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Pagination — Figma exact: arrow-left + page numbers + Next */}
-              <div className="mt-6">
-                <Pagination current={1} />
-              </div>
-            </div>
+            {/* LEFT — live requests from GET /property-requests */}
+            <RequestResults />
 
             {/* SIDEBAR (same as For Sale) */}
             <aside className="flex flex-col gap-6 min-w-0">

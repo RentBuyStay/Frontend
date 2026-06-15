@@ -1,28 +1,14 @@
+import { Suspense } from "react";
 import Footer from "@/components/Footer";
-import Pagination from "@/components/Pagination";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
-import ListingCard from "@/components/ListingCard";
 import ListingSidebar from "@/components/ListingSidebar";
 import ListingHero from "@/components/ListingHero";
-import ListingsHeader from "@/components/ListingsHeader";
+import ListingResults from "@/components/ListingResults";
 
 export const metadata = {
   title: "Properties for Rent in Nigeria | RentBuyStay",
   description: "Browse verified rental properties across Nigeria.",
 };
-
-const listings = [
-  { id: "1", title: "Furnished 2 Bedroom Flat", price: "₦800,000/yr", location: "Wuse 2, Abuja", date: "Listed on 27 Mar 2026", image: "/images/prop1.jpg", desc: "Beautifully furnished 2 bedroom flat in a serene Wuse 2 neighbourhood with 24/7 power and parking space.", agent: "Tunde Bello", agentInitials: "TB", tags: ["Furnished", "Newly Built", "24/7 Power"], beds: 2, baths: 2, area: "1,200 sqft" },
-  { id: "2", title: "Executive 3 Bedroom Terrace", price: "₦1,200,000/yr", location: "Ikeja GRA, Lagos", date: "Listed on 27 Mar 2026", image: "/images/prop3.jpg", desc: "Modern 3 bedroom terrace with fitted kitchen, en-suite bedrooms, and dedicated parking in Ikeja GRA.", agent: "Ngozi Eze", agentInitials: "NE", tags: ["Newly Built", "BIQ", "Gated Estate"], beds: 3, baths: 3, area: "1,800 sqft" },
-  { id: "3", title: "Brand New 2 Bedroom Flat", price: "₦600,000/yr", location: "Surulere, Lagos", date: "Listed on 22 Apr 2026", image: "/images/prop1.jpg", desc: "Brand new 2 bedroom flat with modern fittings, located in a quiet street with easy access to public transport.", agent: "Ibrahim Musa", agentInitials: "IM", tags: ["Brand New", "Pop Ceiling", "Tiled Floors"], beds: 2, baths: 2, area: "900 sqft" },
-  { id: "4", title: "Spacious 4 Bedroom Duplex", price: "₦4,500,000/yr", location: "Lekki Phase 1, Lagos", date: "Listed on 15 Apr 2026", image: "/images/prop4.jpg", desc: "Stunning 4 bedroom duplex with private compound, BQ, and modern finishes throughout.", agent: "Aisha Bello", agentInitials: "AB", tags: ["Newly Built", "BIQ", "24/7 Security"], beds: 4, baths: 5, area: "3,500 sqft" },
-  { id: "5", title: "Modern 1 Bedroom Studio", price: "₦450,000/yr", location: "Yaba, Lagos", date: "Listed on 10 May 2026", image: "/images/prop1.jpg", desc: "Compact studio apartment perfect for young professionals, close to tech hubs and entertainment.", agent: "Chinaza Okafor", agentInitials: "CO", tags: ["Furnished", "24/7 Power", "Wi-Fi Included"], beds: 1, baths: 1, area: "550 sqft" },
-  { id: "6", title: "Family 4 Bedroom Bungalow", price: "₦2,800,000/yr", location: "Magodo, Lagos", date: "Listed on 03 May 2026", image: "/images/prop4.jpg", desc: "Family-friendly bungalow with large compound, ideal for families with children, in a secure neighbourhood.", agent: "Kemi Adeyemi", agentInitials: "KA", tags: ["Family Home", "Gated Estate", "Parking"], beds: 4, baths: 3, area: "2,800 sqft" },
-  { id: "7", title: "Luxurious 5 Bedroom Mansion", price: "₦8,000,000/yr", location: "Maitama, Abuja", date: "Listed on 02 May 2026", image: "/images/prop5.jpg", desc: "Magnificent mansion with smart-home features, swimming pool, and private gym for the discerning tenant.", agent: "Olumide Fashola", agentInitials: "OF", tags: ["Luxury", "Pool", "Smart Home"], beds: 5, baths: 6, area: "5,500 sqft" },
-  { id: "8", title: "Affordable 3 Bedroom Flat", price: "₦950,000/yr", location: "Egbeda, Lagos", date: "Listed on 01 May 2026", image: "/images/prop2.jpg", desc: "Cost-effective 3 bedroom flat in a developing area with all standard amenities and easy commute.", agent: "Funmi Adebayo", agentInitials: "FA", tags: ["Spacious", "Tiled Floors", "0-3 Years"], beds: 3, baths: 2, area: "1,500 sqft" },
-  { id: "9", title: "Contemporary 2 Bedroom Apartment", price: "₦1,500,000/yr", location: "Victoria Island, Lagos", date: "Listed on 29 Apr 2026", image: "/images/prop2.jpg", desc: "Modern apartment with stunning views, fitted kitchen, and access to building amenities like gym and pool.", agent: "Emeka Nwosu", agentInitials: "EN", tags: ["Furnished", "Sea View", "24/7 Concierge"], beds: 2, baths: 2, area: "1,400 sqft" },
-  { id: "10", title: "Cozy 3 Bedroom Penthouse", price: "₦5,500,000/yr", location: "Ikoyi, Lagos", date: "Listed on 26 Apr 2026", image: "/images/prop3.jpg", desc: "Top-floor penthouse with panoramic city views, modern interiors, and rooftop access for entertainment.", agent: "Ngozi Okoro", agentInitials: "NO", tags: ["Furnished", "Penthouse", "Rooftop"], beds: 3, baths: 3, area: "2,200 sqft" },
-];
 
 const propertyTypes = [
   { name: "Flats/Apartments", count: 5032 },
@@ -79,23 +65,14 @@ export default function ForRentPage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-10 md:py-[60px]">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
 
-            {/* LEFT */}
-            <div className="flex flex-col gap-6 min-w-0">
-              <ListingsHeader
+            {/* LEFT: live results from GET /properties (RENT) */}
+            <Suspense fallback={<div className="min-w-0" />}>
+              <ListingResults
+                listingType="RENT"
+                tag="For Rent"
                 title="All Properties for Rent in Nigeria"
-                count="Showing 1 - 10 of 37"
               />
-
-              <div className="flex flex-col gap-6">
-                {listings.map((p) => (
-                  <ListingCard key={p.id} listing={p} tag="For Rent" />
-                ))}
-              </div>
-
-              <div className="mt-6">
-                <Pagination current={1} />
-              </div>
-            </div>
+            </Suspense>
 
             {/* SIDEBAR */}
             <ListingSidebar
