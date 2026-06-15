@@ -199,10 +199,12 @@ export type PropertyTypeOption = { id: number; code: string; displayName: string
 /** GET /properties/facets — grouped active-listing counts. Each `id` is the
  * group key (property-type name, bedroom number, or state name). */
 export type FacetCount = { id: string; count: number };
+export type TypeBedroomCount = { type: string; bedrooms: number; count: number };
 export type PropertyFacets = {
   byPropertyType: FacetCount[];
   byBedrooms: FacetCount[];
   byState: FacetCount[];
+  byTypeBedrooms: TypeBedroomCount[];
 };
 export type LocationOption = {
   id: number;

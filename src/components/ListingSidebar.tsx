@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import VerifiedAgentsList from "./VerifiedAgentsList";
 import SidebarTypeCounts from "./SidebarTypeCounts";
+import SidebarBedroomBreakdown from "./SidebarBedroomBreakdown";
 
 const CATEGORY_LISTING_TYPE: Record<string, "RENT" | "BUY" | "SHORTLET"> = {
   Sale: "BUY",
@@ -55,21 +56,11 @@ export default function ListingSidebar({
 
         <div className="border-t border-[#ededed] my-4 -mx-6" />
 
-        {/* Second nested table: Type | 1 Bed | 2 Bed | … */}
-        <div className="flex flex-col">
-          <div className="grid grid-cols-6 gap-2 py-1.5 border-b border-[#ededed]" style={{ fontSize: "12px", color: "#305e82", fontWeight: 600 }}>
-            {bedroomTable.cols.map((c) => (
-              <span key={c} className={c === "Type" ? "" : "text-right"}>{c}</span>
-            ))}
-          </div>
-          {bedroomTable.rows.map((row) => (
-            <div key={row[0]} className="grid grid-cols-6 gap-2 py-1.5" style={{ fontSize: "12px", color: "#305e82" }}>
-              {row.map((cell, i) => (
-                <span key={i} className={i === 0 ? "" : "text-right"}>{cell}</span>
-              ))}
-            </div>
-          ))}
-        </div>
+        {/* Second nested table: Type | 1 Bed | … (live from /properties/facets, static fallback) */}
+        <SidebarBedroomBreakdown
+          listingType={CATEGORY_LISTING_TYPE[category] ?? "RENT"}
+          fallback={bedroomTable}
+        />
       </div>
 
       {/* Explore States */}
