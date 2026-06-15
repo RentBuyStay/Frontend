@@ -19,13 +19,14 @@ export default function SidebarTypeCounts({
   const { data } = useGetPropertyFacetsQuery({ listingType });
 
   const live = data?.byPropertyType ?? [];
+  // When there's no live data yet, keep the row labels but show 0 (not placeholder numbers).
   const rows: SidebarPropertyType[] =
     live.length > 0
       ? [...live]
           .sort((a, b) => b.count - a.count)
           .slice(0, 5)
           .map((f) => ({ name: f.id, count: f.count }))
-      : fallback;
+      : fallback.map((t) => ({ name: t.name, count: 0 }));
 
   return (
     <div className="flex flex-col">

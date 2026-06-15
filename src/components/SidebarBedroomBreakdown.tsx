@@ -28,13 +28,11 @@ export default function SidebarBedroomBreakdown({
     }
     rows = [...byType.entries()].map(([type, beds]) => [
       type,
-      ...[1, 2, 3, 4, 5].map((b) => {
-        const c = beds.get(b);
-        return c ? String(c) : "—";
-      }),
+      ...[1, 2, 3, 4, 5].map((b) => String(beds.get(b) ?? 0)),
     ]);
   } else {
-    rows = fallback.rows;
+    // No live data yet — keep the row labels but zero the counts (not placeholders).
+    rows = fallback.rows.map((row) => [row[0], "0", "0", "0", "0", "0"]);
   }
 
   return (
