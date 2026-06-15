@@ -15,6 +15,16 @@ export type AppliedFilters = {
   minPrice?: number;
   maxPrice?: number;
   isFurnished?: boolean;
+  isServiced?: boolean;
+  isShared?: boolean;
+  listedWithinDays?: number;
+};
+
+const LISTED_DAYS: Record<string, number | undefined> = {
+  Anytime: undefined,
+  "Last 24 hours": 1,
+  "Last 7 days": 7,
+  "Last 30 days": 30,
 };
 
 export default function FilterModal({
@@ -32,6 +42,9 @@ export default function FilterModal({
   const [minP, setMinP] = useState("");
   const [maxP, setMaxP] = useState("");
   const [furn, setFurn] = useState("");
+  const [serv, setServ] = useState("");
+  const [shared, setShared] = useState("");
+  const [listed, setListed] = useState("Anytime");
   // Real property types from the backend (GET /property-types).
   const { data: propertyTypes } = useGetPropertyTypesQuery();
   // Portal to <body> so the modal escapes any ancestor stacking context (e.g. the
@@ -213,10 +226,10 @@ export default function FilterModal({
                 Servicing
               </label>
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="Any" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                  <option>Any</option>
-                  <option>Serviced</option>
-                  <option>Unserviced</option>
+                <select value={serv} onChange={(e) => setServ(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                  <option value="">Any</option>
+                  <option value="serviced">Serviced</option>
+                  <option value="unserviced">Unserviced</option>
                 </select>
                 <ChevronDown size={16} className="absolute right-4 text-[#807e7e] pointer-events-none" />
               </div>
@@ -230,10 +243,10 @@ export default function FilterModal({
                 Shared
               </label>
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="Any" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
-                  <option>Any</option>
-                  <option>Yes</option>
-                  <option>No</option>
+                <select value={shared} onChange={(e) => setShared(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                  <option value="">Any</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
                 </select>
                 <ChevronDown size={16} className="absolute right-4 text-[#807e7e] pointer-events-none" />
               </div>
@@ -243,7 +256,7 @@ export default function FilterModal({
                 Listed
               </label>
               <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4">
-                <select defaultValue="Anytime" className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
+                <select value={listed} onChange={(e) => setListed(e.target.value)} className="appearance-none text-sm text-[#121212] bg-transparent outline-none w-full pr-6 cursor-pointer">
                   <option>Anytime</option>
                   <option>Last 24 hours</option>
                   <option>Last 7 days</option>
@@ -258,7 +271,7 @@ export default function FilterModal({
         {/* Footer — full-width buttons on mobile, right-aligned on desktop */}
         <div className="flex items-center gap-4 md:justify-end px-4 pt-4 pb-10 md:px-10">
           <button
-            onClick={() => { setActiveBed(""); setActiveType("All"); setLoc(""); setMinP(""); setMaxP(""); setFurn(""); }}
+            onClick={() => { setActiveBed(""); setActiveType("All"); setLoc(""); setMinP(""); setMaxP(""); setFurn(""); setServ(""); setShared(""); setListed("Anytime"); }}
             className="flex-1 md:flex-none flex items-center justify-center hover:opacity-70 transition-opacity"
             style={{ height: "48px", fontSize: "14px", fontWeight: 500, color: "#121212", padding: "8px 16px" }}
           >
@@ -273,6 +286,9 @@ export default function FilterModal({
                 minPrice: minP ? Number(minP) : undefined,
                 maxPrice: maxP ? Number(maxP) : undefined,
                 isFurnished: furn === "furnished" ? true : furn === "unfurnished" ? false : undefined,
+                isServiced: serv === "serviced" ? true : serv === "unserviced" ? false : undefined,
+                isShared: shared === "yes" ? true : shared === "no" ? false : undefined,
+                listedWithinDays: LISTED_DAYS[listed],
               });
               onClose();
             }}

@@ -5,6 +5,7 @@ import type {
   ArchiveReason,
   CreatePropertyRequest,
   Page,
+  PropertyFacets,
   PropertyResponse,
 } from "./types";
 
@@ -28,6 +29,9 @@ export type PropertyQuery = PageParams & {
   state?: string;
   city?: string;
   isFurnished?: boolean;
+  isServiced?: boolean;
+  isShared?: boolean;
+  listedWithinDays?: number;
   sort?: "newest" | "priceAsc" | "priceDesc";
 };
 
@@ -44,6 +48,9 @@ const toSearchQuery = (p: PropertyQuery = {}) => {
   if (p.state) sp.set("state", p.state);
   if (p.city) sp.set("city", p.city);
   if (p.isFurnished != null) sp.set("isFurnished", String(p.isFurnished));
+  if (p.isServiced != null) sp.set("isServiced", String(p.isServiced));
+  if (p.isShared != null) sp.set("isShared", String(p.isShared));
+  if (p.listedWithinDays != null) sp.set("listedWithinDays", String(p.listedWithinDays));
   if (p.sort) sp.set("sort", p.sort);
   return sp.toString();
 };
@@ -82,6 +89,22 @@ export const propertyApi = api.injectEndpoints({
       query: (id) => ({ url: endpoints.property(id), method: "GET" }),
       transformResponse: (res: ApiEnvelope<PropertyResponse>) => res.data,
       providesTags: (_r, _e, id) => [{ type: "Property", id }],
+    }),
+
+    // Grouped active-listing counts for the listing-page sidebar (GET /properties/facets).
+    getPropertyFacets: builder.query<
+      PropertyFacets,
+      { listingType?: "RENT" | "BUY" | "SHORTLET" } | void
+    >({
+      query: (params) => {
+        const lt = params?.listingType;
+        return {
+          url: `${endpoints.propertiesFacets}${lt ? `?listingType=${lt}` : ""}`,
+          method: "GET",
+        };
+      },
+      transformResponse: (res: ApiEnvelope<PropertyFacets>) => res.data,
+      providesTags: [{ type: "Properties", id: "FACETS" }],
     }),
 
     createProperty: builder.mutation<PropertyResponse, CreatePropertyRequest>({
@@ -161,6 +184,7 @@ export const propertyApi = api.injectEndpoints({
 export const {
   useGetMyPropertiesQuery,
   useGetActivePropertiesQuery,
+  useGetPropertyFacetsQuery,
   useGetSavedPropertiesQuery,
   useSavePropertyMutation,
   useUnsavePropertyMutation,

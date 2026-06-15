@@ -142,6 +142,8 @@ export type PropertyResponse = {
   viewCount?: number;
   listedAt?: string;
   isFurnished?: boolean;
+  isServiced?: boolean;
+  isShared?: boolean;
   ownerUserId?: string;
   ownerName?: string;
   organizationId?: string;
@@ -193,6 +195,15 @@ export type ArchiveReason = "RENTED" | "SOLD" | "OTHER";
 // --- Reference data ---
 
 export type PropertyTypeOption = { id: number; code: string; displayName: string };
+
+/** GET /properties/facets — grouped active-listing counts. Each `id` is the
+ * group key (property-type name, bedroom number, or state name). */
+export type FacetCount = { id: string; count: number };
+export type PropertyFacets = {
+  byPropertyType: FacetCount[];
+  byBedrooms: FacetCount[];
+  byState: FacetCount[];
+};
 export type LocationOption = {
   id: number;
   name: string;

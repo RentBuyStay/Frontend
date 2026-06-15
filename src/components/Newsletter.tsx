@@ -1,15 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { useSubscribeNewsletterMutation } from "@/services/newsletterApi";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [subscribe, { isLoading }] = useSubscribeNewsletterMutation();
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
-    setSubmitted(true);
+    setError("");
+    try {
+      // The Figma form only collects an email; the backend requires a name, so
+      // derive a sensible display name from the email's local part.
+      const name = email.split("@")[0]?.trim() || email;
+      await subscribe({ name, email }).unwrap();
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
   }
 
   return (
@@ -37,12 +49,14 @@ export default function Newsletter() {
             />
             <button
               type="submit"
-              className="bg-[#305e82] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#254d6b] transition-colors whitespace-nowrap"
+              disabled={isLoading}
+              className="bg-[#305e82] text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-[#254d6b] transition-colors whitespace-nowrap disabled:opacity-60"
             >
-              Subscribe
+              {isLoading ? "Subscribing…" : "Subscribe"}
             </button>
           </form>
         )}
+        {error && <p className="text-sm font-medium text-[#e5484d] mt-3">{error}</p>}
       </div>
     </section>
   );

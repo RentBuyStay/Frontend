@@ -28,6 +28,9 @@ export default function ListingResults({
     return v ? Number(v) : undefined;
   };
   const furnished = sp.get("furnished");
+  const serviced = sp.get("serviced");
+  const shared = sp.get("shared");
+  const tri = (v: string | null) => (v === "yes" || v === "furnished" ? true : v === "no" || v === "unfurnished" ? false : undefined);
 
   const { data, isLoading, isError } = useGetActivePropertiesQuery({
     listingType,
@@ -39,6 +42,9 @@ export default function ListingResults({
     state: sp.get("state") ?? undefined,
     city: sp.get("city") ?? undefined,
     isFurnished: furnished === "furnished" ? true : furnished === "unfurnished" ? false : undefined,
+    isServiced: tri(serviced),
+    isShared: tri(shared),
+    listedWithinDays: num("listedWithinDays"),
     size: PAGE_SIZE,
   });
 

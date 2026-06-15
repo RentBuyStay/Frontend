@@ -41,11 +41,6 @@ const otherCategories = [
   "Shortlets above 500k per night",
 ];
 
-const verifiedAgents = [
-  { name: "Olaitan Badejo", initials: "OB", agency: "Prime Realty & Co.", location: "Lagos", listings: 13, rating: 4.6 },
-  { name: "Lade Oyetola", initials: "LO", agency: "Propex", location: "Lagos", listings: 8, rating: 4.3, avatar: "/images/agent-6.png" },
-];
-
 export default function ShortletPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -80,7 +75,6 @@ export default function ShortletPage() {
               bedroomTable={bedroomTable}
               states={states}
               otherCategories={otherCategories}
-              verifiedAgents={verifiedAgents}
             />
           </div>
         </div>

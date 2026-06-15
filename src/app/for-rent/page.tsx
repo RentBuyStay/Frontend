@@ -42,11 +42,6 @@ const otherCategories = [
   "Property for rent above 20milion",
 ];
 
-const verifiedAgents = [
-  { name: "Olaitan Badejo", initials: "OB", agency: "Prime Realty & Co.", location: "Lagos", listings: 13, rating: 4.6 },
-  { name: "Lade Oyetola", initials: "LO", agency: "Propex", location: "Lagos", listings: 8, rating: 4.3, avatar: "/images/agent-6.png" },
-];
-
 export default function ForRentPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -81,7 +76,6 @@ export default function ForRentPage() {
               bedroomTable={bedroomTable}
               states={states}
               otherCategories={otherCategories}
-              verifiedAgents={verifiedAgents}
             />
           </div>
         </div>

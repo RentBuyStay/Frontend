@@ -35,6 +35,7 @@ export const endpoints = {
 
   // Properties
   properties: "/properties",
+  propertiesFacets: "/properties/facets",
   property: (id: string) => `/properties/${id}`,
   propertyArchive: (id: string) => `/properties/${id}/archive`,
   propertyTypes: "/property-types",
@@ -89,6 +90,9 @@ export const endpoints = {
 
   // Reference data
   locations: "/locations",
+
+  // Marketing
+  newsletterSubscribe: "/newsletter/subscribe",
 
   // Add more resource paths here as you integrate them.
 } as const;

@@ -43,11 +43,6 @@ const otherCategories = [
   "Property for sale between 120milion and 150milion",
 ];
 
-const verifiedAgents = [
-  { name: "Olaitan Badejo", initials: "OB", agency: "Prime Realty & Co.", location: "Lagos", listings: 13 },
-  { name: "Lade Oyetola", initials: "LO", agency: "Propex", location: "Lagos", listings: 8, avatar: "/images/agent-6.png" },
-];
-
 export default function ForSalePage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -83,7 +78,6 @@ export default function ForSalePage() {
               bedroomTable={bedroomTable}
               states={states}
               otherCategories={otherCategories}
-              verifiedAgents={verifiedAgents}
             />
           </div>
         </div>

@@ -68,6 +68,9 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
     if (f.minPrice != null) params.set("minPrice", String(f.minPrice));
     if (f.maxPrice != null) params.set("maxPrice", String(f.maxPrice));
     if (f.isFurnished != null) params.set("furnished", f.isFurnished ? "furnished" : "unfurnished");
+    if (f.isServiced != null) params.set("serviced", f.isServiced ? "yes" : "no");
+    if (f.isShared != null) params.set("shared", f.isShared ? "yes" : "no");
+    if (f.listedWithinDays != null) params.set("listedWithinDays", String(f.listedWithinDays));
     router.push(`${tabRoutes[activeTab]}?${params.toString()}`);
   }
 
