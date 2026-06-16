@@ -7,6 +7,7 @@ import { useGetPropertyQuery, useGetActivePropertiesQuery } from "@/services/pro
 import { useGetAgentsQuery } from "@/services/agentApi";
 import { toPropertyCard } from "@/lib/propertyMap";
 import PropertyCard from "./PropertyCard";
+import LoginModal from "./LoginModal";
 
 const FREQ: Record<string, string> = {
   PER_NIGHT: "/night",
@@ -67,6 +68,9 @@ export default function PropertyDetail({ id }: { id: string }) {
   // Map centre: use the listing's coordinates when present; otherwise geocode its
   // address (OpenStreetMap/Nominatim) so the map points at the real area.
   const [geo, setGeo] = useState<{ lat: number; lng: number } | null>(null);
+  // Gated actions (report / save / inspection / call / message) require sign-in.
+  const [showLogin, setShowLogin] = useState(false);
+  const requireLogin = () => setShowLogin(true);
   useEffect(() => {
     if (!p) return;
     if (p.latitude != null && p.longitude != null) {
@@ -147,11 +151,11 @@ export default function PropertyDetail({ id }: { id: string }) {
     <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
       <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>Interested in this Property?</h3>
       <div className="flex flex-col" style={{ gap: "24px", marginTop: "24px" }}>
-        <button className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
+        <button onClick={requireLogin} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
           <Image src="/icons/calendar-detail.svg" alt="" width={24} height={24} />
           <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Request Inspection</span>
         </button>
-        <button className="flex items-center justify-center hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
+        <button onClick={requireLogin} className="flex items-center justify-center hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
           <Image src="/icons/heart.svg" alt="" width={24} height={24} />
           <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>Save for Later</span>
         </button>
@@ -181,7 +185,7 @@ export default function PropertyDetail({ id }: { id: string }) {
                 <span style={{ fontSize: "12px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>Listed on {fmtDate(p.listedAt ?? p.createdAt)}</span>
               </div>
             </div>
-            <button className="flex items-center justify-center shrink-0 gap-2 hover:opacity-80 transition-opacity w-10 h-10 md:w-auto md:h-12">
+            <button onClick={requireLogin} className="flex items-center justify-center shrink-0 gap-2 hover:opacity-80 transition-opacity w-10 h-10 md:w-auto md:h-12">
               <Image src="/icons/flag-report.svg" alt="" width={24} height={24} />
               <span className="hidden md:inline" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#D80027" }}>Report Listing</span>
             </button>
@@ -348,11 +352,11 @@ export default function PropertyDetail({ id }: { id: string }) {
 
               {/* Call + Message */}
               <div className="flex" style={{ gap: "12px", marginTop: "24px" }}>
-                <button className="flex items-center justify-center hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
+                <button onClick={requireLogin} className="flex items-center justify-center hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
                   <Image src="/icons/call.svg" alt="" width={20} height={20} />
                   <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>Call</span>
                 </button>
-                <button className="flex items-center justify-center text-white hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", border: "1px solid rgba(120,158,187,0.5)", borderRadius: "12px" }}>
+                <button onClick={requireLogin} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", border: "1px solid rgba(120,158,187,0.5)", borderRadius: "12px" }}>
                   <Image src="/icons/messages-2.svg" alt="" width={20} height={20} />
                   <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Message</span>
                 </button>
@@ -391,6 +395,8 @@ export default function PropertyDetail({ id }: { id: string }) {
           </div>
         </section>
       )}
+
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
     </>
   );
 }
