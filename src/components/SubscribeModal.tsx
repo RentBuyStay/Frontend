@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useSubscribeNewsletterMutation } from "@/services/newsletterApi";
+import PhoneNumberInput from "./PhoneNumberInput";
+import { DEFAULT_COUNTRY, type Country } from "@/lib/countries";
 
 const GRADIENT = "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)";
 const labelStyle = { fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" } as const;
@@ -13,6 +15,7 @@ const labelStyle = { fontSize: "14px", lineHeight: "24px", fontWeight: 500, colo
 export default function SubscribeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY);
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
@@ -46,7 +49,7 @@ export default function SubscribeModal({ open, onClose }: { open: boolean; onClo
       await subscribe({
         name: name.trim(),
         email: email.trim(),
-        phoneNumber: phone.trim() ? `+1 ${phone.trim()}` : undefined,
+        phoneNumber: phone.trim() ? `${country.dial}${phone.trim()}` : undefined,
       }).unwrap();
       setDone(true);
     } catch {
@@ -109,20 +112,13 @@ export default function SubscribeModal({ open, onClose }: { open: boolean; onClo
 
               <div className="flex flex-col gap-2">
                 <label style={labelStyle}>Phone Number</label>
-                <div className="h-12 rounded-[12px] bg-[#F6F6F6] px-4 flex items-center gap-4">
-                  <div className="flex items-center gap-1 shrink-0">
-                    <Image src="/icons/flag-us.svg" alt="US" width={24} height={24} />
-                    <span className="text-[14px] font-medium text-[#807E7E]">+1</span>
-                    <Image src="/icons/chevron-down.svg" alt="" width={16} height={16} />
-                  </div>
-                  <input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    inputMode="tel"
-                    placeholder="Enter phone number"
-                    className="flex-1 min-w-0 bg-transparent text-[14px] text-[#121212] outline-none placeholder:text-[#807E7E]"
-                  />
-                </div>
+                <PhoneNumberInput
+                  country={country}
+                  onCountryChange={setCountry}
+                  value={phone}
+                  onChange={setPhone}
+                  placeholder="Enter phone number"
+                />
               </div>
 
               <div className="flex flex-col gap-2">
