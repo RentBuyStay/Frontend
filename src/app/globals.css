@@ -189,4 +189,13 @@
   html {
     @apply font-sans;
   }
+  /* Tailwind v4 Preflight sets `cursor: default` on buttons; restore the pointer
+     so all interactive elements clearly read as clickable. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  label[for],
+  summary,
+  select:not(:disabled) {
+    cursor: pointer;
+  }
 }
