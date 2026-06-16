@@ -3,8 +3,7 @@ import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
 import RequestResults from "@/components/RequestResults";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
-import Image from "next/image";
-import Link from "next/link";
+import ListingSidebar from "@/components/ListingSidebar";
 
 export const metadata = {
   title: "Property Requests | RentBuyStay",
@@ -63,91 +62,16 @@ export default function PropertyRequestsPage() {
             {/* LEFT — live requests from GET /property-requests */}
             <RequestResults />
 
-            {/* SIDEBAR (same as For Sale) */}
-            <aside className="flex flex-col gap-6 min-w-0">
-              <div className="border border-[#ededed] rounded-[16px] p-6">
-                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
-                  Available Properties
-                </h3>
-                <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
-                  Currently available properties
-                </p>
-                <div className="flex flex-col">
-                  <div className="flex items-center justify-between py-1.5 border-b border-[#ededed]" style={{ fontSize: "14px", color: "#305e82", fontWeight: 600 }}>
-                    <span>Property Type</span>
-                    <span>Property Count</span>
-                  </div>
-                  {propertyTypes.map((t) => (
-                    <div key={t.name} className="flex items-center justify-between py-1.5" style={{ fontSize: "14px", color: "#305e82" }}>
-                      <span>{t.name}</span>
-                      <span>{t.count}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t border-[#ededed] my-4" />
-
-                <div className="flex flex-col">
-                  <div className="grid grid-cols-6 gap-2 py-1.5 border-b border-[#ededed]" style={{ fontSize: "12px", color: "#305e82", fontWeight: 600 }}>
-                    {bedroomTable.cols.map((c) => (
-                      <span key={c} className={c === "Type" ? "" : "text-right"}>{c}</span>
-                    ))}
-                  </div>
-                  {bedroomTable.rows.map((row) => (
-                    <div key={row[0]} className="grid grid-cols-6 gap-2 py-1.5" style={{ fontSize: "12px", color: "#305e82" }}>
-                      {row.map((cell, i) => (
-                        <span key={i} className={i === 0 ? "" : "text-right"}>{cell}</span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border border-[#ededed] rounded-[16px] p-6">
-                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>
-                  Explore States
-                </h3>
-                <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
-                  Find available properties by states
-                </p>
-                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ fontSize: "14px", lineHeight: "32px", color: "#305e82" }}>
-                  {states.map((s) => (
-                    <Link key={s} href={`/search?state=${s.toLowerCase()}`} className="hover:underline whitespace-nowrap">
-                      {s}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border border-[#ededed] rounded-[16px] p-6">
-                <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="mb-4">
-                  Other Related Properties
-                </h3>
-                <ul className="flex flex-col gap-1">
-                  {otherCategories.map((c) => (
-                    <li key={c} className="flex items-start gap-2 min-w-0" style={{ fontSize: "14px", lineHeight: "24px", color: "#305e82" }}>
-                      <span className="shrink-0">•</span>
-                      <Link href="#" className="hover:underline break-words min-w-0">
-                        {c}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="rounded-[16px] p-6 text-white relative overflow-hidden" style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}>
-                <Image src="/icons/bell-alert.svg" alt="" width={34} height={36} className="mb-4" />
-                <h3 style={{ fontSize: "24px", lineHeight: "32px", fontWeight: 600 }} className="mb-2">
-                  Receive alerts for<br />new properties
-                </h3>
-                <p style={{ fontSize: "14px", lineHeight: "24px" }} className="mb-5 text-white/90">
-                  Get instant notifications for recent listings
-                </p>
-                <button className="text-white rounded-[8px] hover:opacity-90 transition-opacity" style={{ fontSize: "14px", fontWeight: 600, background: "#FFAE00", width: "147px", height: "48px" }}>
-                  Subscribe Now
-                </button>
-              </div>
-            </aside>
+            {/* SIDEBAR — shared component (live facets); not scoped to a listing type,
+                and requests don't show the Verified Agents block. */}
+            <ListingSidebar
+              category=""
+              propertyTypes={propertyTypes}
+              bedroomTable={bedroomTable}
+              states={states}
+              otherCategories={otherCategories}
+              showVerifiedAgents={false}
+            />
           </div>
         </div>
       </section>

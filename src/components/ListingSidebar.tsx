@@ -30,13 +30,17 @@ export default function ListingSidebar({
   bedroomTable,
   states,
   otherCategories,
+  showVerifiedAgents = true,
 }: {
-  category: string; // "Sale" | "Rent" | "Shortlet"
+  category: string; // "Sale" | "Rent" | "Shortlet" | "" (no listing-type scope)
   propertyTypes: SidebarPropertyType[];
   bedroomTable: SidebarBedroomTable;
   states: string[];
   otherCategories: string[];
+  showVerifiedAgents?: boolean;
 }) {
+  // undefined when the page isn't scoped to a single listing type (e.g. requests).
+  const listingType = CATEGORY_LISTING_TYPE[category];
   return (
     <aside className="flex flex-col gap-6 min-w-0">
       {/* Available Properties */}
@@ -45,22 +49,16 @@ export default function ListingSidebar({
           Available Properties
         </h3>
         <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
-          Currently available properties for {category}
+          {category ? `Currently available properties for ${category}` : "Currently available properties"}
         </p>
 
         {/* First table: Property Type | Property Count (live from /properties/facets, static fallback) */}
-        <SidebarTypeCounts
-          listingType={CATEGORY_LISTING_TYPE[category] ?? "RENT"}
-          fallback={propertyTypes}
-        />
+        <SidebarTypeCounts listingType={listingType} fallback={propertyTypes} />
 
         <div className="border-t border-[#ededed] my-4 -mx-6" />
 
         {/* Second nested table: Type | 1 Bed | … (live from /properties/facets, static fallback) */}
-        <SidebarBedroomBreakdown
-          listingType={CATEGORY_LISTING_TYPE[category] ?? "RENT"}
-          fallback={bedroomTable}
-        />
+        <SidebarBedroomBreakdown listingType={listingType} fallback={bedroomTable} />
       </div>
 
       {/* Explore States */}
@@ -115,7 +113,7 @@ export default function ListingSidebar({
       </div>
 
       {/* Verified Agents — live from GET /agents */}
-      <VerifiedAgentsList />
+      {showVerifiedAgents && <VerifiedAgentsList />}
     </aside>
   );
 }

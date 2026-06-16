@@ -14,10 +14,10 @@ export default function SidebarTypeCounts({
   listingType,
   fallback,
 }: {
-  listingType: "RENT" | "BUY" | "SHORTLET";
+  listingType?: "RENT" | "BUY" | "SHORTLET";
   fallback: SidebarPropertyType[];
 }) {
-  const { data } = useGetPropertyFacetsQuery({ listingType });
+  const { data } = useGetPropertyFacetsQuery(listingType ? { listingType } : undefined);
 
   const live = data?.byPropertyType ?? [];
   // Always keep the curated category rows; bucket the live facet counts into them

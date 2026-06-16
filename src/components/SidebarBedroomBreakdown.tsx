@@ -14,10 +14,10 @@ export default function SidebarBedroomBreakdown({
   listingType,
   fallback,
 }: {
-  listingType: "RENT" | "BUY" | "SHORTLET";
+  listingType?: "RENT" | "BUY" | "SHORTLET";
   fallback: SidebarBedroomTable;
 }) {
-  const { data } = useGetPropertyFacetsQuery({ listingType });
+  const { data } = useGetPropertyFacetsQuery(listingType ? { listingType } : undefined);
   const xt = data?.byTypeBedrooms ?? [];
 
   // Keep the curated row labels (Flats / Houses, Apartments / Studios…) and bucket
