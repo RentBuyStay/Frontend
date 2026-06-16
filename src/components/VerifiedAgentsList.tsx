@@ -1,20 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Phone, MessageCircle } from "lucide-react";
 import { useGetAgentsQuery } from "@/services/agentApi";
 import type { AgentListItem } from "@/services/types";
+import LoginModal from "./LoginModal";
 
 function initials(name: string) {
   const p = name.trim().split(/\s+/).filter(Boolean);
   return ((p[0]?.[0] ?? "") + (p[1]?.[0] ?? "")).toUpperCase() || "RB";
 }
 
-function AgentCardItem({ a }: { a: AgentListItem }) {
+function AgentCardItem({ a, onAction }: { a: AgentListItem; onAction: () => void }) {
   const name = `${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() || (a.email ?? "Agent");
   const agency = a.organizationName || "Independent Agent";
   const location = [a.city, a.state].filter(Boolean).join(", ") || "Nigeria";
   const listings = a.listingCount ?? 0;
+  const rating = a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating.toFixed(1) : "New";
   const avatar = a.avatarUrl;
 
   return (
@@ -49,7 +52,7 @@ function AgentCardItem({ a }: { a: AgentListItem }) {
       <div className="flex items-center gap-3" style={{ fontSize: "14px", color: "#807e7e" }}>
         <div className="flex items-center gap-1.5">
           <Image src="/icons/star.svg" alt="" width={20} height={20} />
-          <span>{(a.averageRating ?? 4.6).toFixed(1)}</span>
+          <span>{rating}</span>
         </div>
         <div className="w-px h-4 bg-[#807e7e]/40" />
         <div className="flex items-center gap-1.5">
@@ -60,12 +63,12 @@ function AgentCardItem({ a }: { a: AgentListItem }) {
 
       <div className="h-px bg-[#f6f6f6] -mx-5" />
 
-      {/* Buttons */}
+      {/* Buttons — require sign-in */}
       <div className="flex gap-3">
-        <button className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
+        <button onClick={onAction} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
           <Phone size={18} strokeWidth={1.5} /> Call
         </button>
-        <button className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity" style={{ height: "48px", padding: "8px 24px", fontSize: "14px", fontWeight: 500, background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
+        <button onClick={onAction} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity" style={{ height: "48px", padding: "8px 24px", fontSize: "14px", fontWeight: 500, background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
           <MessageCircle size={18} strokeWidth={1.5} /> Message
         </button>
       </div>
@@ -77,6 +80,7 @@ function AgentCardItem({ a }: { a: AgentListItem }) {
 export default function VerifiedAgentsList() {
   const { data, isLoading } = useGetAgentsQuery({ size: 4 });
   const agents = (data?.content ?? []).slice(0, 4);
+  const [showLogin, setShowLogin] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -94,8 +98,10 @@ export default function VerifiedAgentsList() {
           <p className="text-[14px] text-[#807e7e]">No verified agents yet.</p>
         </div>
       ) : (
-        agents.map((a) => <AgentCardItem key={a.userId} a={a} />)
+        agents.map((a) => <AgentCardItem key={a.userId} a={a} onAction={() => setShowLogin(true)} />)
       )}
+
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );
 }

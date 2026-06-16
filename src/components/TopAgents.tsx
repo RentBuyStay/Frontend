@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetAgentsQuery } from "@/services/agentApi";
 import type { AgentListItem } from "@/services/types";
+import LoginModal from "./LoginModal";
 
 const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
 
@@ -12,11 +14,11 @@ function initials(name: string) {
   return ((p[0]?.[0] ?? "") + (p[1]?.[0] ?? "")).toUpperCase() || "RB";
 }
 
-function AgentCard({ a }: { a: AgentListItem }) {
+function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) {
   const name = `${a.firstName ?? ""} ${a.lastName ?? ""}`.trim() || (a.email ?? "Agent");
   const agency = a.organizationName || "Independent Agent";
   const location = [a.city, a.state].filter(Boolean).join(", ") || "Nigeria";
-  const rating = a.averageRating != null ? a.averageRating.toFixed(1) : "New";
+  const rating = a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating.toFixed(1) : "New";
   const listings = a.listingCount ?? 0;
 
   return (
@@ -76,12 +78,14 @@ function AgentCard({ a }: { a: AgentListItem }) {
       {/* Call + Message */}
       <div className="flex gap-4">
         <button
+          onClick={onAction}
           className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors"
           style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}
         >
           <Image src="/icons/call.svg" alt="" width={20} height={20} /> Call
         </button>
         <button
+          onClick={onAction}
           className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity"
           style={{
             height: "48px",
@@ -101,6 +105,7 @@ function AgentCard({ a }: { a: AgentListItem }) {
 /** Home "Top Verified Agents" — live from GET /agents (user_type=property_agent). */
 export default function TopAgents() {
   const { data, isLoading, isError } = useGetAgentsQuery({ size: 6 });
+  const [showLogin, setShowLogin] = useState(false);
 
   if (isLoading) {
     return (
@@ -127,8 +132,9 @@ export default function TopAgents() {
   return (
     <div className={GRID}>
       {agents.map((a) => (
-        <AgentCard key={a.userId} a={a} />
+        <AgentCard key={a.userId} a={a} onAction={() => setShowLogin(true)} />
       ))}
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
     </div>
   );
 }
