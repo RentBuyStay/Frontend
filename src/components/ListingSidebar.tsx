@@ -3,6 +3,7 @@ import Image from "next/image";
 import VerifiedAgentsList from "./VerifiedAgentsList";
 import SidebarTypeCounts from "./SidebarTypeCounts";
 import SidebarBedroomBreakdown from "./SidebarBedroomBreakdown";
+import SubscribeNowButton from "./SubscribeNowButton";
 
 const CATEGORY_LISTING_TYPE: Record<string, "RENT" | "BUY" | "SHORTLET"> = {
   Sale: "BUY",
@@ -104,12 +105,7 @@ export default function ListingSidebar({
         <p style={{ fontSize: "14px", lineHeight: "24px" }} className="mb-5 text-white/90">
           Get instant notifications for recent listings
         </p>
-        <button
-          className="text-white rounded-[8px] hover:opacity-90 transition-opacity"
-          style={{ fontSize: "14px", fontWeight: 600, background: "#FFAE00", width: "147px", height: "48px" }}
-        >
-          Subscribe Now
-        </button>
+        <SubscribeNowButton />
       </div>
 
       {/* Verified Agents — live from GET /agents */}
