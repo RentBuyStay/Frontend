@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetPropertyQuery, useGetActivePropertiesQuery } from "@/services/propertyApi";
+import { useGetAgentsQuery } from "@/services/agentApi";
 import { toPropertyCard } from "@/lib/propertyMap";
 import PropertyCard from "./PropertyCard";
 
@@ -18,6 +19,17 @@ const FREQ: Record<string, string> = {
 function initials(name: string) {
   const p = name.trim().split(/\s+/).filter(Boolean);
   return ((p[0]?.[0] ?? "") + (p[1]?.[0] ?? "")).toUpperCase() || "RB";
+}
+/** Relative "Joined …" label from an ISO date (null when unknown). */
+function joinedAgo(iso?: string): string | null {
+  if (!iso) return null;
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (days < 1) return "Joined today";
+  if (days < 30) return `Joined ${days} day${days === 1 ? "" : "s"} ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `Joined ${months} month${months === 1 ? "" : "s"} ago`;
+  const years = Math.floor(months / 12);
+  return `Joined ${years} year${years === 1 ? "" : "s"} ago`;
 }
 function fmtDate(iso?: string) {
   if (!iso) return "—";
@@ -48,6 +60,9 @@ export default function PropertyDetail({ id }: { id: string }) {
     p ? { listingType: p.listingType, size: 4 } : undefined,
     { skip: !p },
   );
+  // Real "Listed by" agent info (location, joined date, rating, listing count)
+  // from the public agent directory, matched on the listing's agent/owner id.
+  const { data: agentsPage } = useGetAgentsQuery({ size: 50 });
 
   // Map centre: use the listing's coordinates when present; otherwise geocode its
   // address (OpenStreetMap/Nominatim) so the map points at the real area.
@@ -102,6 +117,21 @@ export default function PropertyDetail({ id }: { id: string }) {
   const area = p.totalAreaSqm ? `${p.totalAreaSqm} sqm` : "—";
   const agentName = p.assignedAgentName || p.ownerName || "Property Owner";
   const agentInitials = initials(agentName);
+
+  // Real agent profile (matched on the listing's agent/owner id).
+  const agent = agentsPage?.content?.find(
+    (a) => a.userId === (p.assignedAgentUserId || p.ownerUserId),
+  );
+  const agentLocation = agent
+    ? [agent.city, agent.state].filter(Boolean).join(", ") || "Nigeria"
+    : location;
+  const agentAgency = agent?.organizationName || "Independent Agent";
+  const agentJoined = joinedAgo(agent?.createdAt);
+  const agentListings = agent?.listingCount;
+  const agentRating =
+    agent?.averageRating != null && (agent?.reviewCount ?? 0) > 0
+      ? agent.averageRating.toFixed(1)
+      : "New";
   const photos = p.photos ?? [];
   const heroImage = toPropertyCard(p).image ?? "/images/property-placeholder.png";
   const amenities = (p.amenities ?? []).map((a) => a.name);
@@ -275,10 +305,10 @@ export default function PropertyDetail({ id }: { id: string }) {
                     <Image src="/icons/verify-figma.svg" alt="" width={20} height={20} />
                   </div>
                   {/* Mobile: agency line */}
-                  <span className="lg:hidden" style={{ fontSize: "11px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>Prime Estates</span>
+                  <span className="lg:hidden" style={{ fontSize: "11px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>{agentAgency}</span>
                   {/* Desktop: agency + AGENT pill */}
                   <div className="hidden lg:flex items-center" style={{ gap: "16px" }}>
-                    <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>Propper.</span>
+                    <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentAgency}</span>
                     <span className="inline-flex items-center text-white" style={{ background: "#305E82", borderRadius: "100px", padding: "3px 12px", fontSize: "12px", fontWeight: 500 }}>AGENT</span>
                   </div>
                 </div>
@@ -288,12 +318,14 @@ export default function PropertyDetail({ id }: { id: string }) {
               <div className="hidden lg:flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
                 <div className="flex items-center" style={{ gap: "8px" }}>
                   <Image src="/icons/location-detail.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{location}</span>
+                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentLocation}</span>
                 </div>
-                <div className="flex items-center" style={{ gap: "8px" }}>
-                  <Image src="/icons/user-profile.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>Joined 2 years ago</span>
-                </div>
+                {agentJoined && (
+                  <div className="flex items-center" style={{ gap: "8px" }}>
+                    <Image src="/icons/user-profile.svg" alt="" width={20} height={20} />
+                    <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentJoined}</span>
+                  </div>
+                )}
               </div>
 
               {/* Rating + listings + View all */}
@@ -301,12 +333,12 @@ export default function PropertyDetail({ id }: { id: string }) {
                 <div className="flex items-center" style={{ gap: "16px" }}>
                   <div className="flex items-center" style={{ gap: "8px" }}>
                     <Image src="/icons/star.svg" alt="" width={20} height={20} />
-                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>4.3</span>
+                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentRating}</span>
                   </div>
                   <span style={{ width: "1px", height: "14px", background: "#EDEDED" }} />
                   <div className="flex items-center" style={{ gap: "8px" }}>
                     <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
-                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>8 listings</span>
+                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentListings ?? 0} listings</span>
                   </div>
                 </div>
                 <Link href="/agents" className="hover:opacity-80 shrink-0 whitespace-nowrap text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#305E82" }}>
