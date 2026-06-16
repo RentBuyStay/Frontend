@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetPropertyQuery, useGetActivePropertiesQuery } from "@/services/propertyApi";
@@ -56,6 +57,12 @@ const otherCategories = [
 ];
 
 export default function PropertyDetail({ id }: { id: string }) {
+  const router = useRouter();
+  // Go to the previous page in history; fall back to home on a direct landing.
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) router.back();
+    else router.push("/");
+  };
   const { data: p, isLoading, isError } = useGetPropertyQuery(id);
   const { data: relatedData } = useGetActivePropertiesQuery(
     p ? { listingType: p.listingType, size: 4 } : undefined,
@@ -170,10 +177,10 @@ export default function PropertyDetail({ id }: { id: string }) {
         <div className="relative mx-auto w-full max-w-[1440px] px-4 md:px-[80px]">
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-col min-w-0 flex-1" style={{ gap: "16px" }}>
-              <Link href="/" className="inline-flex items-center hover:opacity-80" style={{ gap: "12px", color: "#525252" }}>
+              <button onClick={goBack} className="inline-flex items-center hover:opacity-80 cursor-pointer" style={{ gap: "12px", color: "#525252" }}>
                 <Image src="/icons/arrow-back.svg" alt="" width={24} height={24} className="w-4 h-4 md:w-6 md:h-6" />
                 <span className="text-[12px] md:text-[16px]" style={{ fontFamily: "Geist, sans-serif", lineHeight: "24px", fontWeight: 400 }}>Back</span>
-              </Link>
+              </button>
               <h1 className="text-[16px] leading-[24px] md:text-[24px] md:leading-[32px]" style={{ fontWeight: 600, color: "#121212", letterSpacing: "-0.02em" }}>
                 {p.title}
               </h1>
