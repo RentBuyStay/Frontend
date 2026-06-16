@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FilterModal, { type AppliedFilters } from "./FilterModal";
 import { useGetPropertyTypesQuery } from "@/services/referenceApi";
+import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
 
 const tabs = ["Rent", "Buy", "Shortlet"] as const;
 type Tab = (typeof tabs)[number];
@@ -53,6 +54,20 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
   const [furnished, setFurnished] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const { data: propertyTypes } = useGetPropertyTypesQuery();
+
+  // On /search, only offer property types that actually have active listings (scoped
+  // to the selected listing type), so a user can't pick a type that returns nothing.
+  const facetLt = activeTab === "All" ? undefined : (activeTab.toUpperCase() as "RENT" | "BUY" | "SHORTLET");
+  const { data: facets } = useGetPropertyFacetsQuery(facetLt ? { listingType: facetLt } : undefined, {
+    skip: !inPlace,
+  });
+  const availableTypeNames = new Set((facets?.byPropertyType ?? []).map((f) => f.id));
+  const typeOptions =
+    !inPlace || availableTypeNames.size === 0
+      ? (propertyTypes ?? [])
+      : (propertyTypes ?? []).filter(
+          (t) => availableTypeNames.has(t.displayName) || String(t.id) === propertyType,
+        );
 
   // On /search, seed the bar from the current URL so re-applying preserves
   // (rather than wipes) filters the bar doesn't otherwise reflect.
@@ -147,7 +162,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           className={selectClass}
         >
           <option value="">All types</option>
-          {(propertyTypes ?? []).map((t) => (
+          {typeOptions.map((t) => (
             <option key={t.id} value={t.id}>{t.displayName}</option>
           ))}
         </select>
@@ -298,7 +313,12 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
         <div className="flex items-start gap-4">{filters}</div>
       </div>
     </div>
-    <FilterModal open={showFilterModal} onClose={() => setShowFilterModal(false)} onApply={applyModalFilters} />
+    <FilterModal
+      open={showFilterModal}
+      onClose={() => setShowFilterModal(false)}
+      onApply={applyModalFilters}
+      availableTypes={inPlace && availableTypeNames.size > 0 ? [...availableTypeNames] : undefined}
+    />
     </>
   );
 }

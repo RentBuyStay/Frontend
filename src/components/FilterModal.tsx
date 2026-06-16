@@ -31,10 +31,13 @@ export default function FilterModal({
   open,
   onClose,
   onApply,
+  availableTypes,
 }: {
   open: boolean;
   onClose: () => void;
   onApply?: (filters: AppliedFilters) => void;
+  /** When set, only these property-type display names are shown (those with listings). */
+  availableTypes?: string[];
 }) {
   const [activeBed, setActiveBed] = useState(""); // "" = no bedroom filter
   const [activeType, setActiveType] = useState("All");
@@ -184,7 +187,15 @@ export default function FilterModal({
             <div className="flex items-center gap-2 flex-wrap">
               {[
                 { id: "All", displayName: "All" },
-                ...(propertyTypes ?? []).map((t) => ({ id: String(t.id), displayName: t.displayName })),
+                ...(propertyTypes ?? [])
+                  .filter(
+                    (t) =>
+                      !availableTypes ||
+                      availableTypes.length === 0 ||
+                      availableTypes.includes(t.displayName) ||
+                      String(t.id) === activeType,
+                  )
+                  .map((t) => ({ id: String(t.id), displayName: t.displayName })),
               ].map((t) => {
                 const active = activeType === t.id;
                 return (
