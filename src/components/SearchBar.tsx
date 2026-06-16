@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FilterModal, { type AppliedFilters } from "./FilterModal";
@@ -8,6 +8,7 @@ import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 
 const tabs = ["Rent", "Buy", "Shortlet"] as const;
 type Tab = (typeof tabs)[number];
+type TabOrAll = Tab | "All";
 
 const tabRoutes: Record<Tab, string> = {
   Rent: "/for-rent",
@@ -17,6 +18,10 @@ const tabRoutes: Record<Tab, string> = {
 
 interface SearchBarProps {
   defaultTab?: Tab;
+  /** On the /search page, apply filters in place (update the /search URL and keep
+   * the current state/city) instead of navigating to a listing page. Adds an
+   * "All" listing-type option so a search isn't silently restricted to one type. */
+  inPlace?: boolean;
 }
 
 const GRADIENT = "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)";
@@ -36,9 +41,10 @@ function FilterField({ label, children }: { label: string; children: React.React
   );
 }
 
-export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
+export default function SearchBar({ defaultTab = "Rent", inPlace = false }: SearchBarProps) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<Tab>(defaultTab);
+  const tabOptions: TabOrAll[] = inPlace ? ["All", ...tabs] : [...tabs];
+  const [activeTab, setActiveTab] = useState<TabOrAll>(inPlace ? "All" : defaultTab);
   const [query, setQuery] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
@@ -48,7 +54,37 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const { data: propertyTypes } = useGetPropertyTypesQuery();
 
+  // On /search, seed the bar from the current URL so re-applying preserves
+  // (rather than wipes) filters the bar doesn't otherwise reflect.
+  useEffect(() => {
+    if (!inPlace) return;
+    const p = new URLSearchParams(window.location.search);
+    setQuery(p.get("q") ?? "");
+    setPropertyType(p.get("type") ?? "");
+    setBedrooms(p.get("beds") ?? "");
+    setMinPrice(p.get("minPrice") ?? "");
+    setMaxPrice(p.get("maxPrice") ?? "");
+    setFurnished(p.get("furnished") ?? "");
+    const lt = p.get("listingType");
+    setActiveTab(lt ? ((lt.charAt(0) + lt.slice(1).toLowerCase()) as TabOrAll) : "All");
+  }, [inPlace]);
+
   function handleSearch() {
+    if (inPlace) {
+      // Update the /search URL in place, preserving existing params (e.g. state).
+      const params = new URLSearchParams(window.location.search);
+      const setOrDel = (k: string, v: string) => (v ? params.set(k, v) : params.delete(k));
+      setOrDel("q", query);
+      setOrDel("type", propertyType);
+      setOrDel("beds", bedrooms);
+      setOrDel("minPrice", minPrice);
+      setOrDel("maxPrice", maxPrice);
+      setOrDel("furnished", furnished);
+      if (activeTab !== "All") params.set("listingType", activeTab.toUpperCase());
+      else params.delete("listingType");
+      router.push(`/search?${params.toString()}`);
+      return;
+    }
     const params = new URLSearchParams();
     if (query) params.set("q", query);
     if (propertyType) params.set("type", propertyType);
@@ -56,11 +92,27 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
     if (minPrice) params.set("minPrice", minPrice);
     if (maxPrice) params.set("maxPrice", maxPrice);
     if (furnished) params.set("furnished", furnished);
-    router.push(`${tabRoutes[activeTab]}?${params.toString()}`);
+    router.push(`${tabRoutes[activeTab as Tab]}?${params.toString()}`);
   }
 
-  // FilterModal "Apply" → navigate to the active tab's listing page with its filters.
+  // FilterModal "Apply" → navigate to the active tab's listing page with its filters
+  // (or refine the /search results in place when inPlace).
   function applyModalFilters(f: AppliedFilters) {
+    if (inPlace) {
+      const params = new URLSearchParams(window.location.search);
+      const setOrDel = (k: string, v?: string) => (v ? params.set(k, v) : params.delete(k));
+      setOrDel("q", f.q);
+      setOrDel("type", f.propertyTypeId != null ? String(f.propertyTypeId) : "");
+      setOrDel("beds", f.bedrooms != null ? String(f.bedrooms) : "");
+      setOrDel("minPrice", f.minPrice != null ? String(f.minPrice) : "");
+      setOrDel("maxPrice", f.maxPrice != null ? String(f.maxPrice) : "");
+      setOrDel("furnished", f.isFurnished != null ? (f.isFurnished ? "furnished" : "unfurnished") : "");
+      setOrDel("serviced", f.isServiced != null ? (f.isServiced ? "yes" : "no") : "");
+      setOrDel("shared", f.isShared != null ? (f.isShared ? "yes" : "no") : "");
+      setOrDel("listedWithinDays", f.listedWithinDays != null ? String(f.listedWithinDays) : "");
+      router.push(`/search?${params.toString()}`);
+      return;
+    }
     const params = new URLSearchParams();
     if (f.q) params.set("q", f.q);
     if (f.propertyTypeId != null) params.set("type", String(f.propertyTypeId));
@@ -71,7 +123,7 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
     if (f.isServiced != null) params.set("serviced", f.isServiced ? "yes" : "no");
     if (f.isShared != null) params.set("shared", f.isShared ? "yes" : "no");
     if (f.listedWithinDays != null) params.set("listedWithinDays", String(f.listedWithinDays));
-    router.push(`${tabRoutes[activeTab]}?${params.toString()}`);
+    router.push(`${tabRoutes[activeTab as Tab]}?${params.toString()}`);
   }
 
   const selectClass =
@@ -134,11 +186,11 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
           <div className="relative flex items-center bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 pl-4 pr-3 shrink-0">
             <select
               value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value as Tab)}
+              onChange={(e) => setActiveTab(e.target.value as TabOrAll)}
               className="appearance-none w-full bg-transparent outline-none cursor-pointer text-[12px] text-[#121212]"
               style={{ letterSpacing: "-0.02em" }}
             >
-              {tabs.map((t) => <option key={t} value={t}>{t}</option>)}
+              {tabOptions.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
             <Image src="/icons/hero-arrow-down.svg" alt="" width={16} height={16} className="pointer-events-none" />
           </div>
@@ -183,11 +235,11 @@ export default function SearchBar({ defaultTab = "Rent" }: SearchBarProps) {
           <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center pl-4 pr-9">
             <select
               value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value as Tab)}
+              onChange={(e) => setActiveTab(e.target.value as TabOrAll)}
               className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer"
               style={{ letterSpacing: "-0.02em" }}
             >
-              {tabs.map((t) => <option key={t} value={t}>{t}</option>)}
+              {tabOptions.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
             <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="absolute right-4 pointer-events-none" />
           </div>

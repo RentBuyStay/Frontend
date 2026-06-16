@@ -15,7 +15,7 @@ export default function SearchPage() {
 
       <section className="bg-[#121212] text-white py-12">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-          <SearchBar />
+          <SearchBar inPlace />
         </div>
       </section>
 
