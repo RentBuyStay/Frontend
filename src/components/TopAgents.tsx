@@ -22,7 +22,7 @@ function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) 
   const listings = a.listingCount ?? 0;
 
   return (
-    <div className="bg-white rounded-[20px] p-6 flex flex-col gap-5" style={{ border: "1px solid #f6f6f6" }}>
+    <div onClick={onAction} role="button" tabIndex={0} className="bg-white rounded-[20px] p-6 flex flex-col gap-5 cursor-pointer hover:shadow-sm transition-shadow" style={{ border: "1px solid #f6f6f6" }}>
       {/* Avatar + Name/Agency/Location */}
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 rounded-full overflow-hidden bg-[#f3fefe] border border-[#ededed] flex items-center justify-center shrink-0">
@@ -68,7 +68,7 @@ function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) 
             <span>{listings} listings</span>
           </div>
         </div>
-        <Link href="/agents" className="hover:underline" style={{ fontSize: "14px", fontWeight: 500, color: "#305e82" }}>
+        <Link href="/agents" onClick={(e) => e.stopPropagation()} className="hover:underline" style={{ fontSize: "14px", fontWeight: 500, color: "#305e82" }}>
           View all Properties
         </Link>
       </div>

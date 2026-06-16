@@ -23,7 +23,7 @@ export function toAgencyCard(a: AgencyListItem): Agency {
     id: a.id,
     name: a.name,
     location: "Nigeria", // DTO has no state/city yet
-    rating: a.averageRating ?? 0,
+    rating: a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating : null,
     listings: a.agentCount ?? 0, // DTO exposes agentCount, not a property count
     logo: AGENCY_LOGOS[hashIndex(a.id, AGENCY_LOGOS.length)],
   };
@@ -38,7 +38,7 @@ export function toAgentCard(a: AgentListItem): Agent {
     initials: initials(name),
     agency: a.organizationName || "Independent Agent",
     location: [a.city, a.state].filter(Boolean).join(", ") || "Nigeria",
-    rating: a.averageRating ?? 0,
+    rating: a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating : null,
     listings: a.listingCount ?? 0,
   };
 }

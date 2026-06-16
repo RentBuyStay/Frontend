@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import LoginModal from "./LoginModal";
 
 export type Agent = {
   name: string;
@@ -7,7 +11,7 @@ export type Agent = {
   initials: string;
   agency: string;
   location: string;
-  rating: number;
+  rating: number | null; // null when the agent has no reviews yet → "New"
   listings: number;
 };
 
@@ -34,9 +38,14 @@ export function LocationIcon() {
 
 // Figma node 252:31027 — 411x284, r=20, bg white, 1px border #F6F6F6, padding 24
 export default function AgentCard({ a }: { a: Agent }) {
+  const [showLogin, setShowLogin] = useState(false);
   return (
+    <>
     <div
-      className="bg-white overflow-hidden flex flex-col w-full"
+      role="button"
+      tabIndex={0}
+      onClick={() => setShowLogin(true)}
+      className="bg-white overflow-hidden flex flex-col w-full cursor-pointer hover:shadow-sm transition-shadow"
       style={{
         borderRadius: "20px",
         padding: "24px",
@@ -123,7 +132,7 @@ export default function AgentCard({ a }: { a: Agent }) {
           <div className="flex items-center" style={{ gap: "8px" }}>
             <Image src="/icons/star.svg" alt="" width={20} height={20} />
             <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
-              {a.rating.toFixed(1)}
+              {a.rating != null ? a.rating.toFixed(1) : "New"}
             </span>
           </div>
           <div style={{ width: "1px", height: "14px", background: "#E5E5E5" }} />
@@ -136,6 +145,7 @@ export default function AgentCard({ a }: { a: Agent }) {
         </div>
         <Link
           href="#"
+          onClick={(e) => e.preventDefault()}
           className="hover:underline"
           style={{
             fontSize: "14px",
@@ -198,5 +208,7 @@ export default function AgentCard({ a }: { a: Agent }) {
         </button>
       </div>
     </div>
+    <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
+    </>
   );
 }

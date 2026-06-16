@@ -21,7 +21,7 @@ function AgentCardItem({ a, onAction }: { a: AgentListItem; onAction: () => void
   const avatar = a.avatarUrl;
 
   return (
-    <div className="bg-white rounded-[20px] p-5 flex flex-col gap-4" style={{ border: "1px solid #f6f6f6" }}>
+    <div onClick={onAction} role="button" tabIndex={0} className="bg-white rounded-[20px] p-5 flex flex-col gap-4 cursor-pointer hover:shadow-sm transition-shadow" style={{ border: "1px solid #f6f6f6" }}>
       {/* Avatar + name + agency + location */}
       <div className="flex items-center gap-3">
         <div className="w-14 h-14 rounded-full bg-[#f3fefe] border border-[#ededed] overflow-hidden flex items-center justify-center shrink-0">

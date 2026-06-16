@@ -1,21 +1,30 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { VerifyBadge, LocationIcon } from "./AgentCard";
+import LoginModal from "./LoginModal";
 
 export type Agency = {
   id: string;
   name: string;
   location: string;
-  rating: number;
+  rating: number | null; // null when the agency has no reviews yet → "New"
   listings: number;
   logo: string;
 };
 
 // Figma node 252:31624 — 411x456, r=20, bg white, 1px border #F6F6F6
 export default function AgencyCard({ a }: { a: Agency }) {
+  const [showLogin, setShowLogin] = useState(false);
   return (
+    <>
     <div
-      className="bg-white overflow-hidden flex flex-col w-full"
+      role="button"
+      tabIndex={0}
+      onClick={() => setShowLogin(true)}
+      className="bg-white overflow-hidden flex flex-col w-full cursor-pointer hover:shadow-sm transition-shadow"
       style={{
         borderRadius: "20px",
         border: "1px solid #F6F6F6",
@@ -76,7 +85,7 @@ export default function AgencyCard({ a }: { a: Agency }) {
             <div className="flex items-center" style={{ gap: "8px" }}>
               <Image src="/icons/star.svg" alt="" width={20} height={20} />
               <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>
-                {a.rating.toFixed(1)}
+                {a.rating != null ? a.rating.toFixed(1) : "New"}
               </span>
             </div>
             <div style={{ width: "1px", height: "14px", background: "#E5E5E5" }} />
@@ -89,6 +98,7 @@ export default function AgencyCard({ a }: { a: Agency }) {
           </div>
           <Link
             href="#"
+            onClick={(e) => e.preventDefault()}
             className="hover:underline"
             style={{
               fontSize: "14px",
@@ -152,5 +162,7 @@ export default function AgencyCard({ a }: { a: Agency }) {
         </div>
       </div>
     </div>
+    <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
+    </>
   );
 }
