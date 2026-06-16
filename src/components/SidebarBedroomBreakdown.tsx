@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
-import { classForLabel, classifyType } from "@/lib/propertyTypeGroups";
+import { categorySearchHref, classForLabel, classifyType } from "@/lib/propertyTypeGroups";
 import type { SidebarBedroomTable } from "./ListingSidebar";
 
 /**
@@ -56,9 +57,13 @@ export default function SidebarBedroomBreakdown({
           style={{ fontSize: "12px", color: "#305e82" }}
         >
           {row.map((cell, i) => (
-            <span key={i} className={i === 0 ? "truncate" : "text-right"}>
+            <Link
+              key={i}
+              href={categorySearchHref(row[0], { listingType, bedrooms: i || undefined })}
+              className={`${i === 0 ? "truncate" : "text-right"} hover:underline`}
+            >
               {cell}
-            </span>
+            </Link>
           ))}
         </div>
       ))}

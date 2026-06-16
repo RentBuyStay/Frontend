@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
-import { classForLabel, classifyType } from "@/lib/propertyTypeGroups";
+import { categorySearchHref, classForLabel, classifyType } from "@/lib/propertyTypeGroups";
 import type { SidebarPropertyType } from "./ListingSidebar";
 
 /**
@@ -38,14 +39,15 @@ export default function SidebarTypeCounts({
         <span>Property Count</span>
       </div>
       {rows.map((t) => (
-        <div
+        <Link
           key={t.name}
-          className="flex items-center justify-between py-1.5"
+          href={categorySearchHref(t.name, { listingType })}
+          className="flex items-center justify-between py-1.5 hover:underline"
           style={{ fontSize: "14px", color: "#305e82" }}
         >
           <span className="truncate pr-2">{t.name}</span>
           <span className="shrink-0">{t.count.toLocaleString()}</span>
-        </div>
+        </Link>
       ))}
     </div>
   );

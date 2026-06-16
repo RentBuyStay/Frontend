@@ -32,6 +32,31 @@ export function classifyType(displayName: string): TypeClass {
   return "other";
 }
 
+/** A representative backend property-type id for each class — used to turn a
+ * sidebar category into a "/search?type=…" link. */
+export const CLASS_TO_TYPE_ID: Partial<Record<TypeClass, number>> = {
+  flats: 16, // Flats & Apartments
+  house: 6, // Duplex
+  commercial: 13, // Office Space
+  coworking: 21, // Co-working Space
+  land: 15, // Land
+  studio: 11, // Studio Apartment
+  penthouse: 10, // Penthouse
+};
+
+/** Build the /search href for a sidebar category (optionally with a bedroom count). */
+export function categorySearchHref(
+  label: string,
+  opts: { listingType?: string; bedrooms?: number } = {},
+) {
+  const params = new URLSearchParams();
+  const id = CLASS_TO_TYPE_ID[classForLabel(label)];
+  if (id) params.set("type", String(id));
+  if (opts.bedrooms) params.set("beds", String(opts.bedrooms));
+  if (opts.listingType) params.set("listingType", opts.listingType);
+  return `/search?${params.toString()}`;
+}
+
 /** Classify a sidebar category/row label. */
 export function classForLabel(label: string): TypeClass {
   const s = label.toLowerCase();
