@@ -69,20 +69,29 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     setActiveTab(lt ? ((lt.charAt(0) + lt.slice(1).toLowerCase()) as TabOrAll) : "All");
   }, [inPlace]);
 
+  // /search: build the URL from the current bar values (plus any immediate
+  // override from the control that just changed) and navigate in place. Dropdowns
+  // call this directly so a selection applies immediately — no extra "Search" click.
+  function applyInPlace(
+    o: Partial<{ query: string; propertyType: string; bedrooms: string; minPrice: string; maxPrice: string; furnished: string; activeTab: TabOrAll }> = {},
+  ) {
+    const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
+    const params = new URLSearchParams(window.location.search);
+    const setOrDel = (k: string, val: string) => (val ? params.set(k, val) : params.delete(k));
+    setOrDel("q", v.query);
+    setOrDel("type", v.propertyType);
+    setOrDel("beds", v.bedrooms);
+    setOrDel("minPrice", v.minPrice);
+    setOrDel("maxPrice", v.maxPrice);
+    setOrDel("furnished", v.furnished);
+    if (v.activeTab !== "All") params.set("listingType", String(v.activeTab).toUpperCase());
+    else params.delete("listingType");
+    router.push(`/search?${params.toString()}`);
+  }
+
   function handleSearch() {
     if (inPlace) {
-      // Update the /search URL in place, preserving existing params (e.g. state).
-      const params = new URLSearchParams(window.location.search);
-      const setOrDel = (k: string, v: string) => (v ? params.set(k, v) : params.delete(k));
-      setOrDel("q", query);
-      setOrDel("type", propertyType);
-      setOrDel("beds", bedrooms);
-      setOrDel("minPrice", minPrice);
-      setOrDel("maxPrice", maxPrice);
-      setOrDel("furnished", furnished);
-      if (activeTab !== "All") params.set("listingType", activeTab.toUpperCase());
-      else params.delete("listingType");
-      router.push(`/search?${params.toString()}`);
+      applyInPlace();
       return;
     }
     const params = new URLSearchParams();
@@ -132,7 +141,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
   const filters = (
     <>
       <FilterField label="Property Type">
-        <select value={propertyType} onChange={(e) => setPropertyType(e.target.value)} className={selectClass}>
+        <select
+          value={propertyType}
+          onChange={(e) => { setPropertyType(e.target.value); if (inPlace) applyInPlace({ propertyType: e.target.value }); }}
+          className={selectClass}
+        >
           <option value="">All types</option>
           {(propertyTypes ?? []).map((t) => (
             <option key={t.id} value={t.id}>{t.displayName}</option>
@@ -140,7 +153,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
         </select>
       </FilterField>
       <FilterField label="Bedrooms">
-        <select value={bedrooms} onChange={(e) => setBedrooms(e.target.value)} className={selectClass}>
+        <select
+          value={bedrooms}
+          onChange={(e) => { setBedrooms(e.target.value); if (inPlace) applyInPlace({ bedrooms: e.target.value }); }}
+          className={selectClass}
+        >
           <option value="">Any</option>
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <option key={n} value={n}>{n}+</option>
@@ -166,7 +183,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
         />
       </FilterField>
       <FilterField label="Furnished">
-        <select value={furnished} onChange={(e) => setFurnished(e.target.value)} className={selectClass}>
+        <select
+          value={furnished}
+          onChange={(e) => { setFurnished(e.target.value); if (inPlace) applyInPlace({ furnished: e.target.value }); }}
+          className={selectClass}
+        >
           <option value="">Any</option>
           <option value="furnished">Furnished</option>
           <option value="unfurnished">Unfurnished</option>
@@ -186,7 +207,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <div className="relative flex items-center bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 pl-4 pr-3 shrink-0">
             <select
               value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value as TabOrAll)}
+              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); if (inPlace) applyInPlace({ activeTab: v }); }}
               className="appearance-none w-full bg-transparent outline-none cursor-pointer text-[12px] text-[#121212]"
               style={{ letterSpacing: "-0.02em" }}
             >
@@ -235,7 +256,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center pl-4 pr-9">
             <select
               value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value as TabOrAll)}
+              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); if (inPlace) applyInPlace({ activeTab: v }); }}
               className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer"
               style={{ letterSpacing: "-0.02em" }}
             >
