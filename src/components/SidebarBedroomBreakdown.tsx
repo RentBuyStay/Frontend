@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
+import { classForLabel, classifyType } from "@/lib/propertyTypeGroups";
 import type { SidebarBedroomTable } from "./ListingSidebar";
 
 /**
@@ -19,21 +20,22 @@ export default function SidebarBedroomBreakdown({
   const { data } = useGetPropertyFacetsQuery({ listingType });
   const xt = data?.byTypeBedrooms ?? [];
 
-  let rows: string[][];
-  if (xt.length > 0) {
-    const byType = new Map<string, Map<number, number>>();
-    for (const r of xt) {
-      if (!byType.has(r.type)) byType.set(r.type, new Map());
-      byType.get(r.type)!.set(r.bedrooms, r.count);
-    }
-    rows = [...byType.entries()].map(([type, beds]) => [
-      type,
-      ...[1, 2, 3, 4, 5].map((b) => String(beds.get(b) ?? 0)),
-    ]);
-  } else {
-    // No live data yet — keep the row labels but zero the counts (not placeholders).
-    rows = fallback.rows.map((row) => [row[0], "0", "0", "0", "0", "0"]);
-  }
+  // Keep the curated row labels (Flats / Houses, Apartments / Studios…) and bucket
+  // the live type×bedroom counts into them (0 when none), so no row disappears.
+  const rows: string[][] = fallback.rows.map((row) => {
+    const cls = classForLabel(row[0]);
+    return [
+      row[0],
+      ...[1, 2, 3, 4, 5].map((b) =>
+        String(
+          xt.reduce(
+            (sum, r) => (classifyType(r.type) === cls && r.bedrooms === b ? sum + r.count : sum),
+            0,
+          ),
+        ),
+      ),
+    ];
+  });
 
   return (
     <div className="flex flex-col">

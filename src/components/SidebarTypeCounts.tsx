@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
+import { classForLabel, classifyType } from "@/lib/propertyTypeGroups";
 import type { SidebarPropertyType } from "./ListingSidebar";
 
 /**
@@ -19,14 +20,13 @@ export default function SidebarTypeCounts({
   const { data } = useGetPropertyFacetsQuery({ listingType });
 
   const live = data?.byPropertyType ?? [];
-  // When there's no live data yet, keep the row labels but show 0 (not placeholder numbers).
-  const rows: SidebarPropertyType[] =
-    live.length > 0
-      ? [...live]
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 5)
-          .map((f) => ({ name: f.id, count: f.count }))
-      : fallback.map((t) => ({ name: t.name, count: 0 }));
+  // Always keep the curated category rows; bucket the live facet counts into them
+  // (0 when a category has no listings yet) so no row ever disappears.
+  const rows: SidebarPropertyType[] = fallback.map((cat) => {
+    const cls = classForLabel(cat.name);
+    const count = live.reduce((sum, f) => (classifyType(f.id) === cls ? sum + f.count : sum), 0);
+    return { name: cat.name, count };
+  });
 
   return (
     <div className="flex flex-col">
