@@ -199,3 +199,37 @@
     cursor: pointer;
   }
 }
+/* ── Mobile menu: app-style push-reveal ───────────────────────────────
+   The left menu panel is fixed and revealed when the whole page content
+   (#site-shell) slides right with a rounded-left corner — mirroring the
+   dashboard drawer. `body.drawer-open` is toggled by the Navbar. */
+.site-shell {
+  transition: transform 0.25s ease-out, border-radius 0.25s ease-out;
+}
+body.drawer-open {
+  overflow: hidden;
+  background: #305e82; /* revealed in the rounded-left corner, like the app */
+}
+body.drawer-open .site-shell {
+  position: relative;
+  z-index: 20;
+  height: 100vh;
+  overflow: hidden;
+  transform: translateX(288px);
+  border-radius: 30px 0 0 30px;
+}
+@media (min-width: 1024px) {
+  /* The drawer never opens on desktop; keep the shell untouched there. */
+  body.drawer-open {
+    overflow: auto;
+    background: transparent;
+  }
+  body.drawer-open .site-shell {
+    position: static;
+    z-index: auto;
+    height: auto;
+    overflow: visible;
+    transform: none;
+    border-radius: 0;
+  }
+}

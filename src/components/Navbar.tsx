@@ -204,39 +204,40 @@ function MobileDrawer({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Lock body scroll + close on Escape while the drawer is open
+  // While open: push the page content aside (app-style) + close on Escape.
+  // `drawer-open` on <body> drives the #site-shell transform in globals.css.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("drawer-open");
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
+      document.body.classList.remove("drawer-open");
     };
   }, [open, onClose]);
 
   if (!mounted) return null;
 
+  if (!open) return null;
+
   return createPortal(
-    <div className="lg:hidden" aria-hidden={!open}>
-      {/* Backdrop — dims the page, tap to close. Inline opacity/pointer-events so it
-          never depends on JIT-generated classes. */}
+    <div className="lg:hidden">
+      {/* Scrim over the pushed-aside page content — tap to close. Starts at the
+          panel's right edge so the menu itself stays interactive. */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-[10010] bg-black/40 backdrop-blur-[2px] transition-opacity duration-300"
-        style={{ opacity: open ? 1 : 0, pointerEvents: open ? "auto" : "none" }}
+        className="fixed inset-y-0 right-0 z-[30]"
+        style={{ left: "288px", background: "rgba(0,0,0,0.4)" }}
       />
 
-      {/* Drawer panel — slides in from the right via an inline transform. */}
+      {/* Menu panel — fixed at the left, revealed as #site-shell slides right. */}
       <aside
         role="dialog"
         aria-modal="true"
-        className="fixed top-0 right-0 z-[10020] flex h-full w-[82%] max-w-[320px] flex-col bg-white shadow-2xl transition-transform duration-300 ease-out"
-        style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
+        className="fixed top-0 left-0 z-[10] flex h-full w-[288px] flex-col bg-white"
       >
         {/* Header — logo + close (X sits exactly where the hamburger was) */}
         <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#ededed] px-5">

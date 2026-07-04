@@ -36,7 +36,11 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <div id="site-shell" className="site-shell flex flex-1 flex-col bg-white">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
