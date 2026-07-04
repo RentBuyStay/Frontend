@@ -28,6 +28,10 @@ const mutex = new Mutex();
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: config.apiBaseUrl,
+  // Send/receive the HttpOnly auth cookies (rbs_access_token / rbs_refresh_token)
+  // on every call. This is what shares the session with the dashboard app: both
+  // hit the same API origin, so a login here is recognised there via the cookie.
+  credentials: "include",
   // Never let a request hang indefinitely — a stalled refresh would otherwise
   // hold the reauth mutex and freeze every other request ("Loading…" forever).
   timeout: 15000,
