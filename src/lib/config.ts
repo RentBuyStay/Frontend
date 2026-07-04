@@ -18,4 +18,18 @@ function required(name: string, value: string | undefined): string {
 
 export const config = {
   apiBaseUrl: required("NEXT_PUBLIC_API_BASE_URL", process.env.NEXT_PUBLIC_API_BASE_URL),
+  // The logged-in dashboard app. Login and account actions redirect here; the
+  // shared auth cookie means the user is recognised on both sites.
+  appUrl: (process.env.NEXT_PUBLIC_APP_URL ?? "https://rentbuystay-app.vercel.app").replace(/\/+$/, ""),
 } as const;
+
+/** URL of the dashboard app's login screen, with an optional post-login return. */
+export function appLoginUrl(returnTo?: string): string {
+  const base = `${config.appUrl}/log-in`;
+  return returnTo ? `${base}?returnTo=${encodeURIComponent(returnTo)}` : base;
+}
+
+/** URL of the dashboard app home. */
+export function appDashboardUrl(): string {
+  return `${config.appUrl}/dashboard`;
+}

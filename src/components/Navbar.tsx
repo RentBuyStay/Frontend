@@ -6,6 +6,8 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, ChevronDown } from "lucide-react";
 import LoginModal from "./LoginModal";
+import { appLoginUrl, appDashboardUrl } from "@/lib/config";
+import { useGetMeQuery } from "@/services/meApi";
 
 type DropdownItem = { label: string; href: string; action?: "login" };
 type NavLink = { label: string; href: string; dropdown?: DropdownItem[] };
@@ -51,6 +53,21 @@ interface NavbarProps {
 export default function Navbar({ variant = "hero" }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  void showLogin;
+
+  // Shared auth cookie → the marketing site recognises a dashboard-app session.
+  const { data: me } = useGetMeQuery();
+  const isAuthed = !!me;
+
+  // Single login lives in the dashboard app; the shared auth cookie carries the
+  // session back to this site. Send login/get-started here (with a return URL).
+  const goToLogin = () => {
+    const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
+    window.location.assign(appLoginUrl(returnTo));
+  };
+  const goToDashboard = () => window.location.assign(appDashboardUrl());
+  // Auth-gated CTAs: straight to the dashboard when signed in, else to login.
+  const authCta = () => (isAuthed ? goToDashboard() : goToLogin());
 
   const renderDropdown = (link: NavLink) =>
     link.dropdown ? (
@@ -58,7 +75,7 @@ export default function Navbar({ variant = "hero" }: NavbarProps) {
         key={link.href}
         link={link}
         dropdown={link.dropdown}
-        onLogin={() => setShowLogin(true)}
+        onLogin={goToLogin}
       />
     ) : (
       <Link
@@ -97,15 +114,15 @@ export default function Navbar({ variant = "hero" }: NavbarProps) {
       <div className="hidden lg:flex items-center gap-4 shrink-0">
         <button
           type="button"
-          onClick={() => setShowLogin(true)}
+          onClick={isAuthed ? goToDashboard : goToLogin}
           className="flex items-center justify-center gap-2.5 px-2 py-1 text-[14px] text-[#121212] hover:text-[#305e82] transition-colors cursor-pointer"
           style={{ letterSpacing: "-0.02em", background: "transparent", border: "none" }}
         >
-          Log in
+          {isAuthed ? "Dashboard" : "Log in"}
         </button>
         <button
           type="button"
-          onClick={() => setShowLogin(true)}
+          onClick={authCta}
           className="flex items-center justify-center gap-2 h-12 px-6 text-[14px] font-medium text-white rounded-[12px] hover:opacity-90 transition-opacity cursor-pointer"
           style={{
             background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
@@ -160,7 +177,7 @@ export default function Navbar({ variant = "hero" }: NavbarProps) {
     <>
       <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
       {header}
-      <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={() => setShowLogin(true)} />
+      <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={goToLogin} authed={isAuthed} onDashboard={goToDashboard} />
     </>
   );
 }
@@ -172,10 +189,14 @@ function MobileDrawer({
   open,
   onClose,
   onLogin,
+  authed = false,
+  onDashboard,
 }: {
   open: boolean;
   onClose: () => void;
   onLogin: () => void;
+  authed?: boolean;
+  onDashboard?: () => void;
 }) {
   // Render through a portal to <body> so the drawer escapes any ancestor stacking,
   // overflow or transform context — it's mounted deep inside the navbar tree (e.g.
@@ -284,17 +305,19 @@ function MobileDrawer({
             type="button"
             onClick={() => {
               onClose();
-              onLogin();
+              if (authed && onDashboard) onDashboard();
+              else onLogin();
             }}
             className="flex h-11 items-center justify-center rounded-[12px] border border-[#ededed] text-[14px] font-medium text-[#121212] hover:bg-[#f6f6f6] transition-colors"
           >
-            Log in
+            {authed ? "Dashboard" : "Log in"}
           </button>
           <button
             type="button"
             onClick={() => {
               onClose();
-              onLogin();
+              if (authed && onDashboard) onDashboard();
+              else onLogin();
             }}
             className="flex h-11 items-center justify-center rounded-[12px] text-[14px] font-medium text-white hover:opacity-90 transition-opacity"
             style={{ background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}
