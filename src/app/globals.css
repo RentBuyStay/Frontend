@@ -218,6 +218,9 @@ body.drawer-open .site-shell {
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
   transform: translateX(-288px);
   border-radius: 0 30px 30px 0;
+  /* Dim the pushed card itself so the shade follows its rounded corners
+     (no hard scrim rectangle cutting across the edge). */
+  filter: brightness(0.55);
 }
 @media (min-width: 1024px) {
   /* The drawer never opens on desktop; keep the shell untouched there. */

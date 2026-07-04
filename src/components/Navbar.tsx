@@ -225,12 +225,13 @@ function MobileDrawer({
 
   return createPortal(
     <div className="lg:hidden">
-      {/* Scrim over the pushed-aside page content — tap to close. Ends at the
-          panel's left edge so the menu itself stays interactive. */}
+      {/* Transparent click-catcher over the pushed content — tap to close.
+          The dimming lives on the card itself (see .site-shell) so there is no
+          hard scrim rectangle; this only captures taps. */}
       <div
         onClick={onClose}
         className="fixed inset-y-0 left-0 z-[30]"
-        style={{ right: "288px", background: "rgba(0,0,0,0.4)" }}
+        style={{ right: "288px" }}
       />
 
       {/* Menu panel — fixed at the right, revealed as #site-shell slides left. */}
