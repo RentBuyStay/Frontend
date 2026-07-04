@@ -12,6 +12,7 @@ export interface Property {
   tag: "For Sale" | "For Rent" | "Shortlet";
   agentName: string;
   agentInitials: string;
+  agentVerified?: boolean;
   image?: string;
 }
 
@@ -99,7 +100,7 @@ export default function PropertyCard({ property }: { property: Property }) {
             {property.agentInitials}
           </div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{property.agentName}</span>
-          <Image src="/icons/verify.svg" alt="" width={20} height={20} />
+          {property.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} />}
         </div>
       </div>
     </Link>

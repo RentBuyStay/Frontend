@@ -58,6 +58,7 @@ export function toPropertyCard(p: PropertyResponse): Property {
     tag: TAG[p.listingType] ?? "For Sale",
     agentName,
     agentInitials: initials(agentName) || "RB",
+    agentVerified: p.listerVerified ?? false,
     // Real photo if the API returned one; otherwise a per-listing house
     // placeholder (temporary, until photo upload exists — see PLACEHOLDERS).
     image: primary?.url ?? placeholderFor(p.id),
@@ -88,6 +89,7 @@ export function toListingCard(p: PropertyResponse): Listing {
     desc: p.description ?? "",
     agent,
     agentInitials: initials(agent) || "RB",
+    agentVerified: p.listerVerified ?? false,
     tags: (p.amenities ?? []).slice(0, 3).map((a) => a.name),
     beds: p.bedrooms ?? 0,
     baths: p.bathrooms ?? 0,

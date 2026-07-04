@@ -16,6 +16,7 @@ export interface Listing {
   desc: string;
   agent: string;
   agentInitials: string;
+  agentVerified?: boolean;
   tags: string[];
   beds: number;
   baths: number;
@@ -89,7 +90,7 @@ export default function ListingCard({
             {p.agentInitials}
           </div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-          <Image src="/icons/verify.svg" alt="" width={20} height={20} />
+          {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} />}
         </div>
       </Link>
 
@@ -170,7 +171,7 @@ export default function ListingCard({
               {p.agentInitials}
             </div>
             <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-            <Image src="/icons/verify.svg" alt="" width={16} height={16} />
+            {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={16} height={16} />}
           </div>
 
           {/* Stats: sqft | beds | baths */}

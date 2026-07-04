@@ -13,6 +13,7 @@ export type Agent = {
   location: string;
   rating: number | null; // null when the agent has no reviews yet → "New"
   listings: number;
+  verified?: boolean;
 };
 
 // Figma: vuesax/bold/verify, 20x20, green #14AE5C
@@ -85,7 +86,7 @@ export default function AgentCard({ a }: { a: Agent }) {
             >
               {a.name}
             </span>
-            <VerifyBadge />
+            {a.verified && <VerifyBadge />}
           </div>
           <span
             className="truncate"

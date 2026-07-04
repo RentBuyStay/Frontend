@@ -36,7 +36,7 @@ function AgentCardItem({ a, onAction }: { a: AgentListItem; onAction: () => void
             <p style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }} className="truncate">
               {name}
             </p>
-            <Image src="/icons/verify.svg" alt="" width={18} height={18} className="shrink-0" />
+            {a.identityVerified && <Image src="/icons/verify.svg" alt="verified" width={18} height={18} className="shrink-0" />}
           </div>
           <p style={{ fontSize: "12px", color: "#807e7e" }} className="truncate">{agency}</p>
           <div className="flex items-center gap-1 mt-0.5">

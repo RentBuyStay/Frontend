@@ -85,7 +85,6 @@ function RequestCard({ r }: { r: PropertyRequestResponse }) {
             {initials(agent)}
           </div>
           <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{agent}</span>
-          <Image src="/icons/verify.svg" alt="" width={20} height={20} className="shrink-0" />
         </div>
         <span className="shrink-0" style={{ fontSize: "12px", fontWeight: 500, color: "#305e82" }}>{fmtDate(r.createdAt)}</span>
       </div>
