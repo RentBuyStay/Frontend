@@ -4,9 +4,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetPropertyQuery, useGetActivePropertiesQuery } from "@/services/propertyApi";
+import {
+  useGetPropertyQuery,
+  useGetActivePropertiesQuery,
+  useGetSavedPropertiesQuery,
+  useSavePropertyMutation,
+  useUnsavePropertyMutation,
+} from "@/services/propertyApi";
 import { useGetAgentsQuery } from "@/services/agentApi";
+import { useGetMeQuery } from "@/services/meApi";
 import { toPropertyCard } from "@/lib/propertyMap";
+import { config, appLoginUrl } from "@/lib/config";
 import PropertyCard from "./PropertyCard";
 import LoginModal from "./LoginModal";
 
@@ -75,9 +83,26 @@ export default function PropertyDetail({ id }: { id: string }) {
   // Map centre: use the listing's coordinates when present; otherwise geocode its
   // address (OpenStreetMap/Nominatim) so the map points at the real area.
   const [geo, setGeo] = useState<{ lat: number; lng: number } | null>(null);
-  // Gated actions (report / save / inspection / call / message) require sign-in.
+  // Gated actions (report / save / inspection / call / message). Auth is the
+  // shared cookie session (recognised via /me); when signed out they route to
+  // the dashboard app's login, and the shared cookie brings the user back.
   const [showLogin, setShowLogin] = useState(false);
-  const requireLogin = () => setShowLogin(true);
+  void showLogin; setShowLogin;
+  const { data: me } = useGetMeQuery();
+  const isAuthed = !!me;
+  const { data: savedPage } = useGetSavedPropertiesQuery({ page: 0, size: 200 }, { skip: !isAuthed });
+  const [saveProperty, { isLoading: saving }] = useSavePropertyMutation();
+  const [unsaveProperty, { isLoading: unsaving }] = useUnsavePropertyMutation();
+
+  const goToLogin = () => {
+    const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
+    window.location.assign(appLoginUrl(returnTo));
+  };
+  // Actions with no inline flow here (inspection/call/message/report) open the
+  // dashboard app's version of this listing when signed in.
+  const openInApp = (propId: string) => window.location.assign(`${config.appUrl}/dashboard/browse/${propId}`);
+  // Signed out → app login; signed in → continue in the dashboard app.
+  const requireLogin = () => { if (isAuthed && p) openInApp(p.id); else goToLogin(); };
   useEffect(() => {
     if (!p) return;
     if (p.latitude != null && p.longitude != null) {
@@ -153,18 +178,30 @@ export default function PropertyDetail({ id }: { id: string }) {
   const mapLat = geo?.lat ?? p.latitude ?? 6.5244;
   const mapLng = geo?.lng ?? p.longitude ?? 3.3792;
 
+  const isSaved = (savedPage?.content ?? []).some((x) => x.id === p.id);
+
   // "Interested in this Property?" card — rendered twice (after price on mobile, sidebar on desktop)
   const interestedCard = (
     <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
       <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>Interested in this Property?</h3>
       <div className="flex flex-col" style={{ gap: "24px", marginTop: "24px" }}>
-        <button onClick={requireLogin} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
+        <button onClick={() => (isAuthed ? openInApp(p.id) : goToLogin())} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
           <Image src="/icons/calendar-detail.svg" alt="" width={24} height={24} />
           <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Request Inspection</span>
         </button>
-        <button onClick={requireLogin} className="flex items-center justify-center hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
+        <button
+          onClick={() => {
+            if (!isAuthed) { goToLogin(); return; }
+            if (saving || unsaving) return;
+            if (isSaved) unsaveProperty(p.id);
+            else saveProperty(p.id);
+          }}
+          className="flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-60"
+          disabled={saving || unsaving}
+          style={{ height: "56px", padding: "16px 24px", gap: "8px", background: isSaved ? "rgba(48,94,130,0.06)" : "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}
+        >
           <Image src="/icons/heart.svg" alt="" width={24} height={24} />
-          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>Save for Later</span>
+          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>{isSaved ? "Saved" : "Save for Later"}</span>
         </button>
       </div>
     </div>
