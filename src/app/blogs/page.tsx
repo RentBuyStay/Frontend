@@ -5,79 +5,12 @@ import RealtorSearch from "@/components/RealtorSearch";
 import BlogCard from "@/components/BlogCard";
 import Image from "next/image";
 import Link from "next/link";
+import { getBlogPosts } from "@/lib/blog";
 
 export const metadata = {
   title: "Blog | RentBuyStay",
   description: "Real estate insights, guides and market reports across Nigeria.",
 };
-
-type Post = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  date: string;
-};
-
-const featured: Post = {
-  slug: "navigating-lagos-property-titles",
-  title: "Navigating Lagos Property Titles: What You Need to Know",
-  excerpt:
-    "Understanding property titles in Lagos can be complex. We've simplified the essential information on C of O, Governor's Consent, and other vital documents to ensure your property transactions are secure and stress-free.",
-  image: "/images/blog-featured.png",
-  date: "June 6, 2025",
-};
-
-const posts: Post[] = [
-  {
-    slug: "is-now-the-right-time-to-invest-in-lagos-real-estate",
-    title: "Is Now the Right Time to Invest in Lagos Real Estate?",
-    excerpt:
-      "Lagos's real estate market continues to evolve. Our experts weigh in on current trends, emerging hot spots, and whether 2025 is the ideal year for you to make a strategic investment in the city's vibrant property landscape.",
-    image: "/images/blog-1.png",
-    date: "June 6, 2025",
-  },
-  {
-    slug: "rise-of-eco-friendly-developments-in-abuja",
-    title: "The Rise of Eco-Friendly Developments in Abuja Real Estate Sector",
-    excerpt:
-      "Discover how sustainability is shaping Abuja's property market, with new green-certified developments setting the standard for the future of urban living.",
-    image: "/images/blog-2.png",
-    date: "July 12, 2025",
-  },
-  {
-    slug: "navigating-lagos-financing-options",
-    title: "Navigating Lagos Real Estate Financing Options in 2025",
-    excerpt:
-      "A comprehensive guide to the latest financing products, interest rates, and mortgage tips that can help you secure your dream home or investment property in Lagos.",
-    image: "/images/blog-3.png",
-    date: "August 20, 2025",
-  },
-  {
-    slug: "is-now-the-right-time-to-invest-in-lagos-real-estate-2",
-    title: "Is Now the Right Time to Invest in Lagos Real Estate?",
-    excerpt:
-      "Lagos's real estate market continues to evolve. Our experts weigh in on current trends, emerging hot spots, and whether 2025 is the ideal year for you to make a strategic investment in the city's vibrant property landscape.",
-    image: "/images/blog-1.png",
-    date: "June 6, 2025",
-  },
-  {
-    slug: "rise-of-eco-friendly-developments-in-abuja-2",
-    title: "The Rise of Eco-Friendly Developments in Abuja Real Estate Sector",
-    excerpt:
-      "Discover how sustainability is shaping Abuja's property market, with new green-certified developments setting the standard for the future of urban living.",
-    image: "/images/blog-2.png",
-    date: "July 12, 2025",
-  },
-  {
-    slug: "navigating-lagos-financing-options-2",
-    title: "Navigating Lagos Real Estate Financing Options in 2025",
-    excerpt:
-      "A comprehensive guide to the latest financing products, interest rates, and mortgage tips that can help you secure your dream home or investment property in Lagos.",
-    image: "/images/blog-3.png",
-    date: "August 20, 2025",
-  },
-];
 
 // Featured article date — just the date, no "RBS" prefix or divider line
 function FeaturedDateBadge({ date }: { date: string }) {
@@ -88,7 +21,10 @@ function FeaturedDateBadge({ date }: { date: string }) {
   );
 }
 
-export default function BlogsPage() {
+export default async function BlogsPage() {
+  const all = await getBlogPosts(12);
+  const featured = all[0];
+  const posts = all.slice(1, 7);
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* HERO — Figma 769:88029: image bg + navbar + heading + realtor search at bottom */}
@@ -132,6 +68,12 @@ export default function BlogsPage() {
       {/* CONTENT — Figma node 254:36886: 1440x1790, padding 80 top/bottom */}
       <section className="bg-white" style={{ paddingTop: "40px", paddingBottom: "80px" }}>
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px]">
+          {!featured ? (
+            <p style={{ fontSize: "16px", lineHeight: "28px", color: "#807E7E", textAlign: "center", padding: "40px 0" }}>
+              No articles published yet. Check back soon for insights, guides and market reports.
+            </p>
+          ) : (
+          <>
           {/* Featured article — Figma: 1281x550, r=20, image bg with gradient overlay + bottom-left text */}
           <Link
             href={`/blogs/${featured.slug}`}
@@ -193,6 +135,8 @@ export default function BlogsPage() {
               <BlogCard key={p.slug} p={p} />
             ))}
           </div>
+          </>
+          )}
         </div>
       </section>
 

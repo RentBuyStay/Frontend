@@ -3,41 +3,23 @@ import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import BlogCard from "@/components/BlogCard";
 import Image from "next/image";
+import { notFound } from "next/navigation";
+import { getBlogPost, getBlogPosts } from "@/lib/blog";
 
-export const metadata = {
-  title: "Navigating Lagos Property Titles | RentBuyStay",
-  description: "What you need to know about property titles in Lagos.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+  return {
+    title: post ? `${post.title} | RentBuyStay` : "Blog | RentBuyStay",
+    description: post?.excerpt ?? "Real estate insights, guides and market reports across Nigeria.",
+  };
+}
 
-// Related posts — same as blog grid cards
-const related = [
-  {
-    slug: "navigating-lagos-financing-options",
-    title: "Navigating Lagos Real Estate Financing Options in 2025",
-    excerpt:
-      "A comprehensive guide to the latest financing products, interest rates, and mortgage tips that can help you secure your dream home or investment property in Lagos.",
-    image: "/images/blog-3.png",
-    date: "August 20, 2025",
-  },
-  {
-    slug: "is-now-the-right-time-to-invest-in-lagos-real-estate",
-    title: "Is Now the Right Time to Invest in Lagos Real Estate?",
-    excerpt:
-      "Lagos's real estate market continues to evolve. Our experts weigh in on current trends, emerging hot spots, and whether 2025 is the ideal year for you to make a strategic investment in the city's vibrant property landscape.",
-    image: "/images/blog-1.png",
-    date: "June 6, 2025",
-  },
-  {
-    slug: "rise-of-eco-friendly-developments-in-abuja",
-    title: "The Rise of Eco-Friendly Developments in Abuja Real Estate Sector",
-    excerpt:
-      "Discover how sustainability is shaping Abuja's property market, with new green-certified developments setting the standard for the future of urban living.",
-    image: "/images/blog-2.png",
-    date: "July 12, 2025",
-  },
-];
-
-export default function BlogPostPage() {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+  if (!post) notFound();
+  const related = (await getBlogPosts(6)).filter((p) => p.slug !== slug).slice(0, 3);
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar variant="page" />
@@ -48,8 +30,8 @@ export default function BlogPostPage() {
           {/* Hero image — Figma: 1280x600 desktop / 350 mobile, r=25 */}
           <div className="relative overflow-hidden w-full h-[350px] md:h-[600px] rounded-[20px] md:rounded-[25px]">
             <Image
-              src="/images/blog-featured.png"
-              alt="Navigating Lagos Property Titles"
+              src={post.image}
+              alt={post.title}
               fill
               sizes="(max-width: 1440px) 100vw, 1280px"
               className="object-cover"
@@ -71,51 +53,22 @@ export default function BlogPostPage() {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  Navigating Lagos Property Titles: What You Need to Know
+                  {post.title}
                 </h1>
                 <span style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                  June 6, 2025
+                  {post.date}
                 </span>
               </div>
 
               <div
-                className="text-[14px] leading-[32px] md:text-[18px] md:leading-[40px]"
+                className="blog-body text-[14px] leading-[32px] md:text-[18px] md:leading-[40px] [&_p]:mb-8 [&_h2]:text-[#121212] [&_h2]:font-semibold [&_h3]:text-[#121212] [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_a]:text-[#305E82] [&_a]:underline"
                 style={{
                   fontWeight: 400,
                   color: "#807E7E",
                   letterSpacing: "-0.02em",
                 }}
-              >
-                <p style={{ marginBottom: "32px" }}>
-                  The Nigerian real estate market offers unique avenues for growth, and we
-                  are dedicated to helping you capitalize on them by providing data-driven
-                  insights, identifying prime investment zones, managing high-performance
-                  assets, and offering secure, reliable financial structuring that maximizes
-                  your long-term returns and builds lasting generational wealth.
-                </p>
-                <p style={{ marginBottom: "32px" }}>
-                  We understand that the path to homeownership in Nigeria can be complex,
-                  and that is exactly why [Your Brand Name] streamlines the entire process,
-                  offering a wide, vetted portfolio of diverse properties, introducing
-                  flexible and innovative financing solutions, and providing expert legal
-                  and logistical guidance to make your dream a practical reality for you
-                  and your family.
-                </p>
-                <p style={{ marginBottom: "32px" }}>
-                  As Nigeria&rsquo;s urban landscape expands rapidly, [Your Brand Name]
-                  establishes trust through transparent property acquisition, verified
-                  listings, meticulous land checks, and comprehensive post-sale support,
-                  ensuring a seamless and reliable journey for every single client,
-                  investor, and prospective homeowner.
-                </p>
-                <p>
-                  The Nigerian real estate market offers unique avenues for growth, and we
-                  are dedicated to helping you capitalize on them by providing data-driven
-                  insights, identifying prime investment zones, managing high-performance
-                  assets, and offering secure, reliable financial structuring that maximizes
-                  your long-term returns and builds lasting generational wealth.
-                </p>
-              </div>
+                dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+              />
             </article>
 
             {/* Sidebar — Figma: 299x800, ADS banner placeholder (desktop only) */}
