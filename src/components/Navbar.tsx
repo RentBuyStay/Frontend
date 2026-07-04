@@ -225,19 +225,19 @@ function MobileDrawer({
 
   return createPortal(
     <div className="lg:hidden">
-      {/* Scrim over the pushed-aside page content — tap to close. Ends at the
-          panel's left edge so the menu itself stays interactive. */}
+      {/* Scrim over the pushed-aside page content — tap to close. Starts at the
+          panel's right edge so the menu itself stays interactive. */}
       <div
         onClick={onClose}
-        className="fixed inset-y-0 left-0 z-[30]"
-        style={{ right: "288px", background: "rgba(0,0,0,0.4)" }}
+        className="fixed inset-y-0 right-0 z-[30]"
+        style={{ left: "288px", background: "rgba(0,0,0,0.4)" }}
       />
 
-      {/* Menu panel — fixed at the right, revealed as #site-shell slides left. */}
+      {/* Menu panel — fixed at the left, revealed as #site-shell slides right. */}
       <aside
         role="dialog"
         aria-modal="true"
-        className="fixed top-0 right-0 z-[10] flex h-full w-[288px] flex-col bg-white"
+        className="fixed top-0 left-0 z-[10] flex h-full w-[288px] flex-col bg-white"
       >
         {/* Header — logo + close (X sits exactly where the hamburger was) */}
         <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#ededed] px-5">
