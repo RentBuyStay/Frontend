@@ -58,7 +58,7 @@ function toBlogPost(b: ApiBlogPost): BlogPost {
 export async function getBlogPosts(size = 12): Promise<BlogPost[]> {
   try {
     const res = await fetch(`${config.apiBaseUrl}/blog?page=0&size=${size}`, {
-      next: { revalidate: 30 },
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -73,7 +73,7 @@ export async function getBlogPosts(size = 12): Promise<BlogPost[]> {
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const res = await fetch(`${config.apiBaseUrl}/blog/${encodeURIComponent(slug)}`, {
-      next: { revalidate: 30 },
+      cache: "no-store",
     });
     if (!res.ok) return null;
     const json = await res.json();
