@@ -6,8 +6,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBlogPost, getBlogPosts } from "@/lib/blog";
 
-// Fetch fresh per request so a just-published post is reachable immediately.
-export const dynamic = "force-dynamic";
+// Cached, refreshed hourly; the admin invalidates the "blog" tag on changes so
+// edits go live immediately (see the website /api/revalidate route).
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

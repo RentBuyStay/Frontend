@@ -12,9 +12,10 @@ export const metadata = {
   description: "Real estate insights, guides and market reports across Nigeria.",
 };
 
-// Render on every request so newly published posts show immediately, instead of
-// serving a stale static copy that only updates on a later refresh.
-export const dynamic = "force-dynamic";
+// Cached page, refreshed hourly as a safety net. The admin invalidates the
+// "blog" cache tag on publish/edit/delete (see /api/revalidate), so new posts
+// appear instantly without waiting for the hourly window.
+export const revalidate = 3600;
 
 // Featured article date — just the date, no "RBS" prefix or divider line
 function FeaturedDateBadge({ date }: { date: string }) {
