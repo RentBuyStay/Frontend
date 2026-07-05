@@ -6,6 +6,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getBlogPost, getBlogPosts } from "@/lib/blog";
 
+// Fetch fresh per request so a just-published post is reachable immediately.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await getBlogPost(slug);

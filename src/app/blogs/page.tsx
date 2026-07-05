@@ -12,6 +12,10 @@ export const metadata = {
   description: "Real estate insights, guides and market reports across Nigeria.",
 };
 
+// Render on every request so newly published posts show immediately, instead of
+// serving a stale static copy that only updates on a later refresh.
+export const dynamic = "force-dynamic";
+
 // Featured article date — just the date, no "RBS" prefix or divider line
 function FeaturedDateBadge({ date }: { date: string }) {
   return (
