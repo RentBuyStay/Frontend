@@ -78,15 +78,24 @@ export const NEW_DEVICE_REQUIRES_OTP = "NEW_DEVICE_REQUIRES_OTP";
 
 export type Page<T> = {
   content: T[];
-  totalElements: number;
-  totalPages: number;
-  number: number; // current page (0-based)
-  size: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-  numberOfElements: number;
+  // Newer Spring serializes pagination under a nested `page` object; older
+  // responses put these at the top level. Both are optional so callers read via
+  // pageTotal() below rather than assuming a shape.
+  totalElements?: number;
+  totalPages?: number;
+  number?: number; // current page (0-based)
+  size?: number;
+  first?: boolean;
+  last?: boolean;
+  empty?: boolean;
+  numberOfElements?: number;
+  page?: { size: number; number: number; totalElements: number; totalPages: number };
 };
+
+/** Total item count regardless of whether Spring nests it under `page`. */
+export function pageTotal<T>(p?: Page<T> | null): number {
+  return p?.totalElements ?? p?.page?.totalElements ?? p?.content?.length ?? 0;
+}
 
 // --- Properties ---
 

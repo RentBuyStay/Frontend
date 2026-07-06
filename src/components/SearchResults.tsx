@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { useGetActivePropertiesQuery, type PropertyQuery } from "@/services/propertyApi";
+import { pageTotal } from "@/services/types";
 import { toPropertyCard } from "@/lib/propertyMap";
 import PropertyCard from "./PropertyCard";
 
@@ -49,7 +50,7 @@ export default function SearchResults() {
   });
 
   const items = (data?.content ?? []).filter((p) => p.status === "ACTIVE");
-  const total = data?.totalElements ?? 0;
+  const total = pageTotal(data);
   const where = state ? ` in ${state.charAt(0).toUpperCase()}${state.slice(1)}` : "";
 
   return (
