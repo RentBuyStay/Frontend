@@ -33,7 +33,7 @@ export default function CardContactButtons({
   };
 
   return (
-    <div className="flex items-center shrink-0" style={{ gap: "14px" }}>
+    <div className="flex items-center shrink-0 ml-3" style={{ gap: "14px" }}>
       <button
         type="button"
         onClick={contact}
