@@ -90,8 +90,9 @@ export default function ListingCard({
           <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: "rgba(48,94,130,0.05)", color: "#305E82", fontSize: "14px", fontWeight: 600 }}>
             {p.agentInitials}
           </div>
-          <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-          {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} />}
+          <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
+          {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} className="shrink-0" />}
+          <CardContactButtons propertyId={p.id} name={p.agent} />
         </div>
       </Link>
 
