@@ -53,7 +53,7 @@ export default function SearchResults() {
   const where = state ? ` in ${state.charAt(0).toUpperCase()}${state.slice(1)}` : "";
 
   return (
-    <section className="py-10 flex-1 bg-[#f6f6f6]">
+    <section className="py-10 flex-1 bg-white">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-[#7f7e7e]">

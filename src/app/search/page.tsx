@@ -13,13 +13,13 @@ export default function SearchPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar variant="page" />
 
-      <section className="py-12 bg-[#f6f6f6]">
+      <section className="py-12 bg-white">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <SearchBar inPlace />
         </div>
       </section>
 
-      <Suspense fallback={<section className="py-10 flex-1 bg-[#f6f6f6]" />}>
+      <Suspense fallback={<section className="py-10 flex-1 bg-white" />}>
         <SearchResults />
       </Suspense>
 
