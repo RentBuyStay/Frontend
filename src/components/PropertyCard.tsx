@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import CardContactButtons from "./CardContactButtons";
 
 export interface Property {
   id: string;
@@ -101,6 +102,7 @@ export default function PropertyCard({ property }: { property: Property }) {
           </div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{property.agentName}</span>
           {property.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} />}
+          <CardContactButtons propertyId={property.id} name={property.agentName} />
         </div>
       </div>
     </Link>
