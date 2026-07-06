@@ -14,9 +14,12 @@ import { config, appLoginUrl } from "@/lib/config";
 export default function CardContactButtons({
   propertyId,
   name,
+  pushRight = false,
 }: {
   propertyId: string;
   name: string;
+  /** Push the buttons to the far right of the row (for full-width agent rows). */
+  pushRight?: boolean;
 }) {
   const { data: me } = useGetMeQuery();
   const isAuthed = !!me;
@@ -33,7 +36,7 @@ export default function CardContactButtons({
   };
 
   return (
-    <div className="flex items-center shrink-0 ml-3" style={{ gap: "14px" }}>
+    <div className={`flex items-center shrink-0 ${pushRight ? "ml-auto pl-3" : "ml-3"}`} style={{ gap: "14px" }}>
       <button
         type="button"
         onClick={contact}

@@ -102,7 +102,7 @@ export default function PropertyCard({ property }: { property: Property }) {
           </div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{property.agentName}</span>
           {property.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} />}
-          <CardContactButtons propertyId={property.id} name={property.agentName} />
+          <CardContactButtons propertyId={property.id} name={property.agentName} pushRight />
         </div>
       </div>
     </Link>

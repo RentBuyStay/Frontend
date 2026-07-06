@@ -92,7 +92,7 @@ export default function ListingCard({
           </div>
           <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
           {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={20} height={20} className="shrink-0" />}
-          <CardContactButtons propertyId={p.id} name={p.agent} />
+          <CardContactButtons propertyId={p.id} name={p.agent} pushRight />
         </div>
       </Link>
 
