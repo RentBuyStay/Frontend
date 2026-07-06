@@ -13,10 +13,7 @@ export default function SearchPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar variant="page" />
 
-      <section
-        className="text-white py-12"
-        style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}
-      >
+      <section className="py-12 bg-[#f6f6f6]">
         <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
           <SearchBar inPlace />
         </div>

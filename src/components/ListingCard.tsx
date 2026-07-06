@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import CardContactButtons from "./CardContactButtons";
 
 // Shared listing card for the for-sale / for-rent / shortlet pages.
 // Renders two layouts that swap at the `sm` breakpoint:
@@ -163,34 +164,34 @@ export default function ListingCard({
           </div>
         </div>
 
-        {/* BOTTOM ROW (full card width): Agent left | Stats right */}
-        <div className="flex items-center justify-between border-t border-[#ededed] pt-4 -mx-5 px-5">
-          {/* Agent: avatar + name + verify */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
+        {/* Stats row: sqft | beds | baths */}
+        <div className="flex items-center gap-4 border-t border-[#ededed] pt-4 -mx-5 px-5" style={{ fontSize: "13px", color: "#807e7e" }}>
+          <span className="flex items-center gap-1.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M3 8V3h5M21 8V3h-5M3 16v5h5M21 16v5h-5" /></svg>
+            {p.area}
+          </span>
+          <span className="w-px h-3 bg-[#ededed]" />
+          <span className="flex items-center gap-1.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M2 22V8.5h20V22M2 13h20M6 13V8.5M2 18h20" /></svg>
+            {p.beds} Beds
+          </span>
+          <span className="w-px h-3 bg-[#ededed]" />
+          <span className="flex items-center gap-1.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3M3 11h18v6a4 4 0 01-4 4H7a4 4 0 01-4-4v-6z" /></svg>
+            {p.baths} Baths
+          </span>
+        </div>
+
+        {/* Agent row: avatar + name + verify | Call + Message */}
+        <div className="flex items-center border-t border-[#ededed] pt-4 mt-4 -mx-5 px-5">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-[#f3fefe] border border-[#ededed] flex items-center justify-center shrink-0" style={{ fontSize: "11px", fontWeight: 600, color: "#305e82" }}>
               {p.agentInitials}
             </div>
-            <span style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
-            {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={16} height={16} />}
+            <span className="truncate" style={{ fontSize: "14px", fontWeight: 600, color: "#121212" }}>{p.agent}</span>
+            {p.agentVerified && <Image src="/icons/verify.svg" alt="verified" width={16} height={16} className="shrink-0" />}
           </div>
-
-          {/* Stats: sqft | beds | baths */}
-          <div className="flex items-center gap-4" style={{ fontSize: "13px", color: "#807e7e" }}>
-            <span className="flex items-center gap-1.5">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M3 8V3h5M21 8V3h-5M3 16v5h5M21 16v5h-5" /></svg>
-              {p.area}
-            </span>
-            <span className="w-px h-3 bg-[#ededed]" />
-            <span className="flex items-center gap-1.5">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M2 22V8.5h20V22M2 13h20M6 13V8.5M2 18h20" /></svg>
-              {p.beds} Beds
-            </span>
-            <span className="w-px h-3 bg-[#ededed]" />
-            <span className="flex items-center gap-1.5">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M9 6V3a1 1 0 011-1h4a1 1 0 011 1v3M3 11h18v6a4 4 0 01-4 4H7a4 4 0 01-4-4v-6z" /></svg>
-              {p.baths} Baths
-            </span>
-          </div>
+          <CardContactButtons propertyId={p.id} name={p.agent} />
         </div>
       </Link>
     </>
