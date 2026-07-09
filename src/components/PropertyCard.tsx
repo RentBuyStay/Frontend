@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import CardContactButtons from "./CardContactButtons";
+import { PropertyCardImage } from "./PropertyGallery";
 
 export interface Property {
   id: string;
@@ -15,6 +16,7 @@ export interface Property {
   agentInitials: string;
   agentVerified?: boolean;
   image?: string;
+  images?: string[];
 }
 
 // Figma: all three tags share the same pill style (bg #FFAE00, white text)
@@ -28,11 +30,10 @@ export default function PropertyCard({ property }: { property: Property }) {
     >
       {/* Image with badge — Figma: 224h, badge bottom-right r=8, 12px/600 white uppercase, pad 4/8 */}
       <div className="relative h-[224px] bg-[#ededed]">
-        <Image
-          src={property.image || "/images/property-placeholder.png"}
+        <PropertyCardImage
+          images={property.images ?? [property.image || "/images/property-placeholder.png"]}
           alt={property.title}
-          fill
-          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 384px"
         />
         <span
           className="absolute uppercase text-white inline-flex items-center"

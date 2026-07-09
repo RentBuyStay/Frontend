@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import CardContactButtons from "./CardContactButtons";
+import { PropertyCardImage } from "./PropertyGallery";
 
 // Shared listing card for the for-sale / for-rent / shortlet pages.
 // Renders two layouts that swap at the `sm` breakpoint:
@@ -14,6 +15,7 @@ export interface Listing {
   location: string;
   date: string;
   image: string;
+  images?: string[];
   desc: string;
   agent: string;
   agentInitials: string;
@@ -43,24 +45,18 @@ export default function ListingCard({
       >
         {/* Image 224 + overlays */}
         <div className="relative w-full h-[224px] bg-[#ededed]">
-          <Image src={p.image} alt={p.title} fill className="object-cover" />
+          <PropertyCardImage
+            images={p.images ?? [p.image]}
+            alt={p.title}
+            sizes="(max-width: 640px) 100vw, 384px"
+          />
           {/* Tag badge — top-left, #FFAE00 */}
           <span
-            className="absolute uppercase text-white"
+            className="absolute z-10 uppercase text-white"
             style={{ top: "16px", left: "16px", fontSize: "12px", lineHeight: "20px", fontWeight: 600, padding: "4px 8px", borderRadius: "8px", background: BADGE_BG }}
           >
             {tag}
           </span>
-          {/* Gallery counter — bottom-left */}
-          <div className="absolute flex items-center gap-[5px] text-white" style={{ left: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px 8px" }}>
-            <Image src="/icons/gallery.svg" alt="" width={16} height={16} />
-            <span style={{ fontSize: "14px" }}>3</span>
-          </div>
-          {/* Nav arrows — bottom-right */}
-          <div className="absolute flex items-center gap-2" style={{ right: "16px", bottom: "16px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", padding: "4px" }}>
-            <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} className="rotate-180" />
-            <Image src="/icons/arrow-right-white.svg" alt="" width={16} height={16} />
-          </div>
         </div>
         {/* Price + title + location */}
         <div className="px-4 pt-4 flex flex-col gap-4">
@@ -105,26 +101,14 @@ export default function ListingCard({
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
           {/* Image — Figma: 184x184 square on left with badge, counter, nav arrows */}
           <div className="relative w-full h-[224px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#ededed]">
-            <Image src={p.image} alt={p.title} fill className="object-cover" />
+            <PropertyCardImage images={p.images ?? [p.image]} alt={p.title} sizes="184px" />
             {/* Tag badge — top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
             <span
-              className="absolute uppercase text-white rounded-full"
+              className="absolute z-10 uppercase text-white rounded-full"
               style={{ top: "8px", left: "8px", fontSize: "10px", lineHeight: "20px", fontWeight: 600, padding: "4px 8px", letterSpacing: 0, background: BADGE_BG }}
             >
               {tag}
             </span>
-            {/* Photo counter bottom-left */}
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-white" style={{ fontSize: "12px" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-              </svg>
-              <span>3</span>
-            </div>
-            {/* Nav arrows bottom-right (decorative — card links to detail page) */}
-            <div className="absolute bottom-2 right-2 flex items-center gap-1 text-white" aria-hidden="true">
-              <span className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">‹</span>
-              <span className="w-5 h-5 flex items-center justify-center bg-black/30 rounded">›</span>
-            </div>
           </div>
 
           {/* Right content area — flex-1 */}

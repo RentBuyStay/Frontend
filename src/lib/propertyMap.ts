@@ -40,6 +40,19 @@ function placeholderFor(id: string): string {
   return PLACEHOLDERS[h % PLACEHOLDERS.length];
 }
 
+/** All photo URLs for a property, primary first then by sortOrder. Falls back
+ *  to a single per-listing placeholder so there's always at least one image. */
+function imageList(p: PropertyResponse): string[] {
+  if (!p.photos?.length) return [placeholderFor(p.id)];
+  const ordered = [...p.photos].sort((a, b) => {
+    if (a.isPrimary && !b.isPrimary) return -1;
+    if (b.isPrimary && !a.isPrimary) return 1;
+    return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+  });
+  const urls = ordered.map((ph) => ph.url).filter(Boolean);
+  return urls.length ? urls : [placeholderFor(p.id)];
+}
+
 /** Map a backend PropertyResponse to the landing PropertyCard's shape. */
 export function toPropertyCard(p: PropertyResponse): Property {
   const currencyPrefix = !p.currency || p.currency === "NGN" ? "₦" : `${p.currency} `;
@@ -62,6 +75,7 @@ export function toPropertyCard(p: PropertyResponse): Property {
     // Real photo if the API returned one; otherwise a per-listing house
     // placeholder (temporary, until photo upload exists — see PLACEHOLDERS).
     image: primary?.url ?? placeholderFor(p.id),
+    images: imageList(p),
   };
 }
 
@@ -94,5 +108,6 @@ export function toListingCard(p: PropertyResponse): Listing {
     beds: p.bedrooms ?? 0,
     baths: p.bathrooms ?? 0,
     area: p.totalAreaSqm ? `${p.totalAreaSqm} sqm` : "—",
+    images: imageList(p),
   };
 }

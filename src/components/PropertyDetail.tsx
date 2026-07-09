@@ -16,6 +16,7 @@ import { useGetMeQuery } from "@/services/meApi";
 import { toPropertyCard } from "@/lib/propertyMap";
 import { config, appLoginUrl } from "@/lib/config";
 import PropertyCard from "./PropertyCard";
+import { PropertyGallery } from "./PropertyGallery";
 import LoginModal from "./LoginModal";
 
 const FREQ: Record<string, string> = {
@@ -168,8 +169,9 @@ export default function PropertyDetail({ id }: { id: string }) {
     agent?.averageRating != null && (agent?.reviewCount ?? 0) > 0
       ? agent.averageRating.toFixed(1)
       : "New";
-  const photos = p.photos ?? [];
-  const heroImage = toPropertyCard(p).image ?? "/images/property-placeholder.png";
+  const card = toPropertyCard(p);
+  const heroImage = card.image ?? "/images/property-placeholder.png";
+  const galleryImages = card.images ?? [heroImage];
   const amenities = (p.amenities ?? []).map((a) => a.name);
   const related = (relatedData?.content ?? [])
     .filter((x) => x.id !== p.id && x.status === "ACTIVE")
@@ -243,15 +245,7 @@ export default function PropertyDetail({ id }: { id: string }) {
           {/* LEFT CONTENT */}
           <div className="flex flex-col w-full min-w-0 lg:flex-1" style={{ gap: "32px" }}>
             {/* Gallery */}
-            <div className="relative overflow-hidden bg-[#F6F6F6] w-full h-[300px] md:h-[450px]" style={{ borderRadius: "20px" }}>
-              <Image src={heroImage} alt={p.title} fill style={{ objectFit: "cover" }} priority />
-              {photos.length > 0 && (
-                <div className="absolute flex items-center justify-center bottom-4 left-4" style={{ width: "64px", height: "32px", background: "rgba(18,18,18,0.5)", borderRadius: "8px", gap: "5px" }}>
-                  <Image src="/icons/gallery-count.svg" alt="" width={16} height={16} />
-                  <span style={{ fontSize: "15px", lineHeight: "16px", fontWeight: 400, color: "#FFFFFF" }}>1/{photos.length}</span>
-                </div>
-              )}
-            </div>
+            <PropertyGallery images={galleryImages} alt={p.title} className="h-[300px] md:h-[450px]" />
 
             {/* Price + Stats row */}
             <div className="flex flex-col gap-4 py-4 border-t border-b border-[#f6f6f6] md:flex-row md:items-center md:justify-between md:gap-0">
