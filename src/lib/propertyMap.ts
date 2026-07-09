@@ -1,6 +1,7 @@
 import type { Property } from "@/components/PropertyCard";
 import type { Listing } from "@/components/ListingCard";
 import type { PropertyResponse } from "@/services/types";
+import type { MediaItem } from "@/components/PropertyGallery";
 
 // priceFrequency → human suffix shown after the amount (OUTRIGHT = sale, no suffix).
 const FREQ_SUFFIX: Record<string, string> = {
@@ -40,17 +41,31 @@ function placeholderFor(id: string): string {
   return PLACEHOLDERS[h % PLACEHOLDERS.length];
 }
 
-/** All photo URLs for a property, primary first then by sortOrder. Falls back
- *  to a single per-listing placeholder so there's always at least one image. */
-function imageList(p: PropertyResponse): string[] {
-  if (!p.photos?.length) return [placeholderFor(p.id)];
-  const ordered = [...p.photos].sort((a, b) => {
+/** Photos ordered primary-first, then by sortOrder. */
+function orderedPhotos(p: PropertyResponse) {
+  return [...(p.photos ?? [])].sort((a, b) => {
     if (a.isPrimary && !b.isPrimary) return -1;
     if (b.isPrimary && !a.isPrimary) return 1;
     return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
   });
-  const urls = ordered.map((ph) => ph.url).filter(Boolean);
+}
+
+/** All photo URLs for a property, primary first then by sortOrder. Falls back
+ *  to a single per-listing placeholder so there's always at least one image. */
+function imageList(p: PropertyResponse): string[] {
+  const urls = orderedPhotos(p).map((ph) => ph.url).filter(Boolean);
   return urls.length ? urls : [placeholderFor(p.id)];
+}
+
+/** Ordered media items (image | video) for the gallery. */
+function mediaList(p: PropertyResponse): MediaItem[] {
+  const items = orderedPhotos(p)
+    .filter((ph) => ph.url)
+    .map((ph) => ({
+      url: ph.url,
+      type: (ph.contentType?.startsWith("video/") ? "video" : "image") as MediaItem["type"],
+    }));
+  return items.length ? items : [{ url: placeholderFor(p.id), type: "image" }];
 }
 
 /** Map a backend PropertyResponse to the landing PropertyCard's shape. */
@@ -76,6 +91,7 @@ export function toPropertyCard(p: PropertyResponse): Property {
     // placeholder (temporary, until photo upload exists — see PLACEHOLDERS).
     image: primary?.url ?? placeholderFor(p.id),
     images: imageList(p),
+    media: mediaList(p),
   };
 }
 
@@ -109,5 +125,6 @@ export function toListingCard(p: PropertyResponse): Listing {
     baths: p.bathrooms ?? 0,
     area: p.totalAreaSqm ? `${p.totalAreaSqm} sqm` : "—",
     images: imageList(p),
+    media: mediaList(p),
   };
 }

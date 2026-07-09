@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import CardContactButtons from "./CardContactButtons";
-import { PropertyCardImage } from "./PropertyGallery";
+import { PropertyCardImage, type MediaItem } from "./PropertyGallery";
 
 // Shared listing card for the for-sale / for-rent / shortlet pages.
 // Renders two layouts that swap at the `sm` breakpoint:
@@ -16,6 +16,7 @@ export interface Listing {
   date: string;
   image: string;
   images?: string[];
+  media?: MediaItem[];
   desc: string;
   agent: string;
   agentInitials: string;
@@ -46,6 +47,7 @@ export default function ListingCard({
         {/* Image 224 + overlays */}
         <div className="relative w-full h-[224px] bg-[#ededed]">
           <PropertyCardImage
+            media={p.media}
             images={p.images ?? [p.image]}
             alt={p.title}
             sizes="(max-width: 640px) 100vw, 384px"
@@ -101,7 +103,7 @@ export default function ListingCard({
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
           {/* Image — Figma: 184x184 square on left with badge, counter, nav arrows */}
           <div className="relative w-full h-[224px] sm:w-[184px] sm:h-[184px] rounded-[12px] overflow-hidden shrink-0 bg-[#ededed]">
-            <PropertyCardImage images={p.images ?? [p.image]} alt={p.title} sizes="184px" />
+            <PropertyCardImage media={p.media} images={p.images ?? [p.image]} alt={p.title} sizes="184px" />
             {/* Tag badge — top-left 8px inset, pill r=50, 10/600 white uppercase, padding 4/8, bg #FFAE00 */}
             <span
               className="absolute z-10 uppercase text-white rounded-full"

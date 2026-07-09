@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import CardContactButtons from "./CardContactButtons";
-import { PropertyCardImage } from "./PropertyGallery";
+import { PropertyCardImage, type MediaItem } from "./PropertyGallery";
 
 export interface Property {
   id: string;
@@ -17,6 +17,7 @@ export interface Property {
   agentVerified?: boolean;
   image?: string;
   images?: string[];
+  media?: MediaItem[];
 }
 
 // Figma: all three tags share the same pill style (bg #FFAE00, white text)
@@ -31,6 +32,7 @@ export default function PropertyCard({ property }: { property: Property }) {
       {/* Image with badge — Figma: 224h, badge bottom-right r=8, 12px/600 white uppercase, pad 4/8 */}
       <div className="relative h-[224px] bg-[#ededed]">
         <PropertyCardImage
+          media={property.media}
           images={property.images ?? [property.image || "/images/property-placeholder.png"]}
           alt={property.title}
           sizes="(max-width: 768px) 100vw, 384px"

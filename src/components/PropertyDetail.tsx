@@ -172,6 +172,7 @@ export default function PropertyDetail({ id }: { id: string }) {
   const card = toPropertyCard(p);
   const heroImage = card.image ?? "/images/property-placeholder.png";
   const galleryImages = card.images ?? [heroImage];
+  const galleryMedia = card.media;
   const amenities = (p.amenities ?? []).map((a) => a.name);
   const related = (relatedData?.content ?? [])
     .filter((x) => x.id !== p.id && x.status === "ACTIVE")
@@ -245,7 +246,7 @@ export default function PropertyDetail({ id }: { id: string }) {
           {/* LEFT CONTENT */}
           <div className="flex flex-col w-full min-w-0 lg:flex-1" style={{ gap: "32px" }}>
             {/* Gallery */}
-            <PropertyGallery images={galleryImages} alt={p.title} className="h-[300px] md:h-[450px]" />
+            <PropertyGallery media={galleryMedia} images={galleryImages} alt={p.title} className="h-[300px] md:h-[450px]" />
 
             {/* Price + Stats row */}
             <div className="flex flex-col gap-4 py-4 border-t border-b border-[#f6f6f6] md:flex-row md:items-center md:justify-between md:gap-0">
