@@ -77,11 +77,30 @@ export default function ListingResults({
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
   const to = (page - 1) * PAGE_SIZE + items.length;
+
+  // Are any narrowing filters active? (listingType alone isn't a "filter".)
+  const hasFilters = [
+    "q", "type", "beds", "minPrice", "maxPrice", "state", "city",
+    "furnished", "serviced", "shared", "listedWithinDays",
+  ].some((k) => sp.get(k));
+  const noResults = !isLoading && !isError && items.length === 0;
+
+  // When the filters match nothing, suggest other available listings of the same
+  // type instead of a dead end — fetched only in that case.
+  const { data: fbData } = useGetActivePropertiesQuery(
+    { listingType, sort, size: PAGE_SIZE } satisfies PropertyQuery,
+    { skip: !(noResults && hasFilters) },
+  );
+  const fallbackItems = (fbData?.content ?? []).filter((p) => p.status === "ACTIVE");
+  const showFallback = noResults && hasFilters && fallbackItems.length > 0;
+
   const count = isLoading
     ? "Loading…"
     : total > 0
       ? `Showing ${from} - ${to} of ${total}`
-      : "No properties found";
+      : showFallback
+        ? "No exact matches — showing other available properties"
+        : "No properties found";
 
   return (
     <div className="flex flex-col gap-6 min-w-0">
@@ -103,9 +122,31 @@ export default function ListingResults({
           <p className="text-[14px] text-[#807e7e]">Couldn&rsquo;t load listings right now. Please try again later.</p>
         </div>
       ) : items.length === 0 ? (
-        <div className="rounded-[20px] border border-[#f6f6f6] bg-[#fafafa] py-16 text-center">
-          <p className="text-[14px] text-[#807e7e]">No properties match your search yet.</p>
-        </div>
+        showFallback ? (
+          <div className="flex flex-col gap-6">
+            <div className="rounded-[16px] border border-[#f6f6f6] bg-[#fafafa] px-5 py-4 flex items-center gap-3">
+              <span aria-hidden className="text-[18px]">💡</span>
+              <p className="text-[14px] text-[#807e7e]">
+                Nothing matched those exact filters. Here are other available properties you might like —{" "}
+                <button
+                  type="button"
+                  onClick={() => router.push(pathname, { scroll: false })}
+                  className="text-[#305e82] font-medium hover:underline"
+                >
+                  clear filters
+                </button>
+                .
+              </p>
+            </div>
+            {fallbackItems.map((p) => (
+              <ListingCard key={p.id} listing={toListingCard(p)} tag={tag} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-[20px] border border-[#f6f6f6] bg-[#fafafa] py-16 text-center">
+            <p className="text-[14px] text-[#807e7e]">No properties match your search yet.</p>
+          </div>
+        )
       ) : (
         <div className="flex flex-col gap-6">
           {items.map((p) => (
@@ -114,7 +155,7 @@ export default function ListingResults({
         </div>
       )}
 
-      {totalPages > 1 && (
+      {items.length > 0 && totalPages > 1 && (
         <div className="mt-6">
           <Pagination
             current={page}

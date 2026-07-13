@@ -53,6 +53,20 @@ export default function SearchResults() {
   const total = pageTotal(data);
   const where = state ? ` in ${state.charAt(0).toUpperCase()}${state.slice(1)}` : "";
 
+  // When the filters match nothing, suggest other available listings instead of a
+  // dead end — fetched only in that case.
+  const hasFilters = [
+    "q", "type", "beds", "minPrice", "maxPrice", "state", "city", "listingType",
+    "furnished", "serviced", "shared", "listedWithinDays",
+  ].some((k) => sp.get(k));
+  const noResults = !isLoading && !isError && items.length === 0;
+  const { data: fbData } = useGetActivePropertiesQuery(
+    { sort, size: PAGE_SIZE } satisfies PropertyQuery,
+    { skip: !(noResults && hasFilters) },
+  );
+  const fallbackItems = (fbData?.content ?? []).filter((p) => p.status === "ACTIVE");
+  const showFallback = noResults && hasFilters && fallbackItems.length > 0;
+
   return (
     <section className="py-10 flex-1 bg-white">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
@@ -95,9 +109,25 @@ export default function SearchResults() {
             <p className="text-sm text-[#7f7e7e]">Couldn&rsquo;t load results right now. Please try again later.</p>
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-[16px] border border-[#ededed] bg-white py-16 text-center">
-            <p className="text-sm text-[#7f7e7e]">No properties found{where}.</p>
-          </div>
+          showFallback ? (
+            <div className="flex flex-col gap-4">
+              <div className="rounded-[12px] border border-[#ededed] bg-white px-5 py-4 flex items-center gap-3">
+                <span aria-hidden className="text-[18px]">💡</span>
+                <p className="text-sm text-[#7f7e7e]">
+                  No properties matched your search{where}. Here are other available listings you might like.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {fallbackItems.map((p) => (
+                  <PropertyCard key={p.id} property={toPropertyCard(p)} />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-[16px] border border-[#ededed] bg-white py-16 text-center">
+              <p className="text-sm text-[#7f7e7e]">No properties found{where}.</p>
+            </div>
+          )
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {items.map((p) => (
