@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Search, ChevronDown } from "lucide-react";
 import { useGetPropertyTypesQuery } from "@/services/referenceApi";
+import LocationPickerModal from "./LocationPickerModal";
 
 const bedrooms = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
@@ -48,6 +49,7 @@ export default function FilterModal({
   const [serv, setServ] = useState("");
   const [shared, setShared] = useState("");
   const [listed, setListed] = useState("Anytime");
+  const [showMap, setShowMap] = useState(false);
   // Real property types from the backend (GET /property-types).
   const { data: propertyTypes } = useGetPropertyTypesQuery();
   // Portal to <body> so the modal escapes any ancestor stacking context (e.g. the
@@ -113,6 +115,7 @@ export default function FilterModal({
   if (!open || !mounted) return null;
 
   return createPortal(
+    <>
     <div
       className="fixed inset-0 z-[10000] overflow-y-auto md:flex md:items-center md:justify-center md:p-4"
       style={{ background: "rgba(0,0,0,0.5)" }}
@@ -139,16 +142,34 @@ export default function FilterModal({
             <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
               Location
             </label>
-            <div className="bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4 gap-2">
-              <Search size={18} className="text-[#807e7e] shrink-0" />
-              <input
-                type="text"
-                value={loc}
-                onChange={(e) => setLoc(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { applyNow(); } }}
-                placeholder="Search address, area or keyword…"
-                className="flex-1 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
-              />
+            <div className="bg-[#F6F6F6] rounded-[12px] h-12 flex items-center justify-between px-4 gap-3">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Search size={18} className="text-[#807e7e] shrink-0" />
+                <input
+                  type="text"
+                  value={loc}
+                  onChange={(e) => setLoc(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { applyNow(); } }}
+                  placeholder="Search address, area or keyword…"
+                  className="flex-1 min-w-0 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMap(true)}
+                className="flex items-center gap-1.5 shrink-0 hover:opacity-80"
+                style={{ color: "#305e82", fontSize: "14px", fontWeight: 500 }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#305e82" strokeWidth="1.8">
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="12" cy="12" r="3" />
+                  <line x1="12" y1="2" x2="12" y2="6" />
+                  <line x1="12" y1="18" x2="12" y2="22" />
+                  <line x1="2" y1="12" x2="6" y2="12" />
+                  <line x1="18" y1="12" x2="22" y2="12" />
+                </svg>
+                <span className="hidden md:inline">Mark location on map</span>
+              </button>
             </div>
           </div>
 
@@ -333,7 +354,14 @@ export default function FilterModal({
           </button>
         </div>
       </div>
-    </div>,
+    </div>
+
+    <LocationPickerModal
+      open={showMap}
+      onClose={() => setShowMap(false)}
+      onSelect={(place) => setLoc(place.city || place.state || place.label)}
+    />
+    </>,
     document.body
   );
 }
