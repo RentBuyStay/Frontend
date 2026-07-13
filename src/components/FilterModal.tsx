@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Search, ChevronDown } from "lucide-react";
 import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 import LocationPickerModal from "./LocationPickerModal";
+import LocationAutocomplete from "./LocationAutocomplete";
 
 const bedrooms = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
@@ -145,13 +146,12 @@ export default function FilterModal({
             <div className="bg-[#F6F6F6] rounded-[12px] h-12 flex items-center justify-between px-4 gap-3">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Search size={18} className="text-[#807e7e] shrink-0" />
-                <input
-                  type="text"
+                <LocationAutocomplete
                   value={loc}
-                  onChange={(e) => setLoc(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") { applyNow(); } }}
+                  onChange={setLoc}
+                  onEnter={applyNow}
                   placeholder="Search address, area or keyword…"
-                  className="flex-1 min-w-0 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
+                  className="w-full min-w-0 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
                 />
               </div>
               <button
