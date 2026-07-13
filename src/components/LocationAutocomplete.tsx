@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Suggestion = { label: string; value: string };
 
@@ -16,6 +17,8 @@ function toValue(r: { display_name: string; address?: Record<string, string> }):
 /**
  * Address autocomplete (OpenStreetMap / Nominatim, Nigeria-scoped) — as the user
  * types, suggest matching places; selecting one sets the value. Free, no API key.
+ * The suggestion list is portalled to <body> with fixed positioning so it's never
+ * clipped by an ancestor's overflow (e.g. the hero) or z-index.
  */
 export default function LocationAutocomplete({
   value,
@@ -33,9 +36,16 @@ export default function LocationAutocomplete({
   const [results, setResults] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const [mounted, setMounted] = useState(false);
   const skipNext = useRef(false); // don't re-search right after a selection
-  const boxRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMounted(true), []);
+
+  // Debounced Nominatim search.
   useEffect(() => {
     if (skipNext.current) {
       skipNext.current = false;
@@ -82,10 +92,28 @@ export default function LocationAutocomplete({
     };
   }, [value]);
 
-  // Close on outside click.
+  // Keep the portalled list anchored to the input while open.
+  useEffect(() => {
+    if (!open) return;
+    const update = () => {
+      const r = inputRef.current?.getBoundingClientRect();
+      if (r) setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+    };
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [open, results.length]);
+
+  // Close on outside click (input or list).
   useEffect(() => {
     function onDoc(e: MouseEvent) {
-      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (inputRef.current?.contains(t) || listRef.current?.contains(t)) return;
+      setOpen(false);
     }
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
@@ -99,8 +127,9 @@ export default function LocationAutocomplete({
   };
 
   return (
-    <div ref={boxRef} className="relative flex-1 min-w-0">
+    <>
       <input
+        ref={inputRef}
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -113,31 +142,34 @@ export default function LocationAutocomplete({
         className={className}
       />
 
-      {open && (
-        <ul
-          className="absolute left-0 right-0 top-[calc(100%+8px)] z-[10002] bg-white rounded-[12px] border border-[#ededed] max-h-[260px] overflow-y-auto py-1"
-          style={{ boxShadow: "0 12px 32px rgba(0,0,0,0.12)" }}
-        >
-          {results.map((s, i) => (
-            <li key={`${s.value}-${i}`}>
-              <button
-                type="button"
-                // onMouseDown fires before the input blur so the pick isn't lost.
-                onMouseDown={(e) => { e.preventDefault(); select(s); }}
-                className="w-full text-left px-4 py-2.5 hover:bg-[#f6f9fc] flex items-start gap-2"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#305e82" strokeWidth="1.8" className="mt-0.5 shrink-0">
-                  <path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
-                </svg>
-                <span className="text-[13px] text-[#121212] leading-snug">{s.label}</span>
-              </button>
-            </li>
-          ))}
-          {loading && results.length === 0 && (
-            <li className="px-4 py-2.5 text-[13px] text-[#807e7e]">Searching…</li>
-          )}
-        </ul>
-      )}
-    </div>
+      {mounted && open && pos &&
+        createPortal(
+          <ul
+            ref={listRef}
+            className="bg-white rounded-[12px] border border-[#ededed] overflow-y-auto py-1"
+            style={{ position: "fixed", top: pos.top, left: pos.left, width: pos.width, maxHeight: 280, zIndex: 10050, boxShadow: "0 12px 32px rgba(0,0,0,0.14)" }}
+          >
+            {results.map((s, i) => (
+              <li key={`${s.value}-${i}`}>
+                <button
+                  type="button"
+                  // onMouseDown fires before the input blur so the pick isn't lost.
+                  onMouseDown={(e) => { e.preventDefault(); select(s); }}
+                  className="w-full text-left px-4 py-2.5 hover:bg-[#f6f9fc] flex items-start gap-2"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#305e82" strokeWidth="1.8" className="mt-0.5 shrink-0">
+                    <path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" />
+                  </svg>
+                  <span className="text-[13px] text-[#121212] leading-snug">{s.label}</span>
+                </button>
+              </li>
+            ))}
+            {loading && results.length === 0 && (
+              <li className="px-4 py-2.5 text-[13px] text-[#807e7e]">Searching…</li>
+            )}
+          </ul>,
+          document.body,
+        )}
+    </>
   );
 }

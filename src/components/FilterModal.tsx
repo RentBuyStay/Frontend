@@ -151,7 +151,7 @@ export default function FilterModal({
                   onChange={setLoc}
                   onEnter={applyNow}
                   placeholder="Search address, area or keyword…"
-                  className="w-full min-w-0 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
+                  className="flex-1 min-w-0 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
                 />
               </div>
               <button
