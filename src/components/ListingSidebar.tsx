@@ -3,6 +3,7 @@ import Image from "next/image";
 import VerifiedAgentsList from "./VerifiedAgentsList";
 import SidebarTypeCounts from "./SidebarTypeCounts";
 import SidebarBedroomBreakdown from "./SidebarBedroomBreakdown";
+import SidebarStates from "./SidebarStates";
 import SubscribeNowButton from "./SubscribeNowButton";
 
 const CATEGORY_LISTING_TYPE: Record<string, "RENT" | "BUY" | "SHORTLET"> = {
@@ -10,6 +11,37 @@ const CATEGORY_LISTING_TYPE: Record<string, "RENT" | "BUY" | "SHORTLET"> = {
   Rent: "RENT",
   Shortlet: "SHORTLET",
 };
+
+const LISTING_TYPE_PATH: Record<string, string> = {
+  BUY: "/for-sale",
+  RENT: "/for-rent",
+  SHORTLET: "/shortlet",
+};
+
+/** Turn a curated "Other Related Properties" label into a real filtered-search URL. */
+function relatedHref(label: string, listingType?: "RENT" | "BUY" | "SHORTLET"): string {
+  const base = listingType ? LISTING_TYPE_PATH[listingType] : "/search";
+  const l = label.toLowerCase();
+  const params = new URLSearchParams();
+
+  const range = l.match(/between\s+(\d+)\s*mil?l?ion\s+and\s+(\d+)\s*mil?l?ion/);
+  if (range) {
+    params.set("minPrice", String(Number(range[1]) * 1_000_000));
+    params.set("maxPrice", String(Number(range[2]) * 1_000_000));
+  } else if (l.includes("serviced")) {
+    params.set("serviced", "yes");
+  } else if (l.includes("furnished")) {
+    params.set("furnished", "furnished");
+  } else if (l.includes("newly")) {
+    params.set("listedWithinDays", "30");
+  } else if (l.includes("cheap")) {
+    params.set("sort", "priceAsc");
+  } else if (l.includes("luxury")) {
+    params.set("sort", "priceDesc");
+  }
+  const qs = params.toString();
+  return qs ? `${base}?${qs}` : base;
+}
 
 // Shared right-hand sidebar for the for-sale / for-rent / shortlet listing pages.
 // The markup is identical across all three; only the data (and the category word
@@ -70,13 +102,7 @@ export default function ListingSidebar({
         <p style={{ fontSize: "12px", lineHeight: "20px", color: "#807e7e" }} className="mb-4">
           Find available properties by states
         </p>
-        <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ fontSize: "14px", lineHeight: "32px", color: "#305e82" }}>
-          {states.map((s) => (
-            <Link key={s} href={`/search?state=${s.toLowerCase()}`} className="hover:underline whitespace-nowrap">
-              {s}
-            </Link>
-          ))}
-        </div>
+        <SidebarStates states={states} listingType={listingType} />
       </div>
 
       {/* Other Related Properties — bullet list, all blue */}
@@ -88,7 +114,7 @@ export default function ListingSidebar({
           {otherCategories.map((c) => (
             <li key={c} className="flex items-start gap-2 min-w-0" style={{ fontSize: "14px", lineHeight: "24px", color: "#305e82" }}>
               <span className="shrink-0">•</span>
-              <Link href="#" className="hover:underline break-words min-w-0">
+              <Link href={relatedHref(c, listingType)} className="hover:underline break-words min-w-0">
                 {c}
               </Link>
             </li>

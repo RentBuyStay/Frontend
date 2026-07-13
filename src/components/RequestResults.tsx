@@ -103,11 +103,7 @@ export default function RequestResults() {
 
   return (
     <div className="flex flex-col gap-6 min-w-0">
-      <ListingsHeader
-        title="Property Requests"
-        count={count}
-        sortOptions={["Newest", "Budget: Low to High", "Budget: High to Low"]}
-      />
+      <ListingsHeader title="Property Requests" count={count} />
 
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

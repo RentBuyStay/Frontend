@@ -1,13 +1,16 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useGetActivePropertiesQuery } from "@/services/propertyApi";
+import { useCallback } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useGetActivePropertiesQuery, type PropertyQuery } from "@/services/propertyApi";
+import { pageTotal } from "@/services/types";
 import { toListingCard } from "@/lib/propertyMap";
 import ListingCard from "./ListingCard";
-import ListingsHeader from "./ListingsHeader";
+import ListingsHeader, { type SortValue } from "./ListingsHeader";
 import Pagination from "./Pagination";
 
 const PAGE_SIZE = 10;
+const SORTS: SortValue[] = ["newest", "priceAsc", "priceDesc"];
 
 /**
  * Left column of the listing pages — reads the search/filter params from the URL
@@ -23,6 +26,8 @@ export default function ListingResults({
   title: string;
 }) {
   const sp = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const num = (k: string) => {
     const v = sp.get(k);
     return v ? Number(v) : undefined;
@@ -31,6 +36,22 @@ export default function ListingResults({
   const serviced = sp.get("serviced");
   const shared = sp.get("shared");
   const tri = (v: string | null) => (v === "yes" || v === "furnished" ? true : v === "no" || v === "unfurnished" ? false : undefined);
+
+  const sortParam = sp.get("sort") as SortValue | null;
+  const sort: SortValue = sortParam && SORTS.includes(sortParam) ? sortParam : "newest";
+  const page = Math.max(1, num("page") ?? 1);
+
+  // Update a URL param and push (resets to page 1 when the filter/sort changes).
+  const setParam = useCallback(
+    (key: string, value: string | null, resetPage = true) => {
+      const params = new URLSearchParams(sp.toString());
+      if (value == null || value === "") params.delete(key);
+      else params.set(key, value);
+      if (resetPage) params.delete("page");
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [sp, router, pathname],
+  );
 
   const { data, isLoading, isError } = useGetActivePropertiesQuery({
     listingType,
@@ -45,22 +66,31 @@ export default function ListingResults({
     isServiced: tri(serviced),
     isShared: tri(shared),
     listedWithinDays: num("listedWithinDays"),
+    sort,
+    page: page - 1, // backend is 0-indexed
     size: PAGE_SIZE,
-  });
+  } satisfies PropertyQuery);
 
   // Public list — only show approved listings.
   const items = (data?.content ?? []).filter((p) => p.status === "ACTIVE");
-  const total = data?.totalElements ?? 0;
+  const total = pageTotal(data);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const to = (page - 1) * PAGE_SIZE + items.length;
   const count = isLoading
     ? "Loading…"
     : total > 0
-      ? `Showing 1 - ${items.length} of ${total}`
+      ? `Showing ${from} - ${to} of ${total}`
       : "No properties found";
 
   return (
     <div className="flex flex-col gap-6 min-w-0">
-      <ListingsHeader title={title} count={count} />
+      <ListingsHeader
+        title={title}
+        count={count}
+        sort={sort}
+        onSortChange={(v) => setParam("sort", v === "newest" ? null : v)}
+      />
 
       {isLoading ? (
         <div className="flex flex-col gap-6">
@@ -86,7 +116,11 @@ export default function ListingResults({
 
       {totalPages > 1 && (
         <div className="mt-6">
-          <Pagination current={1} totalPages={totalPages} />
+          <Pagination
+            current={page}
+            totalPages={totalPages}
+            onChange={(p) => setParam("page", p <= 1 ? null : String(p), false)}
+          />
         </div>
       )}
     </div>
