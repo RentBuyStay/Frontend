@@ -8,24 +8,10 @@ import type { Map as LeafletMap, Marker as LeafletMarker } from "leaflet";
 export type PickedPlace = { lat: number; lng: number; label: string; state?: string; city?: string };
 
 const NIGERIA_CENTER: [number, number] = [9.082, 8.6753];
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-/** Reverse-geocode a point to a human label + state/city — Mapbox when configured,
- *  otherwise the free OpenStreetMap geocoder. */
+/** Reverse-geocode a point to a human label + state/city via OpenStreetMap. */
 async function reverseGeocode(lat: number, lng: number): Promise<PickedPlace> {
   try {
-    if (MAPBOX_TOKEN) {
-      const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&language=en&limit=1&types=neighborhood,locality,place,region`,
-      );
-      const j = await res.json();
-      const f = j.features?.[0];
-      const ctx: { id: string; text: string }[] = f?.context ?? [];
-      const city = f?.text || undefined;
-      const state = ctx.find((c) => c.id?.startsWith("region"))?.text?.replace(/ State$/i, "");
-      const label = [city, state].filter(Boolean).join(", ") || f?.place_name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-      return { lat, lng, label, state, city };
-    }
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&zoom=14&addressdetails=1&lat=${lat}&lon=${lng}`,
       { headers: { "Accept-Language": "en" } },
