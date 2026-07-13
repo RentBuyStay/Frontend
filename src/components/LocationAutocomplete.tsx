@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Search } from "lucide-react";
 
 type Suggestion = { label: string; value: string };
 
@@ -60,6 +61,7 @@ export default function LocationAutocomplete({
     }
     let cancelled = false;
     setLoading(true);
+    setOpen(true); // show the panel immediately (spinner → results or free-text)
     /* eslint-enable react-hooks/set-state-in-effect */
     const t = setTimeout(async () => {
       try {
@@ -79,7 +81,7 @@ export default function LocationAutocomplete({
           }
         }
         setResults(sugg);
-        setOpen(sugg.length > 0);
+        setOpen(true);
       } catch {
         if (!cancelled) setResults([]);
       } finally {
@@ -126,6 +128,14 @@ export default function LocationAutocomplete({
     setOpen(false);
   };
 
+  // Search exactly what was typed (for places OSM doesn't know — e.g. a specific
+  // street). Keeps the typed value and triggers the search.
+  const searchTyped = () => {
+    skipNext.current = true;
+    setOpen(false);
+    onEnter?.();
+  };
+
   return (
     <>
       <input
@@ -164,8 +174,29 @@ export default function LocationAutocomplete({
                 </button>
               </li>
             ))}
+
             {loading && results.length === 0 && (
               <li className="px-4 py-2.5 text-[13px] text-[#807e7e]">Searching…</li>
+            )}
+
+            {!loading && results.length === 0 && (
+              <li className="px-4 pt-2 pb-1 text-[12px] text-[#807e7e]">No place matched — search it as a keyword:</li>
+            )}
+
+            {/* Always let the user search exactly what they typed. */}
+            {!loading && value.trim().length >= 3 && (
+              <li className={results.length ? "border-t border-[#f0f0f0] mt-1 pt-1" : ""}>
+                <button
+                  type="button"
+                  onMouseDown={(e) => { e.preventDefault(); searchTyped(); }}
+                  className="w-full text-left px-4 py-2.5 hover:bg-[#f6f9fc] flex items-center gap-2"
+                >
+                  <Search size={16} className="text-[#305e82] shrink-0" />
+                  <span className="text-[13px] text-[#121212]">
+                    Search “<span className="font-medium">{value.trim()}</span>”
+                  </span>
+                </button>
+              </li>
             )}
           </ul>,
           document.body,
