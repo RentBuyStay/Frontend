@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import SearchBar from "@/components/SearchBar";
+import HeroCount from "@/components/HeroCount";
+
+const TAB_LISTING_TYPE: Record<string, "BUY" | "RENT" | "SHORTLET"> = {
+  Buy: "BUY",
+  Rent: "RENT",
+  Shortlet: "SHORTLET",
+};
 
 // Shared full-viewport hero for the for-sale / for-rent / shortlet listing pages.
 // Identical layout across all three — only the image, heading word, subtitle copy
@@ -47,7 +54,20 @@ export default function ListingHero({
                   )}
                 </h1>
                 <p className="text-white text-[14px] leading-[24px] md:text-[16px] md:leading-[32px]" style={{ fontWeight: 400, letterSpacing: "-0.02em" }}>
-                  {subtitle}
+                  {subtitle.includes("{count}") ? (
+                    (() => {
+                      const [before, after] = subtitle.split("{count}");
+                      return (
+                        <>
+                          {before}
+                          <HeroCount listingType={TAB_LISTING_TYPE[defaultTab]} />
+                          {after}
+                        </>
+                      );
+                    })()
+                  ) : (
+                    subtitle
+                  )}
                 </p>
               </div>
             </div>

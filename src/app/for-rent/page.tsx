@@ -52,7 +52,7 @@ export default function ForRentPage() {
         imageAlt="Properties for Rent"
         headingSuffix="Rent"
         defaultTab="Rent"
-        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have 25,141 available flats, houses, and commercial property for rent in Nigeria. Refine your property search by price, number of beds and type of property, etc."
+        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have {count} available flats, houses, and commercial property for rent in Nigeria. Refine your property search by price, number of beds and type of property, etc."
       />
 
       {/* LISTINGS + SIDEBAR */}

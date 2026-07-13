@@ -51,7 +51,7 @@ export default function ShortletPage() {
         imageAlt="Shortlet Apartments"
         headingSuffix="Shortlet"
         defaultTab="Shortlet"
-        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have 21,141 available flats, houses, and commercial property for shortlet in Nigeria. Refine your property search by price, number of beds and type of property, etc."
+        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have {count} available flats, houses, and commercial property for shortlet in Nigeria. Refine your property search by price, number of beds and type of property, etc."
       />
 
       {/* LISTINGS + SIDEBAR */}

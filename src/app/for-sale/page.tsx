@@ -53,7 +53,7 @@ export default function ForSalePage() {
         imageAlt="Properties for Sale"
         headingSuffix="Sale"
         defaultTab="Buy"
-        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have 21,141 available flats, houses, land and commercial property for sale in Nigeria. Refine your property search by price, number of beds and type of property, etc."
+        subtitle="The properties have been listed by verified estate agents who can be contacted using the contact information provided for each property listing. We have {count} available flats, houses, land and commercial property for sale in Nigeria. Refine your property search by price, number of beds and type of property, etc."
       />
 
       {/* ── LISTINGS + SIDEBAR ── */}
