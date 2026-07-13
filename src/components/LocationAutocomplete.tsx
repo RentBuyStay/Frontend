@@ -37,7 +37,7 @@ export default function LocationAutocomplete({
   const [results, setResults] = useState<Suggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const [pos, setPos] = useState<{ left: number; width: number; top?: number; bottom?: number; maxHeight: number } | null>(null);
   const [mounted, setMounted] = useState(false);
   const skipNext = useRef(false); // don't re-search right after a selection
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -99,7 +99,17 @@ export default function LocationAutocomplete({
     if (!open) return;
     const update = () => {
       const r = inputRef.current?.getBoundingClientRect();
-      if (r) setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+      if (!r) return;
+      const GAP = 6;
+      const spaceBelow = window.innerHeight - r.bottom - GAP;
+      const spaceAbove = r.top - GAP;
+      // Flip the panel above the input when there isn't room below it (e.g. the
+      // hero search bar sitting near the bottom of the viewport).
+      if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+        setPos({ left: r.left, width: r.width, bottom: window.innerHeight - r.top + GAP, maxHeight: Math.min(300, spaceAbove) });
+      } else {
+        setPos({ left: r.left, width: r.width, top: r.bottom + GAP, maxHeight: Math.min(300, spaceBelow) });
+      }
     };
     update();
     window.addEventListener("scroll", update, true);
@@ -157,7 +167,7 @@ export default function LocationAutocomplete({
           <ul
             ref={listRef}
             className="bg-white rounded-[12px] border border-[#ededed] overflow-y-auto py-1"
-            style={{ position: "fixed", top: pos.top, left: pos.left, width: pos.width, maxHeight: 280, zIndex: 10050, boxShadow: "0 12px 32px rgba(0,0,0,0.14)" }}
+            style={{ position: "fixed", top: pos.top, bottom: pos.bottom, left: pos.left, width: pos.width, maxHeight: pos.maxHeight, zIndex: 10050, boxShadow: "0 12px 32px rgba(0,0,0,0.14)" }}
           >
             {results.map((s, i) => (
               <li key={`${s.value}-${i}`}>
