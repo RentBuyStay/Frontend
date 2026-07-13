@@ -6,13 +6,56 @@ import { Search } from "lucide-react";
 
 type Suggestion = { label: string; value: string };
 
+// Mapbox has much better Nigerian street/estate coverage than the free OSM
+// geocoder. It's used automatically when this token is set (Vercel env), and we
+// fall back to the free Nominatim otherwise — so nothing breaks without a key.
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+
 /** Build a concise filter value (area/city) from a Nominatim result. */
-function toValue(r: { display_name: string; address?: Record<string, string> }): string {
+function nominatimValue(r: { display_name: string; address?: Record<string, string> }): string {
   const a = r.address ?? {};
   return (
     a.suburb || a.neighbourhood || a.quarter || a.city || a.town || a.village || a.county ||
     r.display_name.split(",")[0]
   ).trim();
+}
+
+/** Forward-geocode a query to suggestions, preferring Mapbox when configured. */
+async function geocode(q: string): Promise<Suggestion[]> {
+  const seen = new Set<string>();
+  const out: Suggestion[] = [];
+
+  if (MAPBOX_TOKEN) {
+    const url =
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json` +
+      `?access_token=${MAPBOX_TOKEN}&country=ng&autocomplete=true&language=en&limit=6` +
+      `&types=region,place,district,locality,neighborhood,address,poi`;
+    const res = await fetch(url);
+    const j = await res.json();
+    for (const f of (j.features ?? []) as { text?: string; place_name?: string }[]) {
+      const value = (f.text || f.place_name || "").trim();
+      const label = f.place_name || value;
+      if (value && !seen.has(value.toLowerCase())) {
+        seen.add(value.toLowerCase());
+        out.push({ label, value });
+      }
+    }
+    return out;
+  }
+
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=ng&limit=6&q=${encodeURIComponent(q)}`,
+    { headers: { "Accept-Language": "en" } },
+  );
+  const arr: { display_name: string; address?: Record<string, string> }[] = await res.json();
+  for (const r of arr) {
+    const v = nominatimValue(r);
+    if (v && !seen.has(v.toLowerCase())) {
+      seen.add(v.toLowerCase());
+      out.push({ label: r.display_name, value: v });
+    }
+  }
+  return out;
 }
 
 /**
@@ -65,21 +108,8 @@ export default function LocationAutocomplete({
     /* eslint-enable react-hooks/set-state-in-effect */
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=ng&limit=6&q=${encodeURIComponent(q)}`,
-          { headers: { "Accept-Language": "en" } },
-        );
-        const arr: { display_name: string; address?: Record<string, string> }[] = await res.json();
+        const sugg = await geocode(q);
         if (cancelled) return;
-        const seen = new Set<string>();
-        const sugg: Suggestion[] = [];
-        for (const r of arr) {
-          const v = toValue(r);
-          if (v && !seen.has(v.toLowerCase())) {
-            seen.add(v.toLowerCase());
-            sugg.push({ label: r.display_name, value: v });
-          }
-        }
         setResults(sugg);
         setOpen(true);
       } catch {
