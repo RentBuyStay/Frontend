@@ -2,14 +2,20 @@
 
 import Link from "next/link";
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
-import { categorySearchHref, classForLabel, classifyType } from "@/lib/propertyTypeGroups";
+import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 import type { SidebarPropertyType } from "./ListingSidebar";
 
+const CATEGORY_PATH: Record<string, string> = {
+  BUY: "/for-sale",
+  RENT: "/for-rent",
+  SHORTLET: "/shortlet",
+};
+
 /**
- * "Property Type | Property Count" rows of the listing-page sidebar.
- * Shows live grouped counts from GET /properties/facets when available, and
- * falls back to the static Figma reference rows when the facets are empty
- * (e.g. before the backend search index is populated) — keeping the UI intact.
+ * "Property Type | Property Count" rows of the listing-page sidebar — the actual
+ * property types (and counts) the backend returns from GET /properties/facets.
+ * Falls back to the static reference rows only when the facets are empty
+ * (e.g. before any listings exist) so the section is never blank.
  */
 export default function SidebarTypeCounts({
   listingType,
@@ -19,15 +25,27 @@ export default function SidebarTypeCounts({
   fallback: SidebarPropertyType[];
 }) {
   const { data } = useGetPropertyFacetsQuery(listingType ? { listingType } : undefined);
+  const { data: types } = useGetPropertyTypesQuery();
+
+  // Map a property-type display name → its numeric id, so a row can link to a
+  // "?type=<id>" filtered search.
+  const idByName = new Map<string, number>();
+  for (const t of types ?? []) idByName.set(t.displayName.toLowerCase(), t.id);
 
   const live = data?.byPropertyType ?? [];
-  // Always keep the curated category rows; bucket the live facet counts into them
-  // (0 when a category has no listings yet) so no row ever disappears.
-  const rows: SidebarPropertyType[] = fallback.map((cat) => {
-    const cls = classForLabel(cat.name);
-    const count = live.reduce((sum, f) => (classifyType(f.id) === cls ? sum + f.count : sum), 0);
-    return { name: cat.name, count };
-  });
+  const basePath = listingType ? CATEGORY_PATH[listingType] : "/search";
+
+  // Real backend rows when we have them; otherwise the curated fallback (no link).
+  const rows = live.length
+    ? live.map((f) => ({ name: f.id, count: f.count, id: idByName.get(f.id.toLowerCase()) }))
+    : fallback.map((f) => ({ name: f.name, count: f.count, id: undefined as number | undefined }));
+
+  const hrefFor = (id?: number) => {
+    const params = new URLSearchParams();
+    if (id) params.set("type", String(id));
+    if (listingType) params.set("listingType", listingType);
+    return `${basePath}?${params.toString()}`;
+  };
 
   return (
     <div className="flex flex-col">
@@ -41,7 +59,7 @@ export default function SidebarTypeCounts({
       {rows.map((t) => (
         <Link
           key={t.name}
-          href={categorySearchHref(t.name, { listingType })}
+          href={hrefFor(t.id)}
           className="flex items-center justify-between py-1.5 hover:underline"
           style={{ fontSize: "14px", color: "#305e82" }}
         >
