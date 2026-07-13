@@ -53,6 +53,7 @@ export default function FilterModal({
   // Portal to <body> so the modal escapes any ancestor stacking context (e.g. the
   // hero's z-10 content wrapper, which otherwise lets the navbar paint over it).
   const [mounted, setMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   // Lock body scroll when modal is open + ESC to close
@@ -68,6 +69,46 @@ export default function FilterModal({
       document.removeEventListener("keydown", onKey);
     };
   }, [open, onClose]);
+
+  // Seed the modal from the current URL each time it opens, so it reflects the
+  // active filters — otherwise applying would silently wipe filters set elsewhere.
+  useEffect(() => {
+    if (!open) return;
+    const p = new URLSearchParams(window.location.search);
+    const listedLabel = (d: string | null) => {
+      const n = d ? Number(d) : undefined;
+      return n === 1 ? "Last 24 hours" : n === 7 ? "Last 7 days" : n === 30 ? "Last 30 days" : "Anytime";
+    };
+    const f = p.get("furnished");
+    const s = p.get("serviced");
+    const sh = p.get("shared");
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setLoc(p.get("q") ?? "");
+    setActiveType(p.get("type") ?? "All");
+    setActiveBed(p.get("beds") ?? "");
+    setMinP(p.get("minPrice") ?? "");
+    setMaxP(p.get("maxPrice") ?? "");
+    setFurn(f === "furnished" ? "furnished" : f === "unfurnished" ? "unfurnished" : "");
+    setServ(s === "yes" ? "serviced" : s === "no" ? "unserviced" : "");
+    setShared(sh === "yes" ? "yes" : sh === "no" ? "no" : "");
+    setListed(listedLabel(p.get("listedWithinDays")));
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, [open]);
+
+  function applyNow() {
+    onApply?.({
+      q: loc.trim() || undefined,
+      propertyTypeId: activeType !== "All" ? Number(activeType) : undefined,
+      bedrooms: activeBed ? Number(activeBed) : undefined,
+      minPrice: minP ? Number(minP) : undefined,
+      maxPrice: maxP ? Number(maxP) : undefined,
+      isFurnished: furn === "furnished" ? true : furn === "unfurnished" ? false : undefined,
+      isServiced: serv === "serviced" ? true : serv === "unserviced" ? false : undefined,
+      isShared: shared === "yes" ? true : shared === "no" ? false : undefined,
+      listedWithinDays: LISTED_DAYS[listed],
+    });
+    onClose();
+  }
 
   if (!open || !mounted) return null;
 
@@ -98,28 +139,16 @@ export default function FilterModal({
             <label style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212", letterSpacing: "-0.02em" }}>
               Location
             </label>
-            <div className="bg-[#F6F6F6] rounded-[12px] h-12 flex items-center justify-between px-4 gap-3">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <Search size={18} className="text-[#807e7e] shrink-0" />
-                <input
-                  type="text"
-                  value={loc}
-                  onChange={(e) => setLoc(e.target.value)}
-                  placeholder="Search address, neighbourhood..."
-                  className="flex-1 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
-                />
-              </div>
-              <button className="flex items-center gap-1.5 shrink-0" style={{ color: "#305e82", fontSize: "14px", fontWeight: 500 }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#305e82" strokeWidth="1.8">
-                  <circle cx="12" cy="12" r="9" />
-                  <circle cx="12" cy="12" r="3" />
-                  <line x1="12" y1="2" x2="12" y2="6" />
-                  <line x1="12" y1="18" x2="12" y2="22" />
-                  <line x1="2" y1="12" x2="6" y2="12" />
-                  <line x1="18" y1="12" x2="22" y2="12" />
-                </svg>
-                <span className="hidden md:inline">Mark location on map</span>
-              </button>
+            <div className="bg-[#F6F6F6] rounded-[12px] h-12 flex items-center px-4 gap-2">
+              <Search size={18} className="text-[#807e7e] shrink-0" />
+              <input
+                type="text"
+                value={loc}
+                onChange={(e) => setLoc(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { applyNow(); } }}
+                placeholder="Search address, area or keyword…"
+                className="flex-1 text-sm outline-none bg-transparent placeholder:text-[#807e7e] text-[#121212]"
+              />
             </div>
           </div>
 
@@ -289,20 +318,7 @@ export default function FilterModal({
             Reset
           </button>
           <button
-            onClick={() => {
-              onApply?.({
-                q: loc.trim() || undefined,
-                propertyTypeId: activeType !== "All" ? Number(activeType) : undefined,
-                bedrooms: activeBed ? Number(activeBed) : undefined,
-                minPrice: minP ? Number(minP) : undefined,
-                maxPrice: maxP ? Number(maxP) : undefined,
-                isFurnished: furn === "furnished" ? true : furn === "unfurnished" ? false : undefined,
-                isServiced: serv === "serviced" ? true : serv === "unserviced" ? false : undefined,
-                isShared: shared === "yes" ? true : shared === "no" ? false : undefined,
-                listedWithinDays: LISTED_DAYS[listed],
-              });
-              onClose();
-            }}
+            onClick={applyNow}
             className="flex-1 md:flex-none flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
             style={{
               height: "48px",
