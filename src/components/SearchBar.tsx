@@ -69,25 +69,33 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           (t) => availableTypeNames.has(t.displayName) || String(t.id) === propertyType,
         );
 
-  // On /search, seed the bar from the current URL so re-applying preserves
-  // (rather than wipes) filters the bar doesn't otherwise reflect.
+  // Seed the bar from the current URL once on mount (both modes) so applying a
+  // single control preserves — rather than wipes — the other active filters
+  // (state, city, sort…). Read from window on the client to avoid an SSR
+  // hydration mismatch; this is a legitimate one-time external-state sync.
   useEffect(() => {
-    if (!inPlace) return;
     const p = new URLSearchParams(window.location.search);
+    /* eslint-disable react-hooks/set-state-in-effect */
     setQuery(p.get("q") ?? "");
     setPropertyType(p.get("type") ?? "");
     setBedrooms(p.get("beds") ?? "");
     setMinPrice(p.get("minPrice") ?? "");
     setMaxPrice(p.get("maxPrice") ?? "");
     setFurnished(p.get("furnished") ?? "");
-    const lt = p.get("listingType");
-    setActiveTab(lt ? ((lt.charAt(0) + lt.slice(1).toLowerCase()) as TabOrAll) : "All");
+    if (inPlace) {
+      const lt = p.get("listingType");
+      setActiveTab(lt ? ((lt.charAt(0) + lt.slice(1).toLowerCase()) as TabOrAll) : "All");
+    }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [inPlace]);
 
-  // /search: build the URL from the current bar values (plus any immediate
-  // override from the control that just changed) and navigate in place. Dropdowns
-  // call this directly so a selection applies immediately — no extra "Search" click.
-  function applyInPlace(
+  // Where results live: /search when in place, else the active tab's listing page.
+  const basePath = (tab: TabOrAll) => (inPlace ? "/search" : tabRoutes[tab as Tab] ?? "/search");
+
+  // Apply the bar's values (plus any override from the control that just changed)
+  // by merging into the current URL and navigating — so ANY change re-queries
+  // immediately, no separate "Search" click needed, and untouched filters persist.
+  function apply(
     o: Partial<{ query: string; propertyType: string; bedrooms: string; minPrice: string; maxPrice: string; furnished: string; activeTab: TabOrAll }> = {},
   ) {
     const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
@@ -99,55 +107,36 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     setOrDel("minPrice", v.minPrice);
     setOrDel("maxPrice", v.maxPrice);
     setOrDel("furnished", v.furnished);
-    if (v.activeTab !== "All") params.set("listingType", String(v.activeTab).toUpperCase());
-    else params.delete("listingType");
-    router.push(`/search?${params.toString()}`);
+    if (inPlace) {
+      if (v.activeTab !== "All") params.set("listingType", String(v.activeTab).toUpperCase());
+      else params.delete("listingType");
+    }
+    params.delete("page"); // any filter change returns to page 1
+    router.push(`${basePath(v.activeTab)}?${params.toString()}`, { scroll: false });
   }
 
   function handleSearch() {
-    if (inPlace) {
-      applyInPlace();
-      return;
-    }
-    const params = new URLSearchParams();
-    if (query) params.set("q", query);
-    if (propertyType) params.set("type", propertyType);
-    if (bedrooms) params.set("beds", bedrooms);
-    if (minPrice) params.set("minPrice", minPrice);
-    if (maxPrice) params.set("maxPrice", maxPrice);
-    if (furnished) params.set("furnished", furnished);
-    router.push(`${tabRoutes[activeTab as Tab]}?${params.toString()}`);
+    apply();
   }
 
   // FilterModal "Apply" → navigate to the active tab's listing page with its filters
   // (or refine the /search results in place when inPlace).
   function applyModalFilters(f: AppliedFilters) {
-    if (inPlace) {
-      const params = new URLSearchParams(window.location.search);
-      const setOrDel = (k: string, v?: string) => (v ? params.set(k, v) : params.delete(k));
-      setOrDel("q", f.q);
-      setOrDel("type", f.propertyTypeId != null ? String(f.propertyTypeId) : "");
-      setOrDel("beds", f.bedrooms != null ? String(f.bedrooms) : "");
-      setOrDel("minPrice", f.minPrice != null ? String(f.minPrice) : "");
-      setOrDel("maxPrice", f.maxPrice != null ? String(f.maxPrice) : "");
-      setOrDel("furnished", f.isFurnished != null ? (f.isFurnished ? "furnished" : "unfurnished") : "");
-      setOrDel("serviced", f.isServiced != null ? (f.isServiced ? "yes" : "no") : "");
-      setOrDel("shared", f.isShared != null ? (f.isShared ? "yes" : "no") : "");
-      setOrDel("listedWithinDays", f.listedWithinDays != null ? String(f.listedWithinDays) : "");
-      router.push(`/search?${params.toString()}`);
-      return;
-    }
-    const params = new URLSearchParams();
-    if (f.q) params.set("q", f.q);
-    if (f.propertyTypeId != null) params.set("type", String(f.propertyTypeId));
-    if (f.bedrooms != null) params.set("beds", String(f.bedrooms));
-    if (f.minPrice != null) params.set("minPrice", String(f.minPrice));
-    if (f.maxPrice != null) params.set("maxPrice", String(f.maxPrice));
-    if (f.isFurnished != null) params.set("furnished", f.isFurnished ? "furnished" : "unfurnished");
-    if (f.isServiced != null) params.set("serviced", f.isServiced ? "yes" : "no");
-    if (f.isShared != null) params.set("shared", f.isShared ? "yes" : "no");
-    if (f.listedWithinDays != null) params.set("listedWithinDays", String(f.listedWithinDays));
-    router.push(`${tabRoutes[activeTab as Tab]}?${params.toString()}`);
+    // Merge into the current URL (both modes) so the modal refines rather than
+    // replaces existing filters (e.g. a state selected from the sidebar).
+    const params = new URLSearchParams(window.location.search);
+    const setOrDel = (k: string, v?: string) => (v ? params.set(k, v) : params.delete(k));
+    setOrDel("q", f.q);
+    setOrDel("type", f.propertyTypeId != null ? String(f.propertyTypeId) : "");
+    setOrDel("beds", f.bedrooms != null ? String(f.bedrooms) : "");
+    setOrDel("minPrice", f.minPrice != null ? String(f.minPrice) : "");
+    setOrDel("maxPrice", f.maxPrice != null ? String(f.maxPrice) : "");
+    setOrDel("furnished", f.isFurnished != null ? (f.isFurnished ? "furnished" : "unfurnished") : "");
+    setOrDel("serviced", f.isServiced != null ? (f.isServiced ? "yes" : "no") : "");
+    setOrDel("shared", f.isShared != null ? (f.isShared ? "yes" : "no") : "");
+    setOrDel("listedWithinDays", f.listedWithinDays != null ? String(f.listedWithinDays) : "");
+    params.delete("page");
+    router.push(`${basePath(activeTab)}?${params.toString()}`, { scroll: false });
   }
 
   const selectClass =
@@ -158,7 +147,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
       <FilterField label="Property Type">
         <select
           value={propertyType}
-          onChange={(e) => { setPropertyType(e.target.value); if (inPlace) applyInPlace({ propertyType: e.target.value }); }}
+          onChange={(e) => { setPropertyType(e.target.value); apply({ propertyType: e.target.value }); }}
           className={selectClass}
         >
           <option value="">All types</option>
@@ -170,37 +159,43 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
       <FilterField label="Bedrooms">
         <select
           value={bedrooms}
-          onChange={(e) => { setBedrooms(e.target.value); if (inPlace) applyInPlace({ bedrooms: e.target.value }); }}
+          onChange={(e) => { setBedrooms(e.target.value); apply({ bedrooms: e.target.value }); }}
           className={selectClass}
         >
           <option value="">Any</option>
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <option key={n} value={n}>{n}+</option>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+            <option key={n} value={n}>{n} {n === 1 ? "Bedroom" : "Bedrooms"}</option>
           ))}
         </select>
       </FilterField>
       <FilterField label="Min. Price">
         <input
           type="text"
+          inputMode="numeric"
           placeholder="No min"
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
+          onBlur={() => apply()}
+          onKeyDown={(e) => e.key === "Enter" && apply()}
           className="flex-1 min-w-0 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
         />
       </FilterField>
       <FilterField label="Max Price">
         <input
           type="text"
+          inputMode="numeric"
           placeholder="No max"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
+          onBlur={() => apply()}
+          onKeyDown={(e) => e.key === "Enter" && apply()}
           className="flex-1 min-w-0 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
         />
       </FilterField>
       <FilterField label="Furnished">
         <select
           value={furnished}
-          onChange={(e) => { setFurnished(e.target.value); if (inPlace) applyInPlace({ furnished: e.target.value }); }}
+          onChange={(e) => { setFurnished(e.target.value); apply({ furnished: e.target.value }); }}
           className={selectClass}
         >
           <option value="">Any</option>
@@ -222,7 +217,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <div className="relative flex items-center bg-[#F6F6F6] rounded-[12px] w-[93px] h-12 pl-4 pr-3 shrink-0">
             <select
               value={activeTab}
-              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); if (inPlace) applyInPlace({ activeTab: v }); }}
+              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); apply({ activeTab: v }); }}
               className="appearance-none w-full bg-transparent outline-none cursor-pointer text-[12px] text-[#121212]"
               style={{ letterSpacing: "-0.02em" }}
             >
@@ -271,7 +266,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center pl-4 pr-9">
             <select
               value={activeTab}
-              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); if (inPlace) applyInPlace({ activeTab: v }); }}
+              onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); apply({ activeTab: v }); }}
               className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer"
               style={{ letterSpacing: "-0.02em" }}
             >
