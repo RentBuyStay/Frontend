@@ -124,19 +124,37 @@ export default function ListingResults({
       ) : items.length === 0 ? (
         showFallback ? (
           <div className="flex flex-col gap-6">
-            <div className="rounded-[16px] border border-[#f6f6f6] bg-[#fafafa] px-5 py-4 flex items-center gap-3">
-              <span aria-hidden className="text-[18px]">💡</span>
-              <p className="text-[14px] text-[#807e7e]">
-                Nothing matched those exact filters. Here are other available properties you might like —{" "}
-                <button
-                  type="button"
-                  onClick={() => router.push(pathname, { scroll: false })}
-                  className="text-[#305e82] font-medium hover:underline"
+            <div className="rounded-[16px] border border-[#ededed] bg-white px-5 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  aria-hidden
+                  className="shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
+                  style={{ background: "rgba(48,94,130,0.08)" }}
                 >
-                  clear filters
-                </button>
-                .
-              </p>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="7" stroke="#305E82" strokeWidth="1.6" />
+                    <path d="M20 20L16.65 16.65" stroke="#305E82" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <div className="flex flex-col min-w-0">
+                  <p className="text-[14px] font-semibold text-[#121212]" style={{ letterSpacing: "-0.02em" }}>
+                    No exact matches
+                  </p>
+                  <p className="text-[13px] leading-[20px] text-[#807e7e]">
+                    Here are other available properties you might like.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => router.push(pathname, { scroll: false })}
+                className="shrink-0 self-start sm:self-auto inline-flex items-center gap-2 h-10 px-4 rounded-[12px] border border-[#ededed] text-[13px] font-medium text-[#305e82] hover:bg-[#f6f6f6] transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 6L18 18M18 6L6 18" stroke="#305E82" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+                Clear filters
+              </button>
             </div>
             {fallbackItems.map((p) => (
               <ListingCard key={p.id} listing={toListingCard(p)} tag={tag} />

@@ -111,11 +111,25 @@ export default function SearchResults() {
         ) : items.length === 0 ? (
           showFallback ? (
             <div className="flex flex-col gap-4">
-              <div className="rounded-[12px] border border-[#ededed] bg-white px-5 py-4 flex items-center gap-3">
-                <span aria-hidden className="text-[18px]">💡</span>
-                <p className="text-sm text-[#7f7e7e]">
-                  No properties matched your search{where}. Here are other available listings you might like.
-                </p>
+              <div className="rounded-[16px] border border-[#ededed] bg-white px-5 py-4 flex items-center gap-3">
+                <span
+                  aria-hidden
+                  className="shrink-0 flex items-center justify-center w-10 h-10 rounded-full"
+                  style={{ background: "rgba(48,94,130,0.08)" }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="7" stroke="#305E82" strokeWidth="1.6" />
+                    <path d="M20 20L16.65 16.65" stroke="#305E82" strokeWidth="1.6" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <div className="flex flex-col min-w-0">
+                  <p className="text-[14px] font-semibold text-[#121212]" style={{ letterSpacing: "-0.02em" }}>
+                    No exact matches{where}
+                  </p>
+                  <p className="text-[13px] leading-[20px] text-[#807e7e]">
+                    Here are other available listings you might like.
+                  </p>
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {fallbackItems.map((p) => (
