@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FilterModal, { type AppliedFilters } from "./FilterModal";
-import LocationAutocomplete from "./LocationAutocomplete";
 import { resolveLocationQuery } from "@/lib/locationQuery";
 import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
@@ -252,10 +251,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           </div>
           <div className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
             <Image src="/icons/hero-search.svg" alt="" width={16} height={16} className="shrink-0" />
-            <LocationAutocomplete
+            <input
+              type="text"
               value={query}
-              onChange={setQuery}
-              onEnter={handleSearch}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="Enter location, area or keyword..."
               className="flex-1 min-w-0 bg-transparent outline-none text-[#121212] text-[10px] placeholder:text-[rgba(128,126,126,0.75)]"
             />
@@ -299,10 +299,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           </div>
           <div className="flex items-center gap-2 flex-1 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
             <Image src="/icons/hero-search.svg" alt="" width={20} height={20} className="shrink-0" />
-            <LocationAutocomplete
+            <input
+              type="text"
               value={query}
-              onChange={setQuery}
-              onEnter={handleSearch}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="Enter location, area or keyword..."
               className="flex-1 min-w-0 text-[14px] outline-none text-[#121212] bg-transparent placeholder:text-[12px] placeholder:text-[rgba(128,126,126,0.75)]"
             />
