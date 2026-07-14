@@ -19,6 +19,19 @@ const NG_STATES = [
 // Longest names first so "Akwa Ibom" / "Cross River" match before any single token.
 const STATES_BY_LEN = [...NG_STATES].sort((a, b) => b.length - a.length);
 
+// Filler people type around a real location ("a 3 bedroom flat for rent in ...").
+// Stripped from the leftover text so a noisy sentence doesn't over-filter to zero.
+const NOISE_WORDS = new Set([
+  "a", "an", "the", "for", "in", "at", "on", "near", "around", "close", "to",
+  "of", "with", "and", "or", "my", "me", "i", "want", "need", "looking", "search",
+  "find", "get", "buy", "rent", "sale", "shortlet", "short", "stay", "lease",
+  "property", "properties", "home", "homes", "house", "houses", "flat", "flats",
+  "apartment", "apartments", "duplex", "bungalow", "room", "rooms", "bedroom",
+  "bedrooms", "bed", "beds", "bath", "baths", "bathroom", "bathrooms", "self",
+  "contain", "mini", "studio", "available", "cheap", "affordable", "luxury",
+  "new", "newly", "built", "serviced", "furnished", "please", "pls",
+]);
+
 function esc(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -29,29 +42,36 @@ export interface ResolvedLocation {
   state?: string;
 }
 
+// Drop noise words and digits so only meaningful area text survives as `q`.
+function distill(text: string): string {
+  return text
+    .split(/[\s,]+/)
+    .filter((w) => w && !/\d/.test(w) && !NOISE_WORDS.has(w.toLowerCase()))
+    .join(" ")
+    .trim();
+}
+
 export function resolveLocationQuery(raw: string): ResolvedLocation {
   const original = (raw ?? "").trim();
   if (!original) return { q: "" };
 
-  // Strip filler like "properties for rent in", "homes in", and the word "state".
-  const cleaned = original
-    .replace(/^\s*(propert(?:y|ies)|homes?|houses?|flats?|apartments?)\s+(for\s+\w+\s+)?in\s+/i, "")
-    .replace(/\bstate\b/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
+  // Users type anything ("a 3-bed flat for rent in Lagos state near Lekki"), so
+  // rather than matching fixed phrases we just scan the whole string: drop the
+  // word "state", then look for any Nigerian state token anywhere in the text.
+  const cleaned = original.replace(/\bstate\b/gi, " ").replace(/\s+/g, " ").trim();
   const lower = cleaned.toLowerCase();
   const match = STATES_BY_LEN.find((st) =>
     new RegExp(`(^|[\\s,])${esc(st.toLowerCase())}([\\s,]|$)`).test(lower),
   );
 
-  if (!match) return { q: original };
+  // No state named → keep the distilled keyword (fall back to the raw text if
+  // distilling removed everything, so a pure keyword search still runs).
+  if (!match) return { q: distill(original) || original };
 
-  // Remove the matched state; any remaining text is a narrower area/keyword.
-  const remainder = cleaned
-    .replace(new RegExp(`(^|[\\s,])${esc(match)}([\\s,]|$)`, "i"), " ")
-    .replace(/[,\s]+/g, " ")
-    .trim();
-
-  return { state: match, q: remainder };
+  // State found → filter by it exactly; keep any remaining area word as `q`.
+  const remainder = cleaned.replace(
+    new RegExp(`(^|[\\s,])${esc(match)}([\\s,]|$)`, "i"),
+    " ",
+  );
+  return { state: match, q: distill(remainder) };
 }

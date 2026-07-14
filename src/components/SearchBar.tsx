@@ -105,9 +105,9 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
     const params = new URLSearchParams(window.location.search);
     const setOrDel = (k: string, val: string) => (val ? params.set(k, val) : params.delete(k));
-    // Route a location keyword (e.g. "Lagos State", "Properties in Lagos") to the
-    // exact `state` filter so it reliably matches; keep any leftover area as `q`.
-    // Only touch `state` when the user actually typed something, so a state chosen
+    // Users type anything — resolveLocationQuery scans the whole text for a state
+    // and routes it to the exact `state` filter (reliable), keeping any leftover
+    // area as `q`. Only touch `state` when something was typed, so a state chosen
     // from the sidebar (empty keyword) is preserved.
     if (v.query.trim()) {
       const resolved = resolveLocationQuery(v.query);
