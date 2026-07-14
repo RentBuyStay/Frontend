@@ -30,6 +30,7 @@ const NOISE_WORDS = new Set([
   "bedrooms", "bed", "beds", "bath", "baths", "bathroom", "bathrooms", "self",
   "contain", "mini", "studio", "available", "cheap", "affordable", "luxury",
   "new", "newly", "built", "serviced", "furnished", "please", "pls",
+  "nigeria", "naija", "ng", "area", "location", "place", "around",
 ]);
 
 function esc(s: string) {
@@ -42,13 +43,26 @@ export interface ResolvedLocation {
   state?: string;
 }
 
-// Drop noise words and digits so only meaningful area text survives as `q`.
-function distill(text: string): string {
-  return text
-    .split(/[\s,]+/)
-    .filter((w) => w && !/\d/.test(w) && !NOISE_WORDS.has(w.toLowerCase()))
-    .join(" ")
-    .trim();
+// Is this token a real-looking word rather than filler or gibberish? The backend
+// `q` is a contiguous-substring match, so a token must actually appear in a field
+// to hit — a mistyped "hhhh" never will and only causes a false "no match".
+function isMeaningful(w: string): boolean {
+  const lw = w.toLowerCase();
+  return (
+    w.length >= 2 &&
+    !/\d/.test(w) &&            // not a number ("3", "2bed")
+    !NOISE_WORDS.has(lw) &&     // not filler ("rent", "nigeria", …)
+    /[aeiou]/i.test(w) &&       // has a vowel → filters keyboard mash like "hhhh", "xzcv"
+    !/^(.)\1+$/.test(lw)        // not a single char repeated ("aaaa")
+  );
+}
+
+// Reduce free text to the single nearest keyword worth searching. People type
+// noise around the real place ("Lagos yaba hhhh"), and since `q` matches a whole
+// contiguous string, sending the phrase matches nothing — so we pick just the
+// first meaningful token (the location they led with) and drop the rest.
+function pickKeyword(text: string): string {
+  return text.split(/[\s,]+/).find(isMeaningful) ?? "";
 }
 
 export function resolveLocationQuery(raw: string): ResolvedLocation {
@@ -64,14 +78,15 @@ export function resolveLocationQuery(raw: string): ResolvedLocation {
     new RegExp(`(^|[\\s,])${esc(st.toLowerCase())}([\\s,]|$)`).test(lower),
   );
 
-  // No state named → keep the distilled keyword (fall back to the raw text if
-  // distilling removed everything, so a pure keyword search still runs).
-  if (!match) return { q: distill(original) || original };
+  // No state named → search the single nearest keyword (fall back to the raw
+  // text only if nothing meaningful was found, so an honest no-match still shows).
+  if (!match) return { q: pickKeyword(original) || original };
 
-  // State found → filter by it exactly; keep any remaining area word as `q`.
+  // State found → filter by it exactly, and narrow by the nearest remaining
+  // keyword (e.g. "Lagos yaba hhhh" → state=Lagos, q=yaba; the noise is dropped).
   const remainder = cleaned.replace(
     new RegExp(`(^|[\\s,])${esc(match)}([\\s,]|$)`, "i"),
     " ",
   );
-  return { state: match, q: distill(remainder) };
+  return { state: match, q: pickKeyword(remainder) };
 }
