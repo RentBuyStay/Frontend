@@ -148,11 +148,11 @@ export default function HomePage() {
 
       {/* ── HERO — Figma: rounded card 1392x934, 24px margin all sides, bg #F3FEFE, border-radius 25px ── */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
+        <div className="w-full px-4 py-4 md:px-6 md:py-6">
         <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)]">
 
-          {/* Background image — bleeds top/bottom (Figma position y=-21, height 976) */}
-          <div className="absolute inset-x-0 -top-[21px] h-[976px] z-0">
+          {/* Background image — fills the whole card at any size */}
+          <div className="absolute inset-0 z-0">
             <Image
               src="/images/hero-bg.png"
               alt="Luxury living room"
@@ -164,7 +164,7 @@ export default function HomePage() {
 
           {/* Black gradient overlay — Figma exact gradient */}
           <div
-            className="absolute inset-x-0 -top-[42px] h-[976px] z-[1]"
+            className="absolute inset-0 z-[1]"
             style={{
               background:
                 "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 12%, rgba(0,0,0,0.91) 17%, rgba(0,0,0,0.84) 31%, rgba(0,0,0,0.5) 66%, rgba(102,102,102,0) 96%)",

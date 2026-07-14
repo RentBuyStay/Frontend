@@ -33,8 +33,8 @@ export default function ListingHero({
 }) {
   return (
     <section className="bg-white">
-      <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
-        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[852px]">
+      <div className="w-full px-4 py-4 md:px-6 md:py-6">
+        <div className="relative rounded-[20px] md:rounded-[25px] overflow-hidden bg-[#F3FEFE] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)]">
           <div className="absolute inset-0 z-0">
             <Image src={image} alt={imageAlt} fill className="object-cover" priority />
             <div className="absolute inset-0 bg-black/55" />
