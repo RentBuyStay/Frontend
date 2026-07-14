@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FilterModal, { type AppliedFilters } from "./FilterModal";
 import LocationAutocomplete from "./LocationAutocomplete";
+import { resolveLocationQuery } from "@/lib/locationQuery";
 import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 import { useGetPropertyFacetsQuery } from "@/services/propertyApi";
 
@@ -77,7 +78,9 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     /* eslint-disable react-hooks/set-state-in-effect */
-    setQuery(p.get("q") ?? "");
+    // Show the active location in the box — the keyword `q` or, if the search was
+    // resolved to a state filter (e.g. sidebar or a "Lagos State" search), the state.
+    setQuery(p.get("q") || p.get("state") || "");
     setPropertyType(p.get("type") ?? "");
     setBedrooms(p.get("beds") ?? "");
     setMinPrice(p.get("minPrice") ?? "");
@@ -102,7 +105,19 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
     const params = new URLSearchParams(window.location.search);
     const setOrDel = (k: string, val: string) => (val ? params.set(k, val) : params.delete(k));
-    setOrDel("q", v.query);
+    // Route a location keyword (e.g. "Lagos State", "Properties in Lagos") to the
+    // exact `state` filter so it reliably matches; keep any leftover area as `q`.
+    // Only touch `state` when the user actually typed something, so a state chosen
+    // from the sidebar (empty keyword) is preserved.
+    if (v.query.trim()) {
+      const resolved = resolveLocationQuery(v.query);
+      setOrDel("q", resolved.q);
+      setOrDel("state", resolved.state ?? "");
+    } else {
+      // Cleared the box → clear the whole location (keyword + state).
+      params.delete("q");
+      params.delete("state");
+    }
     setOrDel("type", v.propertyType);
     setOrDel("beds", v.bedrooms);
     setOrDel("minPrice", v.minPrice);
@@ -127,7 +142,16 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     // replaces existing filters (e.g. a state selected from the sidebar).
     const params = new URLSearchParams(window.location.search);
     const setOrDel = (k: string, v?: string) => (v ? params.set(k, v) : params.delete(k));
-    setOrDel("q", f.q);
+    // Resolve a location keyword to `state` + leftover `q`, same as the search bar.
+    // Only touch `state` when a location was actually entered, so an existing
+    // state filter isn't wiped when the modal's location field is left blank.
+    if (f.q && f.q.trim()) {
+      const loc = resolveLocationQuery(f.q);
+      setOrDel("q", loc.q);
+      setOrDel("state", loc.state);
+    } else {
+      params.delete("q");
+    }
     setOrDel("type", f.propertyTypeId != null ? String(f.propertyTypeId) : "");
     setOrDel("beds", f.bedrooms != null ? String(f.bedrooms) : "");
     setOrDel("minPrice", f.minPrice != null ? String(f.minPrice) : "");
