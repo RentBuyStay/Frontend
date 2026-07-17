@@ -41,5 +41,6 @@ export function toAgentCard(a: AgentListItem): Agent {
     rating: a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating : null,
     listings: a.listingCount ?? 0,
     verified: a.identityVerified ?? false,
+    agentId: a.userId,
   };
 }

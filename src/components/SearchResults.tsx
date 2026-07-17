@@ -74,6 +74,8 @@ export default function SearchResults() {
     isServiced: tri(sp.get("serviced")),
     isShared: tri(sp.get("shared")),
     listedWithinDays: num("listedWithinDays"),
+    agentId: sp.get("agentId") ?? undefined,
+    organizationId: sp.get("organizationId") ?? undefined,
     sort,
     size: PAGE_SIZE,
   });
@@ -86,7 +88,7 @@ export default function SearchResults() {
   // dead end — fetched only in that case.
   const hasFilters = [
     "q", "type", "beds", "minPrice", "maxPrice", "state", "city", "listingType",
-    "furnished", "serviced", "shared", "listedWithinDays",
+    "furnished", "serviced", "shared", "listedWithinDays", "agentId", "organizationId",
   ].some((k) => sp.get(k));
   const noResults = !isLoading && !isError && items.length === 0;
   const { data: fbData } = useGetActivePropertiesQuery(

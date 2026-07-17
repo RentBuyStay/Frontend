@@ -33,6 +33,8 @@ export type PropertyQuery = PageParams & {
   isShared?: boolean;
   listedWithinDays?: number;
   sort?: "newest" | "priceAsc" | "priceDesc";
+  agentId?: string;
+  organizationId?: string;
 };
 
 const toSearchQuery = (p: PropertyQuery = {}) => {
@@ -52,6 +54,8 @@ const toSearchQuery = (p: PropertyQuery = {}) => {
   if (p.isShared != null) sp.set("isShared", String(p.isShared));
   if (p.listedWithinDays != null) sp.set("listedWithinDays", String(p.listedWithinDays));
   if (p.sort) sp.set("sort", p.sort);
+  if (p.agentId) sp.set("agentId", p.agentId);
+  if (p.organizationId) sp.set("organizationId", p.organizationId);
   return sp.toString();
 };
 

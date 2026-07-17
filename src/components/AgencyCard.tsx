@@ -97,8 +97,8 @@ export default function AgencyCard({ a }: { a: Agency }) {
             </div>
           </div>
           <Link
-            href="#"
-            onClick={(e) => e.preventDefault()}
+            href={a.id ? `/search?organizationId=${a.id}` : "/search"}
+            onClick={(e) => e.stopPropagation()}
             className="hover:underline"
             style={{
               fontSize: "14px",

@@ -6,6 +6,7 @@ import { useGetAgentsQuery } from "@/services/agentApi";
 import { toAgentCard } from "@/lib/agentMap";
 import { pageTotal } from "@/services/types";
 import AgentCard from "@/components/AgentCard";
+import DirectoryFilterButtons from "@/components/DirectoryFilterButtons";
 
 const PAGE_SIZE = 12;
 
@@ -28,7 +29,17 @@ export default function AllAgentsList() {
     size: PAGE_SIZE,
   });
 
-  const items = data?.content ?? [];
+  // Client-side rating sort of the loaded page (backend has no rating sort yet —
+  // see backend issue). Agents with no reviews sort last.
+  const ratingSort = sp.get("ratingSort");
+  const raw = data?.content ?? [];
+  const items = ratingSort
+    ? [...raw].sort((a, b) => {
+        const ra = a.averageRating ?? -1;
+        const rb = b.averageRating ?? -1;
+        return ratingSort === "asc" ? ra - rb : rb - ra;
+      })
+    : raw;
   const total = pageTotal(data);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
@@ -73,40 +84,7 @@ export default function AllAgentsList() {
             {isLoading ? "Loading…" : total === 0 ? "No agents found" : `Showing ${from} - ${to} of ${total}`}
           </p>
         </div>
-        <div className="flex items-center" style={{ gap: "16px" }}>
-          <span
-            style={{
-              fontSize: "14px",
-              lineHeight: "18px",
-              fontWeight: 500,
-              color: "#121212",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Filter:
-          </span>
-          {(["State", "Ratings"] as const).map((label) => (
-            <button
-              key={label}
-              type="button"
-              className="flex-1 md:flex-none md:w-[120px] flex items-center justify-between bg-[#F6F6F6] hover:bg-[#EDEDED] transition-colors rounded-[12px]"
-              style={{ height: "40px", padding: "8px 16px" }}
-            >
-              <span
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "24px",
-                  fontWeight: 400,
-                  color: "#121212",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {label}
-              </span>
-              <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} />
-            </button>
-          ))}
-        </div>
+        <DirectoryFilterButtons />
       </div>
 
       {/* Grid — 3 cols × 4 rows (12 cards), gap 24 col / 40 row */}

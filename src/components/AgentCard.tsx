@@ -14,6 +14,8 @@ export type Agent = {
   rating: number | null; // null when the agent has no reviews yet → "New"
   listings: number;
   verified?: boolean;
+  /** Backend userId — links "View all Properties" to /search?agentId=. */
+  agentId?: string;
 };
 
 // Figma: vuesax/bold/verify, 20x20, green #14AE5C
@@ -145,8 +147,8 @@ export default function AgentCard({ a }: { a: Agent }) {
           </div>
         </div>
         <Link
-          href="#"
-          onClick={(e) => e.preventDefault()}
+          href={a.agentId ? `/search?agentId=${a.agentId}` : "/search"}
+          onClick={(e) => e.stopPropagation()}
           className="hover:underline"
           style={{
             fontSize: "14px",
