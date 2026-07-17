@@ -63,7 +63,7 @@ export default function Navbar({ variant = "hero" }: NavbarProps) {
   // session back to this site. Send login/get-started here (with a return URL).
   const goToLogin = () => {
     const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-    window.location.assign(appLoginUrl(returnTo));
+    window.location.assign(appLoginUrl({ returnTo }));
   };
   const goToDashboard = () => window.location.assign(appDashboardUrl());
   // Auth-gated CTAs: straight to the dashboard when signed in, else to login.

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
+import { appLoginUrl, config } from "@/lib/config";
 
 export default function LoginModal({
   open,
@@ -130,7 +131,7 @@ export default function LoginModal({
                   />
                   <span style={{ fontSize: "14px", lineHeight: "24px", color: "#807e7e" }}>Remember me</span>
                 </label>
-                <a href="#" style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#305e82" }} className="hover:underline">
+                <a href={`${config.appUrl}/forgot-password`} style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#305e82" }} className="hover:underline">
                   Forgot Password?
                 </a>
               </div>
@@ -141,7 +142,7 @@ export default function LoginModal({
           <div className="flex flex-col" style={{ gap: "24px" }}>
             {/* Proceed button — Figma: padding 8/24, h=48, rounded-12, gradient */}
             <button
-              onClick={onClose}
+              onClick={() => window.location.assign(appLoginUrl())}
               className="text-white rounded-[12px] hover:opacity-90 transition-opacity w-full flex items-center justify-center"
               style={{
                 height: "48px",

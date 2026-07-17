@@ -31,7 +31,7 @@ export default function CardContactButtons({
       window.location.assign(`${config.appUrl}/dashboard/browse/${propertyId}`);
     } else {
       const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-      window.location.assign(appLoginUrl(returnTo));
+      window.location.assign(appLoginUrl({ returnTo }));
     }
   };
 

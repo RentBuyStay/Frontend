@@ -23,10 +23,23 @@ export const config = {
   appUrl: (process.env.NEXT_PUBLIC_APP_URL ?? "https://rentbuystay-app.vercel.app").replace(/\/+$/, ""),
 } as const;
 
-/** URL of the dashboard app's login screen, with an optional post-login return. */
-export function appLoginUrl(returnTo?: string): string {
-  const base = `${config.appUrl}/log-in`;
-  return returnTo ? `${base}?returnTo=${encodeURIComponent(returnTo)}` : base;
+/**
+ * URL of the dashboard app's login screen, with an optional post-login return
+ * and email prefill.
+ *
+ * Sessions can't be shared between the two apps today: tokens live in
+ * localStorage, which is per-origin, and the API's cookie is third-party across
+ * these two unrelated *.vercel.app domains (Safari blocks it outright). So the
+ * marketing site never holds a session — it hands off to the app, which owns
+ * auth. Once both sites move to *.rentbuystay.com the API cookie becomes
+ * first-party and true single sign-on is possible.
+ */
+export function appLoginUrl(opts?: { returnTo?: string; email?: string }): string {
+  const params = new URLSearchParams();
+  if (opts?.returnTo) params.set("returnTo", opts.returnTo);
+  if (opts?.email) params.set("email", opts.email);
+  const qs = params.toString();
+  return `${config.appUrl}/log-in${qs ? `?${qs}` : ""}`;
 }
 
 /** URL of the dashboard app home. */

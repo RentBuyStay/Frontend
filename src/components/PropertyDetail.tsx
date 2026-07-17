@@ -97,7 +97,7 @@ export default function PropertyDetail({ id }: { id: string }) {
 
   const goToLogin = () => {
     const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-    window.location.assign(appLoginUrl(returnTo));
+    window.location.assign(appLoginUrl({ returnTo }));
   };
   // Actions with no inline flow here (inspection/call/message/report) open the
   // dashboard app's version of this listing when signed in.
