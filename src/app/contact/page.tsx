@@ -6,6 +6,8 @@ import ListPropertyCTA from "@/components/ListPropertyCTA";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useSubmitContactMutation } from "@/services/contactApi";
+import { unwrapApiError } from "@/services/api";
 
 const inputCls =
   "w-full h-12 bg-[#F6F6F6] rounded-[12px] px-4 text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] tracking-[-0.02em] outline-none";
@@ -58,10 +60,29 @@ function ContactRow({
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [submitContact, { isLoading }] = useSubmitContactMutation();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError(null);
+    try {
+      await submitContact({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        phoneNumber: phone.trim() || undefined,
+        message: message.trim(),
+      }).unwrap();
+      setSubmitted(true);
+    } catch (err) {
+      setError(unwrapApiError(err)?.message ?? "Couldn't send your message. Please try again.");
+    }
   }
 
   return (
@@ -131,10 +152,10 @@ export default function ContactPage() {
               {/* First / Last — stacked on mobile, side-by-side on desktop */}
               <div className="flex flex-col gap-4 lg:flex-row">
                 <Field label="First Name" className="lg:flex-1">
-                  <input type="text" required placeholder="Enter your first name here" className={inputCls} />
+                  <input type="text" required value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Enter your first name here" className={inputCls} />
                 </Field>
                 <Field label="Last Name" className="lg:flex-1">
-                  <input type="text" required placeholder="Enter your last name here" className={inputCls} />
+                  <input type="text" required value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Enter your last name here" className={inputCls} />
                 </Field>
               </div>
 
@@ -147,6 +168,8 @@ export default function ContactPage() {
                   </div>
                   <input
                     type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                     placeholder="phone number"
                     className="flex-1 min-w-0 bg-transparent text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] outline-none"
                   />
@@ -154,12 +177,14 @@ export default function ContactPage() {
               </Field>
 
               <Field label="Email">
-                <input type="email" required placeholder="Enter your email address here" className={inputCls} />
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address here" className={inputCls} />
               </Field>
 
               <Field label="Message">
                 <textarea
                   required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   placeholder="Enter your message here"
                   className="w-full min-h-[160px] bg-[#F6F6F6] rounded-[12px] p-4 text-[14px] leading-[24px] text-[#121212] placeholder:text-[#807E7E] tracking-[-0.02em] outline-none resize-none"
                 />
@@ -200,16 +225,28 @@ export default function ContactPage() {
                 </span>
               </label>
 
+              {error && (
+                <p role="alert" className="text-[14px] leading-[20px] font-medium text-[#E30045]">
+                  {error}
+                </p>
+              )}
+              {submitted && !error && (
+                <p role="status" className="text-[14px] leading-[20px] font-medium text-[#14AE5C]">
+                  Thanks — your message has been sent. We&rsquo;ll get back to you shortly.
+                </p>
+              )}
+
               {/* Submit — blue gradient, full width */}
               <button
                 type="submit"
-                className="flex items-center justify-center h-12 px-6 rounded-[12px] text-[14px] font-medium text-white hover:opacity-90 transition-opacity mt-2"
+                disabled={!agreed || isLoading || submitted}
+                className="flex items-center justify-center h-12 px-6 rounded-[12px] text-[14px] font-medium text-white hover:opacity-90 transition-opacity mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)",
                   border: "1px solid rgba(120, 158, 187, 0.5)",
                 }}
               >
-                {submitted ? "Message Sent ✓" : "Submit Report"}
+                {isLoading ? "Sending…" : submitted ? "Message Sent ✓" : "Submit Report"}
               </button>
             </form>
           </div>
