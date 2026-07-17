@@ -33,3 +33,15 @@ export function appLoginUrl(returnTo?: string): string {
 export function appDashboardUrl(): string {
   return `${config.appUrl}/dashboard`;
 }
+
+/** Account types the sign-up screen accepts, shared with the app via `?type=`. */
+export type SignUpType = "seeker" | "agent" | "owner" | "agency";
+
+/**
+ * URL of the dashboard app's sign-up screen. Registration lives in the app, so
+ * "Get Started Free" hands off there with the chosen account type preselected.
+ */
+export function appSignUpUrl(type?: SignUpType): string {
+  const base = `${config.appUrl}/sign-up`;
+  return type ? `${base}?type=${type}` : base;
+}

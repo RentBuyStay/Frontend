@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { appSignUpUrl, type SignUpType } from "@/lib/config";
 
 // Figma node 280:11625 "create account" — 580x680 modal opened by "Get Started Free" buttons.
 // 4 user-type cards (Property Seeker / Real Estate Agent / Property Owner / Real Estate Agency or Developer)
 // → Proceed (disabled at 25% opacity until selection) → "Have a RentBuyStay account? Sign In"
 
-const userTypes = [
+const userTypes: { id: SignUpType; label: string; icon: string }[] = [
   { id: "seeker", label: "Property Seeker", icon: "/icons/user-profile.svg" },
   { id: "agent", label: "Real Estate Agent", icon: "/icons/user-tag.svg" },
   { id: "owner", label: "Property Owner", icon: "/icons/user-profile-tick.svg" },
@@ -28,7 +29,13 @@ export default function CreateAccountModal({
   /** Optional: called when user clicks "Sign In" — typically closes this modal and opens LoginModal */
   onSwitchToLogin?: () => void;
 }) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<SignUpType | null>(null);
+
+  // Registration lives in the dashboard app — hand off with the chosen type.
+  function handleProceed() {
+    if (!selected) return;
+    window.location.assign(appSignUpUrl(selected));
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -139,6 +146,7 @@ export default function CreateAccountModal({
             <button
               type="button"
               disabled={!proceedEnabled}
+              onClick={handleProceed}
               className="flex items-center justify-center text-white transition-opacity"
               style={{
                 width: "100%",
