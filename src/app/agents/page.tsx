@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
@@ -61,7 +62,9 @@ export default function AgentsPage() {
             </div>
 
             {/* Search — shared realtor search, pinned to the bottom of the hero */}
-            <RealtorSearch className="w-full max-w-[1344px] mx-auto bg-white rounded-[12px] p-4" />
+            <Suspense fallback={null}>
+              <RealtorSearch className="w-full max-w-[1344px] mx-auto bg-white rounded-[12px] p-4" />
+            </Suspense>
           </div>
         </div>
         </div>

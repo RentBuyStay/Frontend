@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
@@ -64,7 +65,9 @@ export default async function BlogsPage() {
                   </p>
                 </div>
               </div>
-              <RealtorSearch className="w-full bg-white rounded-[12px] p-2 md:p-4" />
+              <Suspense fallback={null}>
+                <RealtorSearch className="w-full bg-white rounded-[12px] p-2 md:p-4" />
+              </Suspense>
             </div>
           </div>
         </div>
