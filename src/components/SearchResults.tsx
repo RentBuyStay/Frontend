@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { useGetActivePropertiesQuery, type PropertyQuery } from "@/services/propertyApi";
 import { pageTotal } from "@/services/types";
 import { toPropertyCard } from "@/lib/propertyMap";
+import { resolveLocationQuery } from "@/lib/locationQuery";
 import PropertyCard from "./PropertyCard";
+import FilterModal, { type AppliedFilters } from "./FilterModal";
 
 const PAGE_SIZE = 24;
 
@@ -20,7 +22,34 @@ const SORTS: { label: string; value: PropertyQuery["sort"] }[] = [
  * furnished/serviced/shared, listingType) and renders GET /properties. */
 export default function SearchResults() {
   const sp = useSearchParams();
+  const router = useRouter();
   const [sort, setSort] = useState<PropertyQuery["sort"]>("newest");
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
+  // Apply the modal's filters by merging them into the current /search URL —
+  // this component already reads every filter from there.
+  function applyModalFilters(f: AppliedFilters) {
+    const params = new URLSearchParams(window.location.search);
+    const setOrDel = (k: string, v?: string) => (v ? params.set(k, v) : params.delete(k));
+    // Resolve a location keyword to `state` + leftover `q`, same as the search bar.
+    if (f.q && f.q.trim()) {
+      const loc = resolveLocationQuery(f.q);
+      setOrDel("q", loc.q);
+      setOrDel("state", loc.state);
+    } else {
+      params.delete("q");
+    }
+    setOrDel("type", f.propertyTypeId != null ? String(f.propertyTypeId) : "");
+    setOrDel("beds", f.bedrooms != null ? String(f.bedrooms) : "");
+    setOrDel("minPrice", f.minPrice != null ? String(f.minPrice) : "");
+    setOrDel("maxPrice", f.maxPrice != null ? String(f.maxPrice) : "");
+    setOrDel("furnished", f.isFurnished != null ? (f.isFurnished ? "furnished" : "unfurnished") : "");
+    setOrDel("serviced", f.isServiced != null ? (f.isServiced ? "yes" : "no") : "");
+    setOrDel("shared", f.isShared != null ? (f.isShared ? "yes" : "no") : "");
+    setOrDel("listedWithinDays", f.listedWithinDays != null ? String(f.listedWithinDays) : "");
+    params.delete("page");
+    router.push(`/search?${params.toString()}`, { scroll: false });
+  }
 
   const num = (k: string) => {
     const v = sp.get(k);
@@ -82,7 +111,11 @@ export default function SearchResults() {
             )}
           </p>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 text-sm border border-[#ededed] rounded-lg px-4 py-2 bg-white hover:border-[#305e82] transition-colors">
+            <button
+              type="button"
+              onClick={() => setShowFilterModal(true)}
+              className="flex items-center gap-2 text-sm border border-[#ededed] rounded-lg px-4 py-2 bg-white hover:border-[#305e82] transition-colors"
+            >
               <SlidersHorizontal size={15} />
               Filters
             </button>
@@ -150,6 +183,12 @@ export default function SearchResults() {
           </div>
         )}
       </div>
+
+      <FilterModal
+        open={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={applyModalFilters}
+      />
     </section>
   );
 }
