@@ -14,17 +14,22 @@ const legal = [
   { label: "Cookie Policy", href: "/cookie-policy" },
 ];
 
-const reachUs = [
-  { icon: "/icons/location-white.svg", text: "Lagos, Nigeria", href: "#" },
+// `href` is omitted where the entry isn't actionable — the address is plain text
+// rather than a link that goes nowhere.
+const reachUs: { icon: string; text: string; href?: string }[] = [
+  { icon: "/icons/location-white.svg", text: "Lagos, Nigeria" },
   { icon: "/icons/call-white.svg", text: "+234 800 RENT BUY", href: "tel:+2348000000000" },
   { icon: "/icons/sms.svg", text: "info@rentbuystay.com", href: "mailto:info@rentbuystay.com" },
 ];
 
+// Official RentBuyStay profiles. URLs are the canonical ones — the share/QR
+// tracking params (?s=, igsh=, mibextid=, _r/_t) are session-specific and are
+// deliberately left off.
 const socials = [
-  { icon: "/icons/facebook.svg", href: "#", label: "Facebook" },
-  { icon: "/icons/instagram.svg", href: "#", label: "Instagram" },
-  { icon: "/icons/linkedin.svg", href: "#", label: "LinkedIn" },
-  { icon: "/icons/twitter.svg", href: "#", label: "X" },
+  { icon: "/icons/facebook.svg", href: "https://www.facebook.com/share/17sEDSM7jt/", label: "Facebook" },
+  { icon: "/icons/instagram.svg", href: "https://www.instagram.com/rentbuystay", label: "Instagram" },
+  { icon: "/icons/twitter.svg", href: "https://x.com/rentbuystay", label: "X" },
+  { icon: "/icons/tiktok.svg", href: "https://www.tiktok.com/@rentbuystay", label: "TikTok" },
 ];
 
 export default function Footer() {
@@ -55,7 +60,14 @@ export default function Footer() {
               </p>
               <div className="flex items-center gap-4">
                 {socials.map((s) => (
-                  <a key={s.label} href={s.href} aria-label={s.label} className="opacity-90 hover:opacity-100 transition-opacity">
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="opacity-90 hover:opacity-100 transition-opacity"
+                  >
                     <Image src={s.icon} alt={s.label} width={24} height={24} />
                   </a>
                 ))}
@@ -103,9 +115,13 @@ export default function Footer() {
                 {reachUs.map((r) => (
                   <li key={r.text} className="flex items-center gap-3" style={{ height: "35px" }}>
                     <Image src={r.icon} alt="" width={24} height={24} />
-                    <a href={r.href} className="hover:underline" style={{ fontSize: "16px", color: "#ffffff" }}>
-                      {r.text}
-                    </a>
+                    {r.href ? (
+                      <a href={r.href} className="hover:underline" style={{ fontSize: "16px", color: "#ffffff" }}>
+                        {r.text}
+                      </a>
+                    ) : (
+                      <span style={{ fontSize: "16px", color: "#ffffff" }}>{r.text}</span>
+                    )}
                   </li>
                 ))}
               </ul>
