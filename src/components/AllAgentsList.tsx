@@ -22,24 +22,20 @@ export default function AllAgentsList() {
   const state = sp.get("state") ?? undefined;
   const page = Math.max(1, Number(sp.get("page") ?? 1) || 1);
 
+  // Rating sort is server-side: ratingSort=desc|asc → sort=ratingDesc|ratingAsc,
+  // so it's correct across all pages (not just the loaded one).
+  const ratingSort = sp.get("ratingSort");
+  const sort = ratingSort === "desc" ? "ratingDesc" : ratingSort === "asc" ? "ratingAsc" : undefined;
+
   const { data, isLoading, isError } = useGetAgentsQuery({
     q,
     state,
+    sort,
     page: page - 1, // backend is 0-indexed
     size: PAGE_SIZE,
   });
 
-  // Client-side rating sort of the loaded page (backend has no rating sort yet —
-  // see backend issue). Agents with no reviews sort last.
-  const ratingSort = sp.get("ratingSort");
-  const raw = data?.content ?? [];
-  const items = ratingSort
-    ? [...raw].sort((a, b) => {
-        const ra = a.averageRating ?? -1;
-        const rb = b.averageRating ?? -1;
-        return ratingSort === "asc" ? ra - rb : rb - ra;
-      })
-    : raw;
+  const items = data?.content ?? [];
   const total = pageTotal(data);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;

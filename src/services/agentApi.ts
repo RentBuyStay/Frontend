@@ -8,7 +8,8 @@ import type {
   Page,
 } from "./types";
 
-type ListParams = { q?: string; state?: string; page?: number; size?: number };
+// `sort` maps to the backend rating sort: "ratingDesc" | "ratingAsc" (unrated last).
+type ListParams = { q?: string; state?: string; sort?: string; page?: number; size?: number };
 
 const toQuery = (p: ListParams = {}) => {
   const sp = new URLSearchParams();
@@ -16,6 +17,7 @@ const toQuery = (p: ListParams = {}) => {
   sp.set("size", String(p.size ?? 50));
   if (p.q) sp.set("search", p.q);
   if (p.state) sp.set("state", p.state);
+  if (p.sort) sp.set("sort", p.sort);
   return sp.toString();
 };
 
