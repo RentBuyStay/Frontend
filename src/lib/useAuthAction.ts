@@ -17,9 +17,11 @@ import { config, appLoginUrl } from "@/lib/config";
  * is shared, so `/me` is trusted and auth is respected locally.
  */
 export function useAuthAction() {
-  // `/me` is only meaningful when the session is shared (SSO). Off, it can't see
-  // the app's cross-domain session, so skip the call and treat as signed-out here.
-  const { data: me } = useGetMeQuery(undefined, { skip: !config.sso });
+  // Best-effort: always ask /me via the shared cookie. Where the browser allows
+  // it (e.g. Chrome), the site recognises the app session and can act inline
+  // (save, etc.). Where it's blocked (Safari third-party cookies), /me just 401s
+  // → isAuthed stays false → the action hands off to the app instead.
+  const { data: me } = useGetMeQuery();
   const isAuthed = !!me;
 
   /** Send to the app's login, returning to the current page afterwards. Safe to
