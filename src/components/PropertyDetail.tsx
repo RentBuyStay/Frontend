@@ -198,6 +198,78 @@ export default function PropertyDetail({ id }: { id: string }) {
     </div>
   );
 
+  // "Listed by" agent card — rendered twice: on mobile right under the Interested
+  // card (Figma order), and in the sidebar on desktop.
+  const listedByCard = (
+    <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
+      <h3 style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>Listed by</h3>
+
+      {/* Avatar + name + agency */}
+      <div className="flex items-center" style={{ gap: "16px", marginTop: "24px" }}>
+        <div className="rounded-full flex items-center justify-center text-white shrink-0" style={{ width: "64px", height: "64px", background: "#305E82", fontSize: "18px", fontWeight: 600 }}>
+          {agentInitials}
+        </div>
+        <div className="flex flex-col" style={{ gap: "8px" }}>
+          <div className="flex items-center" style={{ gap: "8px" }}>
+            <span className="text-[16px] lg:text-[18px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212" }}>{agentName}</span>
+            <Image src="/icons/verify-figma.svg" alt="" width={20} height={20} />
+          </div>
+          {/* Mobile: agency line */}
+          <span className="lg:hidden" style={{ fontSize: "11px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>{agentAgency}</span>
+          {/* Desktop: agency + AGENT pill */}
+          <div className="hidden lg:flex items-center" style={{ gap: "16px" }}>
+            <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentAgency}</span>
+            <span className="inline-flex items-center text-white" style={{ background: "#305E82", borderRadius: "100px", padding: "3px 12px", fontSize: "12px", fontWeight: 500 }}>AGENT</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Location + Joined — desktop */}
+      <div className="hidden lg:flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
+        <div className="flex items-center" style={{ gap: "8px" }}>
+          <Image src="/icons/location-detail.svg" alt="" width={20} height={20} />
+          <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentLocation}</span>
+        </div>
+        {agentJoined && (
+          <div className="flex items-center" style={{ gap: "8px" }}>
+            <Image src="/icons/user-profile.svg" alt="" width={20} height={20} />
+            <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentJoined}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Rating + listings + View all */}
+      <div className="flex items-center justify-between gap-2 border-t border-b border-[#F6F6F6] py-4" style={{ marginTop: "24px" }}>
+        <div className="flex items-center" style={{ gap: "16px" }}>
+          <div className="flex items-center" style={{ gap: "8px" }}>
+            <Image src="/icons/star.svg" alt="" width={20} height={20} />
+            <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentRating}</span>
+          </div>
+          <span style={{ width: "1px", height: "14px", background: "#EDEDED" }} />
+          <div className="flex items-center" style={{ gap: "8px" }}>
+            <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
+            <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentListings ?? 0} listings</span>
+          </div>
+        </div>
+        <Link href="/agents" className="hover:opacity-80 shrink-0 whitespace-nowrap text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#305E82" }}>
+          View all Properties
+        </Link>
+      </div>
+
+      {/* Call + Message */}
+      <div className="flex" style={{ gap: "12px", marginTop: "24px" }}>
+        <button onClick={openListing} className="flex items-center justify-center hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
+          <Image src="/icons/call.svg" alt="" width={20} height={20} />
+          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>Call</span>
+        </button>
+        <button onClick={openListing} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", border: "1px solid rgba(120,158,187,0.5)", borderRadius: "12px" }}>
+          <Image src="/icons/messages-2.svg" alt="" width={20} height={20} />
+          <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Message</span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <>
       {/* TOP HEADER — Figma 133:18646 */}
@@ -257,8 +329,9 @@ export default function PropertyDetail({ id }: { id: string }) {
               </div>
             </div>
 
-            {/* Interested CTA — mobile only */}
+            {/* Interested CTA + agent card — mobile only, directly under the specs */}
             <div className="lg:hidden">{interestedCard}</div>
+            <div className="lg:hidden">{listedByCard}</div>
 
             {/* Description */}
             <div className="flex flex-col" style={{ gap: "16px" }}>
@@ -321,74 +394,8 @@ export default function PropertyDetail({ id }: { id: string }) {
           <div className="flex flex-col w-full min-w-0 lg:w-[411px] lg:shrink-0" style={{ gap: "24px" }}>
             <div className="hidden lg:block">{interestedCard}</div>
 
-            {/* Agent card — Figma 133:18593 / 216:21683 */}
-            <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
-              <h3 style={{ fontSize: "16px", lineHeight: "32px", fontWeight: 600, color: "#121212" }}>Listed by</h3>
-
-              {/* Avatar + name + agency */}
-              <div className="flex items-center" style={{ gap: "16px", marginTop: "24px" }}>
-                <div className="rounded-full flex items-center justify-center text-white shrink-0" style={{ width: "64px", height: "64px", background: "#305E82", fontSize: "18px", fontWeight: 600 }}>
-                  {agentInitials}
-                </div>
-                <div className="flex flex-col" style={{ gap: "8px" }}>
-                  <div className="flex items-center" style={{ gap: "8px" }}>
-                    <span className="text-[16px] lg:text-[18px]" style={{ lineHeight: "24px", fontWeight: 600, color: "#121212" }}>{agentName}</span>
-                    <Image src="/icons/verify-figma.svg" alt="" width={20} height={20} />
-                  </div>
-                  {/* Mobile: agency line */}
-                  <span className="lg:hidden" style={{ fontSize: "11px", lineHeight: "16px", fontWeight: 400, color: "#807E7E" }}>{agentAgency}</span>
-                  {/* Desktop: agency + AGENT pill */}
-                  <div className="hidden lg:flex items-center" style={{ gap: "16px" }}>
-                    <span style={{ fontSize: "14px", lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentAgency}</span>
-                    <span className="inline-flex items-center text-white" style={{ background: "#305E82", borderRadius: "100px", padding: "3px 12px", fontSize: "12px", fontWeight: 500 }}>AGENT</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Location + Joined — desktop */}
-              <div className="hidden lg:flex flex-col" style={{ gap: "16px", marginTop: "24px" }}>
-                <div className="flex items-center" style={{ gap: "8px" }}>
-                  <Image src="/icons/location-detail.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentLocation}</span>
-                </div>
-                {agentJoined && (
-                  <div className="flex items-center" style={{ gap: "8px" }}>
-                    <Image src="/icons/user-profile.svg" alt="" width={20} height={20} />
-                    <span style={{ fontSize: "12px", lineHeight: "24px", color: "#807E7E" }}>{agentJoined}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Rating + listings + View all */}
-              <div className="flex items-center justify-between gap-2 border-t border-b border-[#F6F6F6] py-4" style={{ marginTop: "24px" }}>
-                <div className="flex items-center" style={{ gap: "16px" }}>
-                  <div className="flex items-center" style={{ gap: "8px" }}>
-                    <Image src="/icons/star.svg" alt="" width={20} height={20} />
-                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentRating}</span>
-                  </div>
-                  <span style={{ width: "1px", height: "14px", background: "#EDEDED" }} />
-                  <div className="flex items-center" style={{ gap: "8px" }}>
-                    <Image src="/icons/buildings.svg" alt="" width={20} height={20} />
-                    <span className="text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#807E7E" }}>{agentListings ?? 0} listings</span>
-                  </div>
-                </div>
-                <Link href="/agents" className="hover:opacity-80 shrink-0 whitespace-nowrap text-[12px] md:text-[14px]" style={{ lineHeight: "20px", fontWeight: 500, color: "#305E82" }}>
-                  View all Properties
-                </Link>
-              </div>
-
-              {/* Call + Message */}
-              <div className="flex" style={{ gap: "12px", marginTop: "24px" }}>
-                <button onClick={openListing} className="flex items-center justify-center hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}>
-                  <Image src="/icons/call.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>Call</span>
-                </button>
-                <button onClick={openListing} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity flex-1" style={{ height: "48px", padding: "12px 16px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", border: "1px solid rgba(120,158,187,0.5)", borderRadius: "12px" }}>
-                  <Image src="/icons/messages-2.svg" alt="" width={20} height={20} />
-                  <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Message</span>
-                </button>
-              </div>
-            </div>
+            {/* Agent card — desktop sidebar (mobile copy is under the specs) */}
+            <div className="hidden lg:block">{listedByCard}</div>
 
             {/* Other Related Properties */}
             <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
