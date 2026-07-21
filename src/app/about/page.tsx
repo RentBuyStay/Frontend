@@ -329,10 +329,12 @@ export default function AboutPage() {
               letterSpacing: "-0.02em",
             }}
           >
-            We didn&rsquo;t just build a property platform.
-            <br className="hidden lg:inline" /> We built the one we wished existed. Finding your perfect space,{" "}
+            We didn&rsquo;t just build a property platform. We built the one
+            <br className="hidden lg:inline" /> we wished existed. Finding your perfect space,{" "}
             <span style={{ color: "#807E7E" }}>
-              whether for a night, a year, or a lifetime, should feel exciting, not exhausting.
+              whether
+              <br className="hidden lg:inline" /> for a night, a year, or a lifetime, should feel exciting,
+              <br className="hidden lg:inline" /> not exhausting.
             </span>
           </p>
         </div>
