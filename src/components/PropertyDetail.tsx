@@ -93,6 +93,8 @@ export default function PropertyDetail({ id }: { id: string }) {
   useEffect(() => {
     if (!p) return;
     if (p.latitude != null && p.longitude != null) {
+      // Sync map coords from the loaded property (external data), then geocode as fallback.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGeo({ lat: p.latitude, lng: p.longitude });
       return;
     }

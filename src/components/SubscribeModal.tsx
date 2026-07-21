@@ -22,6 +22,8 @@ export default function SubscribeModal({ open, onClose }: { open: boolean; onClo
   const [subscribe, { isLoading }] = useSubscribeNewsletterMutation();
 
   const [mounted, setMounted] = useState(false);
+  // One-time client-mount flag so the portal renders only after hydration.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {

@@ -189,6 +189,8 @@ function MobileDrawer({
   // overflow or transform context — it's mounted deep inside the navbar tree (e.g.
   // inside the property card). Portals need the DOM, so wait for client mount.
   const [mounted, setMounted] = useState(false);
+  // One-time client-mount flag so the portal renders only after hydration.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   // While open: push the page content aside (app-style) + close on Escape.
