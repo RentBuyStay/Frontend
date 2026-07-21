@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { VerifyBadge, LocationIcon } from "./AgentCard";
 import LoginModal from "./LoginModal";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 export type Agency = {
   id: string;
@@ -13,11 +14,32 @@ export type Agency = {
   rating: number | null; // null when the agency has no reviews yet → "New"
   listings: number;
   logo: string;
+  /** Backend userId of the agency owner — the USER that Call/Message contacts. */
+  ownerUserId?: string;
 };
 
 // Figma node 252:31624 — 411x456, r=20, bg white, 1px border #F6F6F6
 export default function AgencyCard({ a }: { a: Agency }) {
   const [showLogin, setShowLogin] = useState(false);
+  const { requireAuth } = useAuthAction();
+
+  // Deep-link the exact action so Call dials and Message opens the chat with this
+  // agency's owner in the app, stopping the click from bubbling to the card-level
+  // login modal.
+  const contact = (action: "call" | "message") => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!a.ownerUserId) {
+      setShowLogin(true);
+      return;
+    }
+    requireAuth(
+      action === "call"
+        ? `/dashboard/messages?contact=${a.ownerUserId}&do=call`
+        : `/dashboard/messages?contact=${a.ownerUserId}`,
+    );
+  };
+
   return (
     <>
     <div
@@ -125,6 +147,7 @@ export default function AgencyCard({ a }: { a: Agency }) {
 
         <div className="flex items-center" style={{ gap: "16px" }}>
           <button
+            onClick={contact("call")}
             className="flex-1 flex items-center justify-center hover:bg-[#f6f6f6] transition-colors"
             style={{
               height: "48px",
@@ -142,6 +165,7 @@ export default function AgencyCard({ a }: { a: Agency }) {
             Call
           </button>
           <button
+            onClick={contact("message")}
             className="flex-1 flex items-center justify-center text-white hover:opacity-90 transition-opacity"
             style={{
               height: "48px",

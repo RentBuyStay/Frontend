@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useGetAgentsQuery } from "@/services/agentApi";
 import type { AgentListItem } from "@/services/types";
 import LoginModal from "./LoginModal";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 const GRID = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
 
@@ -20,6 +21,19 @@ function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) 
   const location = [a.city, a.state].filter(Boolean).join(", ") || "Nigeria";
   const rating = a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating.toFixed(1) : "New";
   const listings = a.listingCount ?? 0;
+  const { requireAuth } = useAuthAction();
+
+  // Deep-link the exact action so Call dials and Message opens the chat with this
+  // specific agent in the app, stopping the click from bubbling to the login modal.
+  const contact = (action: "call" | "message") => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    requireAuth(
+      action === "call"
+        ? `/dashboard/messages?contact=${a.userId}&do=call`
+        : `/dashboard/messages?contact=${a.userId}`,
+    );
+  };
 
   return (
     <div onClick={onAction} role="button" tabIndex={0} className="bg-white rounded-[20px] p-6 flex flex-col gap-5 cursor-pointer hover:shadow-sm transition-shadow" style={{ border: "1px solid #f6f6f6" }}>
@@ -68,7 +82,7 @@ function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) 
             <span>{listings} listings</span>
           </div>
         </div>
-        <Link href="/agents" onClick={(e) => e.stopPropagation()} className="hover:underline" style={{ fontSize: "14px", fontWeight: 500, color: "#305e82" }}>
+        <Link href={`/search?agentId=${a.userId}`} onClick={(e) => e.stopPropagation()} className="hover:underline" style={{ fontSize: "14px", fontWeight: 500, color: "#305e82" }}>
           View all Properties
         </Link>
       </div>
@@ -78,14 +92,14 @@ function AgentCard({ a, onAction }: { a: AgentListItem; onAction: () => void }) 
       {/* Call + Message */}
       <div className="flex gap-4">
         <button
-          onClick={onAction}
+          onClick={contact("call")}
           className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors"
           style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}
         >
           <Image src="/icons/call.svg" alt="" width={20} height={20} /> Call
         </button>
         <button
-          onClick={onAction}
+          onClick={contact("message")}
           className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity"
           style={{
             height: "48px",

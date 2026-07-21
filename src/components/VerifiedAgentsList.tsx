@@ -6,6 +6,7 @@ import { Phone, MessageCircle } from "lucide-react";
 import { useGetAgentsQuery } from "@/services/agentApi";
 import type { AgentListItem } from "@/services/types";
 import LoginModal from "./LoginModal";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 function initials(name: string) {
   const p = name.trim().split(/\s+/).filter(Boolean);
@@ -19,6 +20,19 @@ function AgentCardItem({ a, onAction }: { a: AgentListItem; onAction: () => void
   const listings = a.listingCount ?? 0;
   const rating = a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating.toFixed(1) : "New";
   const avatar = a.avatarUrl;
+  const { requireAuth } = useAuthAction();
+
+  // Deep-link the exact action so Call dials and Message opens the chat with this
+  // specific agent in the app, stopping the click from bubbling to the login modal.
+  const contact = (action: "call" | "message") => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    requireAuth(
+      action === "call"
+        ? `/dashboard/messages?contact=${a.userId}&do=call`
+        : `/dashboard/messages?contact=${a.userId}`,
+    );
+  };
 
   return (
     <div onClick={onAction} role="button" tabIndex={0} className="bg-white rounded-[20px] p-5 flex flex-col gap-4 cursor-pointer hover:shadow-sm transition-shadow" style={{ border: "1px solid #f6f6f6" }}>
@@ -65,10 +79,10 @@ function AgentCardItem({ a, onAction }: { a: AgentListItem; onAction: () => void
 
       {/* Buttons — require sign-in */}
       <div className="flex gap-3">
-        <button onClick={onAction} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
+        <button onClick={contact("call")} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] hover:bg-[#f6f6f6] transition-colors" style={{ height: "48px", padding: "8px 24px", border: "1px solid #ededed", color: "#121212", fontSize: "14px", fontWeight: 500 }}>
           <Phone size={18} strokeWidth={1.5} /> Call
         </button>
-        <button onClick={onAction} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity" style={{ height: "48px", padding: "8px 24px", fontSize: "14px", fontWeight: 500, background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
+        <button onClick={contact("message")} className="flex-1 flex items-center justify-center gap-2 rounded-[12px] text-white hover:opacity-90 transition-opacity" style={{ height: "48px", padding: "8px 24px", fontSize: "14px", fontWeight: 500, background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)" }}>
           <MessageCircle size={18} strokeWidth={1.5} /> Message
         </button>
       </div>

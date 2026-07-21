@@ -26,6 +26,7 @@ export function toAgencyCard(a: AgencyListItem): Agency {
     rating: a.averageRating != null && (a.reviewCount ?? 0) > 0 ? a.averageRating : null,
     listings: a.agentCount ?? 0, // DTO exposes agentCount, not a property count
     logo: AGENCY_LOGOS[hashIndex(a.id, AGENCY_LOGOS.length)],
+    ownerUserId: a.ownerUserId,
   };
 }
 

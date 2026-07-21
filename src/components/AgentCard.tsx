@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import LoginModal from "./LoginModal";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 export type Agent = {
   name: string;
@@ -42,6 +43,25 @@ export function LocationIcon() {
 // Figma node 252:31027 — 411x284, r=20, bg white, 1px border #F6F6F6, padding 24
 export default function AgentCard({ a }: { a: Agent }) {
   const [showLogin, setShowLogin] = useState(false);
+  const { requireAuth } = useAuthAction();
+
+  // Deep-link the exact action so Call dials and Message opens the chat with this
+  // specific agent in the app (same as the browse-detail buttons), stopping the
+  // click from bubbling to the card-level login modal.
+  const contact = (action: "call" | "message") => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!a.agentId) {
+      setShowLogin(true);
+      return;
+    }
+    requireAuth(
+      action === "call"
+        ? `/dashboard/messages?contact=${a.agentId}&do=call`
+        : `/dashboard/messages?contact=${a.agentId}`,
+    );
+  };
+
   return (
     <>
     <div
@@ -175,6 +195,7 @@ export default function AgentCard({ a }: { a: Agent }) {
 
       <div className="flex items-center" style={{ gap: "16px" }}>
         <button
+          onClick={contact("call")}
           className="flex-1 flex items-center justify-center hover:bg-[#f6f6f6] transition-colors"
           style={{
             height: "48px",
@@ -192,6 +213,7 @@ export default function AgentCard({ a }: { a: Agent }) {
           Call
         </button>
         <button
+          onClick={contact("message")}
           className="flex-1 flex items-center justify-center text-white hover:opacity-90 transition-opacity"
           style={{
             height: "48px",
