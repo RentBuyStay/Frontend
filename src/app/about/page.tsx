@@ -321,10 +321,10 @@ export default function AboutPage() {
 
           {/* Quote — two-tone (first sentence dark, rest grey). 24px mobile / 40px desktop. */}
           <p
-            className="text-center text-[24px] leading-[40px] lg:text-[40px] lg:leading-[1.3]"
+            className="text-center text-[24px] leading-[40px] lg:text-[40px] lg:leading-[64px]"
             style={{
               maxWidth: "1280px",
-              fontWeight: 500,
+              fontWeight: 600,
               color: "#121212",
               letterSpacing: "-0.02em",
             }}
