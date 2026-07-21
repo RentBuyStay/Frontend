@@ -44,11 +44,11 @@ const propertyTypes = [
 ];
 
 const locations = [
-  { name: "Lagos", count: "1206 Properties Listed", image: "/images/city-lagos.png", href: "/search?location=lagos" },
-  { name: "Ibadan", count: "830 Properties Listed", image: "/images/city-ibadan.png", href: "/search?location=ibadan" },
-  { name: "Abuja", count: "718 Properties Listed", image: "/images/city-abuja.png", href: "/search?location=abuja" },
-  { name: "Ogun", count: "472 Properties Listed", image: "/images/city-ogun.png", href: "/search?location=ogun" },
-  { name: "Port-Harcourt", count: "718 Properties Listed", image: "/images/city-ph.png", href: "/search?location=port-harcourt" },
+  { name: "Lagos", count: "1206 Properties Listed", image: "/images/city-lagos.png", href: "/search?state=Lagos" },
+  { name: "Ibadan", count: "830 Properties Listed", image: "/images/city-ibadan.png", href: "/search?state=Ibadan" },
+  { name: "Abuja", count: "718 Properties Listed", image: "/images/city-abuja.png", href: "/search?state=Abuja" },
+  { name: "Ogun", count: "472 Properties Listed", image: "/images/city-ogun.png", href: "/search?state=Ogun" },
+  { name: "Port-Harcourt", count: "718 Properties Listed", image: "/images/city-ph.png", href: "/search?state=Port%20Harcourt" },
 ];
 
 // Mobile hero stat — Figma: check icon + "{value} {label}" at 12px (value SemiBold)

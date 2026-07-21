@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import SearchBar from "@/components/SearchBar";
+import RequestSearch from "@/components/RequestSearch";
 import RequestResults from "@/components/RequestResults";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 import ListingSidebar from "@/components/ListingSidebar";
@@ -49,7 +50,7 @@ export default function PropertyRequestsPage() {
         <div className="mx-auto w-full max-w-[1440px] px-4 md:px-6 pt-4 md:pt-6">
           <div className="rounded-[20px] md:rounded-[25px] bg-white md:p-6 flex flex-col gap-10">
             <Navbar variant="card" />
-            <SearchBar defaultTab="Rent" />
+            <RequestSearch />
           </div>
         </div>
       </section>
@@ -59,8 +60,10 @@ export default function PropertyRequestsPage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-[60px]">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_411px] gap-6">
 
-            {/* LEFT — live requests from GET /property-requests */}
-            <RequestResults />
+            {/* LEFT — live requests from GET /property-requests (reads URL filters) */}
+            <Suspense fallback={<div className="min-w-0" />}>
+              <RequestResults />
+            </Suspense>
 
             {/* SIDEBAR — shared component (live facets); not scoped to a listing type,
                 and requests don't show the Verified Agents block. */}

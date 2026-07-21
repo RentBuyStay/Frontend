@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FilterModal, { type AppliedFilters } from "./FilterModal";
@@ -27,17 +27,31 @@ interface SearchBarProps {
 }
 
 const GRADIENT = "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)";
+/* Solid brand blue shown on the Search button while a results navigation is in flight. */
+const SEARCH_PENDING = "#305E82";
 
-/* Filter field — Figma: 12px Medium #121212 label + #F6F6F6 box (value 14px #121212 + arrow-down 16) */
+/* Inline spinner for the Search button's in-flight (isPending) state; inherits the button's white text. */
+function Spinner() {
+  return (
+    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" className="animate-spin shrink-0" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.35" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/* Filter field — Figma: 12px Medium #121212 label + #F6F6F6 box (value 14px #121212 + arrow-down 16).
+ * The child control fills the whole box and the arrow is a pointer-events-none overlay, so a click
+ * anywhere in the field — including on the arrow — opens the underlying <select>. */
 function FilterField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex-1 flex flex-col gap-2 min-w-0">
       <span className="text-[12px] font-medium text-[#121212]" style={{ lineHeight: "20px", letterSpacing: "-0.02em" }}>
         {label}
       </span>
-      <div className="bg-[#F6F6F6] rounded-[12px] h-12 px-4 flex items-center justify-between gap-2">
+      <div className="relative bg-[#F6F6F6] rounded-[12px] h-12 px-4 flex items-center">
         {children}
-        <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="shrink-0 pointer-events-none" />
+        <Image src="/icons/arrow-down.svg" alt="" width={16} height={16} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
       </div>
     </div>
   );
@@ -92,22 +106,22 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [inPlace]);
 
-  // Where results live: /search when in place, else the active tab's listing page.
+  // Spinner / pressed state on the Search button while the results navigation is
+  // in flight (React keeps this pending until the target route has rendered).
+  const [isPending, startTransition] = useTransition();
+
+  // Where an in-place filter change lands: /search when already there, else the
+  // active tab's listing page (so the listing pages keep filtering in place).
   const basePath = (tab: TabOrAll) => (inPlace ? "/search" : tabRoutes[tab as Tab] ?? "/search");
 
-  // Apply the bar's values (plus any override from the control that just changed)
-  // by merging into the current URL and navigating — so ANY change re-queries
-  // immediately, no separate "Search" click needed, and untouched filters persist.
-  function apply(
-    o: Partial<{ query: string; propertyType: string; bedrooms: string; minPrice: string; maxPrice: string; furnished: string; activeTab: TabOrAll }> = {},
-  ) {
-    const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
+  // Build the URL params from the bar's current values, merged over the current
+  // URL so untouched filters persist. resolveLocationQuery scans the keyword for
+  // a state (routed to the exact `state` filter) keeping any leftover as `q`.
+  function collectParams(v: {
+    query: string; propertyType: string; bedrooms: string; minPrice: string; maxPrice: string; furnished: string;
+  }) {
     const params = new URLSearchParams(window.location.search);
     const setOrDel = (k: string, val: string) => (val ? params.set(k, val) : params.delete(k));
-    // Users type anything — resolveLocationQuery scans the whole text for a state
-    // and routes it to the exact `state` filter (reliable), keeping any leftover
-    // area as `q`. Only touch `state` when something was typed, so a state chosen
-    // from the sidebar (empty keyword) is preserved.
     if (v.query.trim()) {
       const resolved = resolveLocationQuery(v.query);
       setOrDel("q", resolved.q);
@@ -122,16 +136,34 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     setOrDel("minPrice", v.minPrice);
     setOrDel("maxPrice", v.maxPrice);
     setOrDel("furnished", v.furnished);
+    params.delete("page"); // any filter change returns to page 1
+    return params;
+  }
+
+  // In-place filter change (a dropdown on the bar) — re-queries the current page
+  // immediately, no separate "Search" click needed, and untouched filters persist.
+  function apply(
+    o: Partial<{ query: string; propertyType: string; bedrooms: string; minPrice: string; maxPrice: string; furnished: string; activeTab: TabOrAll }> = {},
+  ) {
+    const v = { query, propertyType, bedrooms, minPrice, maxPrice, furnished, activeTab, ...o };
+    const params = collectParams(v);
     if (inPlace) {
       if (v.activeTab !== "All") params.set("listingType", String(v.activeTab).toUpperCase());
       else params.delete("listingType");
     }
-    params.delete("page"); // any filter change returns to page 1
     router.push(`${basePath(v.activeTab)}?${params.toString()}`, { scroll: false });
   }
 
+  // The Search button / Enter — always lands on the dedicated /search results
+  // page (which shows only the matching properties, not the listing-page hero and
+  // category layout), carrying the listing type so results stay scoped.
   function handleSearch() {
-    apply();
+    const params = collectParams({ query, propertyType, bedrooms, minPrice, maxPrice, furnished });
+    if (activeTab !== "All") params.set("listingType", String(activeTab).toUpperCase());
+    else params.delete("listingType");
+    startTransition(() => {
+      router.push(`/search?${params.toString()}`, { scroll: false });
+    });
   }
 
   // FilterModal "Apply" → navigate to the active tab's listing page with its filters
@@ -159,12 +191,19 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
     setOrDel("serviced", f.isServiced != null ? (f.isServiced ? "yes" : "no") : "");
     setOrDel("shared", f.isShared != null ? (f.isShared ? "yes" : "no") : "");
     setOrDel("listedWithinDays", f.listedWithinDays != null ? String(f.listedWithinDays) : "");
+    // Carry the listing type and show the filtered results on /search.
+    if (activeTab !== "All") params.set("listingType", String(activeTab).toUpperCase());
+    else params.delete("listingType");
     params.delete("page");
-    router.push(`${basePath(activeTab)}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`/search?${params.toString()}`, { scroll: false });
+    });
   }
 
+  // h-full + pr-6 make the <select> span the whole field (the arrow overlay sits in the pr-6
+  // gutter) so a click anywhere — text or arrow — opens it, without changing the look.
   const selectClass =
-    "appearance-none flex-1 min-w-0 text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer";
+    "appearance-none flex-1 min-w-0 h-full pr-6 text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer";
 
   const filters = (
     <>
@@ -201,7 +240,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           onChange={(e) => setMinPrice(e.target.value)}
           onBlur={() => apply()}
           onKeyDown={(e) => e.key === "Enter" && apply()}
-          className="flex-1 min-w-0 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
+          className="flex-1 min-w-0 pr-6 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
         />
       </FilterField>
       <FilterField label="Max Price">
@@ -213,7 +252,7 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           onChange={(e) => setMaxPrice(e.target.value)}
           onBlur={() => apply()}
           onKeyDown={(e) => e.key === "Enter" && apply()}
-          className="flex-1 min-w-0 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
+          className="flex-1 min-w-0 pr-6 text-[14px] text-[#121212] bg-transparent outline-none placeholder:text-[#121212]"
         />
       </FilterField>
       <FilterField label="Furnished">
@@ -242,12 +281,12 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
             <select
               value={activeTab}
               onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); apply({ activeTab: v }); }}
-              className="appearance-none w-full bg-transparent outline-none cursor-pointer text-[12px] text-[#121212]"
+              className="appearance-none w-full h-full pr-5 bg-transparent outline-none cursor-pointer text-[12px] text-[#121212]"
               style={{ letterSpacing: "-0.02em" }}
             >
               {tabOptions.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
-            <Image src="/icons/hero-arrow-down.svg" alt="" width={16} height={16} className="pointer-events-none" />
+            <Image src="/icons/hero-arrow-down.svg" alt="" width={16} height={16} className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
           <div className="flex items-center gap-2 flex-1 min-w-0 bg-[#F6F6F6] rounded-[12px] h-12 px-4">
             <Image src="/icons/hero-search.svg" alt="" width={16} height={16} className="shrink-0" />
@@ -274,9 +313,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <button
             type="button"
             onClick={handleSearch}
-            className="flex-1 h-12 rounded-[12px] text-white text-[14px] font-medium"
-            style={{ background: GRADIENT, border: "1px solid rgba(120,158,187,0.5)" }}
+            disabled={isPending}
+            className="flex-1 h-12 rounded-[12px] text-white text-[14px] font-medium flex items-center justify-center gap-2"
+            style={{ background: isPending ? SEARCH_PENDING : GRADIENT, border: "1px solid rgba(120,158,187,0.5)" }}
           >
+            {isPending && <Spinner />}
             Search
           </button>
         </div>
@@ -286,11 +327,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
       <div className="hidden md:flex md:flex-col gap-4 bg-white rounded-[12px] p-6">
         {/* Top row: tab dropdown | search input | search button */}
         <div className="flex items-center gap-4">
-          <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center pl-4 pr-9">
+          <div className="relative shrink-0 bg-[#F6F6F6] rounded-[12px] h-12 flex items-center pl-4">
             <select
               value={activeTab}
               onChange={(e) => { const v = e.target.value as TabOrAll; setActiveTab(v); apply({ activeTab: v }); }}
-              className="appearance-none text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer"
+              className="appearance-none h-full pr-9 text-[14px] text-[#121212] bg-transparent outline-none cursor-pointer"
               style={{ letterSpacing: "-0.02em" }}
             >
               {tabOptions.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -311,9 +352,11 @@ export default function SearchBar({ defaultTab = "Rent", inPlace = false }: Sear
           <button
             type="button"
             onClick={handleSearch}
-            className="shrink-0 flex items-center justify-center text-white text-[14px] font-medium w-[160px] h-12 rounded-[12px] hover:opacity-90 transition-opacity"
-            style={{ background: GRADIENT, border: "1px solid rgba(120,158,187,0.5)" }}
+            disabled={isPending}
+            className="shrink-0 flex items-center justify-center gap-2 text-white text-[14px] font-medium w-[160px] h-12 rounded-[12px] hover:opacity-90 transition-opacity"
+            style={{ background: isPending ? SEARCH_PENDING : GRADIENT, border: "1px solid rgba(120,158,187,0.5)" }}
           >
+            {isPending && <Spinner />}
             Search
           </button>
           {/* Filter button — opens the advanced filter modal (Figma 77:1176) */}

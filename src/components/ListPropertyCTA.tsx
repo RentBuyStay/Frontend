@@ -8,7 +8,7 @@ import LogInButton from "./LogInButton";
 export default function ListPropertyCTA() {
   return (
     <section className="bg-white">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-6 py-4 md:py-6">
+      <div className="w-full px-4 py-4 md:px-6 md:py-6">
         <div
           className="rounded-[20px] h-[296px] md:h-[464px] flex flex-col items-center justify-center text-white text-center px-4 md:px-6"
           style={{ background: "linear-gradient(174deg, #75A3C7 0%, #305E82 96%)" }}

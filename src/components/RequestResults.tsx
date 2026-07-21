@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useGetPropertyRequestsQuery } from "@/services/propertyRequestApi";
 import type { PropertyRequestResponse } from "@/services/types";
 import ListingsHeader from "./ListingsHeader";
@@ -92,9 +92,20 @@ function RequestCard({ r }: { r: PropertyRequestResponse }) {
   );
 }
 
-/** Left column of the property-requests page — live from GET /property-requests. */
+/** Left column of the property-requests page — live from GET /property-requests.
+ * Reads the filters set by RequestSearch from the URL (only the fields the public
+ * endpoint supports: listingType, propertyTypeId via `type`, and state). */
 export default function RequestResults() {
-  const { data, isLoading, isError } = useGetPropertyRequestsQuery({ size: PAGE_SIZE });
+  const sp = useSearchParams();
+  const typeParam = sp.get("type");
+  const propertyTypeId = typeParam && !Number.isNaN(Number(typeParam)) ? Number(typeParam) : undefined;
+
+  const { data, isLoading, isError } = useGetPropertyRequestsQuery({
+    listingType: sp.get("listingType") ?? undefined,
+    propertyTypeId,
+    state: sp.get("state") ?? undefined,
+    size: PAGE_SIZE,
+  });
 
   const items = data?.content ?? [];
   const total = data?.totalElements ?? 0;

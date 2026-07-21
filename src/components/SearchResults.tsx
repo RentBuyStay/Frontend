@@ -82,7 +82,9 @@ export default function SearchResults() {
 
   const items = (data?.content ?? []).filter((p) => p.status === "ACTIVE");
   const total = pageTotal(data);
-  const where = state ? ` in ${state.charAt(0).toUpperCase()}${state.slice(1)}` : "";
+  const displayState = state ? `${state.charAt(0).toUpperCase()}${state.slice(1)}` : "";
+  const where = displayState ? ` in ${displayState}` : "";
+  const heading = displayState ? `All Properties in ${displayState}` : "All Properties";
 
   // When the filters match nothing, suggest other available listings instead of a
   // dead end — fetched only in that case.
@@ -101,6 +103,12 @@ export default function SearchResults() {
   return (
     <section className="py-10 flex-1 bg-white">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+        <h1
+          className="text-[24px] md:text-[28px] font-semibold text-[#121212] mb-4"
+          style={{ letterSpacing: "-0.02em" }}
+        >
+          {heading}
+        </h1>
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-[#7f7e7e]">
             {isLoading ? (

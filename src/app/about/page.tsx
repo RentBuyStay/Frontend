@@ -167,78 +167,80 @@ function FAQItem({ q, a }: { q: string; a: string }) {
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white overflow-x-clip">
-      {/* HERO — Figma 280:11076 (desktop) / 803:61294 (mobile).
-          Desktop: 852px card, title at x64 y540, stats at x921 y718.
-          Mobile: shorter card, title + stats stacked at the bottom-left. */}
+      {/* HERO — full-viewport image card with the navbar inside, matching the
+          listing/rent hero. Title + stats sit at the bottom of the card: stacked
+          on mobile, title-left / stats-right on desktop. */}
       <section className="bg-white">
-        <div className="max-w-[1440px] mx-auto px-4 py-4 md:px-6 md:py-6">
-          <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)] lg:min-h-0 lg:h-[852px]">
-          <Image
-            src="/images/about-hero.png"
-            alt="One platform. Every property need."
-            fill
-            className="object-cover"
-            priority
-          />
-          {/* Gradient overlay — Figma fill; dark at the bottom for legibility */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
-              opacity: 0.65,
-            }}
-          />
-          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.2)" }} />
-
-          <Navbar variant="hero" />
-
-          {/* Title + stats: stacked at the bottom on mobile. On desktop this wrapper
-              dissolves (lg:contents) so each block takes its absolute Figma position. */}
-          <div className="absolute z-10 inset-x-4 bottom-8 flex flex-col gap-10 lg:contents">
-            {/* Title block */}
-            <div className="flex flex-col gap-2 lg:gap-4 lg:absolute lg:z-10 lg:left-[64px] lg:top-[540px] lg:w-[641px] lg:max-w-[calc(100%-128px)]">
-              <h1
-                className="text-white text-[32px] leading-[40px] lg:text-[64px] lg:leading-[1.2]"
-                style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
-              >
-                One Platform.
-                <br />
-                Every Property Need.
-              </h1>
-              <p
-                className="text-white text-[14px] leading-[24px] lg:text-[18px] lg:leading-[32px]"
-                style={{ fontWeight: 400, letterSpacing: "-0.02em" }}
-              >
-                Whether you&rsquo;re looking for a furnished apartment this weekend, signing
-                a 12-month lease, or taking the big step of owning your first home, we&rsquo;ve
-                built the tools, the listings, and the support to make it seamless.
-              </p>
+        <div className="w-full px-4 py-4 md:px-6 md:py-6">
+          <div className="relative overflow-hidden bg-[#F3FEFE] rounded-[20px] md:rounded-[25px] min-h-[calc(100svh-32px)] md:min-h-[calc(100svh-48px)]">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/about-hero.png"
+                alt="One platform. Every property need."
+                fill
+                className="object-cover"
+                priority
+              />
+              {/* Gradient overlay — dark at the bottom for legibility */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.96) 7%, rgba(0,0,0,0.94) 13%, rgba(0,0,0,0.91) 18%, rgba(0,0,0,0.84) 32%, rgba(0,0,0,0.5) 69%, rgba(102,102,102,0) 100%)",
+                  opacity: 0.65,
+                }}
+              />
+              <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.2)" }} />
             </div>
 
-            {/* Stats */}
-            <div className="flex items-center text-white gap-6 lg:gap-10 lg:absolute lg:z-10 lg:right-[64px] lg:top-[718px]">
-              {stats.map((s) => (
-                <div
-                  key={s.label}
-                  className="flex flex-col items-center justify-center whitespace-nowrap gap-2"
+            <Navbar variant="hero" />
+
+            {/* Title + stats: stacked at the bottom on mobile. On desktop this wrapper
+                dissolves (lg:contents) so each block anchors to the bottom of the card. */}
+            <div className="absolute z-10 inset-x-4 bottom-8 flex flex-col gap-10 lg:contents">
+              {/* Title block */}
+              <div className="flex flex-col gap-2 lg:gap-4 lg:absolute lg:z-10 lg:left-[64px] lg:bottom-[46px] lg:w-[641px] lg:max-w-[calc(100%-128px)]">
+                <h1
+                  className="text-white text-[32px] leading-[40px] lg:text-[64px] lg:leading-[1.2]"
+                  style={{ fontWeight: 600, letterSpacing: "-0.02em" }}
                 >
-                  <span
-                    className="text-[24px] lg:text-[48px]"
-                    style={{ fontWeight: 600, letterSpacing: "-0.02em", textAlign: "center" }}
+                  One Platform.
+                  <br />
+                  Every Property Need.
+                </h1>
+                <p
+                  className="text-white text-[14px] leading-[24px] lg:text-[18px] lg:leading-[32px]"
+                  style={{ fontWeight: 400, letterSpacing: "-0.02em" }}
+                >
+                  Whether you&rsquo;re looking for a furnished apartment this weekend, signing
+                  a 12-month lease, or taking the big step of owning your first home, we&rsquo;ve
+                  built the tools, the listings, and the support to make it seamless.
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div className="flex items-center text-white gap-6 lg:gap-10 lg:absolute lg:z-10 lg:right-[64px] lg:bottom-[54px]">
+                {stats.map((s) => (
+                  <div
+                    key={s.label}
+                    className="flex flex-col items-center justify-center whitespace-nowrap gap-2"
                   >
-                    {s.value}
-                  </span>
-                  <span
-                    className="text-[13px] leading-[20px] lg:text-[16px] lg:leading-[24px]"
-                    style={{ fontWeight: 400, color: "rgba(255,255,255,0.75)", textAlign: "center" }}
-                  >
-                    {s.label}
-                  </span>
-                </div>
-              ))}
+                    <span
+                      className="text-[24px] lg:text-[48px]"
+                      style={{ fontWeight: 600, letterSpacing: "-0.02em", textAlign: "center" }}
+                    >
+                      {s.value}
+                    </span>
+                    <span
+                      className="text-[13px] leading-[20px] lg:text-[16px] lg:leading-[24px]"
+                      style={{ fontWeight: 400, color: "rgba(255,255,255,0.75)", textAlign: "center" }}
+                    >
+                      {s.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </section>
@@ -257,31 +259,32 @@ export default function AboutPage() {
                   src: "/images/about-mi-1.png",
                   inner: { x: 9.04, y: 9.04 },
                   img: { x: -21.64, y: -5.09, w: 202.75, h: 149.64 },
-                  rotate: -8,
+                  rotate: "rotate-[-8deg]",
+                  z: "z-[3]",
                 },
                 {
                   src: "/images/about-mi-2.png",
                   inner: { x: 11.26, y: 9.04 },
                   img: { x: -35.33, y: -6.04, w: 230.24, h: 150.01 },
-                  rotate: 8,
+                  rotate: "rotate-[8deg]",
+                  z: "z-[2]",
                 },
                 {
                   src: "/images/about-mi-3.png",
                   inner: { x: 9.04, y: 9.04 },
                   img: { x: -19.83, y: -3.53, w: 198.25, h: 145.14 },
-                  rotate: -8,
+                  rotate: "rotate-[-8deg]",
+                  z: "z-[1]",
                 },
               ].map((card, i) => (
                 <div
                   key={i}
-                  className="bg-white shrink-0 relative"
+                  className={`bg-white shrink-0 relative ${card.rotate} ${card.z} transition-all duration-300 ease-out shadow-[0_10px_30px_-8px_rgba(0,0,0,0.15)] hover:z-20 hover:-translate-y-1 hover:scale-[1.05] hover:shadow-[0_20px_45px_-10px_rgba(0,0,0,0.3)]`}
                   style={{
                     width: "179.6px",
                     height: "172.79px",
                     borderRadius: "24px",
                     marginLeft: i === 0 ? 0 : "-24px",
-                    zIndex: 3 - i,
-                    transform: `rotate(${card.rotate}deg)`,
                     transformOrigin: "center center",
                   }}
                 >
