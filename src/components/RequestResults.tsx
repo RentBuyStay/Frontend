@@ -93,17 +93,29 @@ function RequestCard({ r }: { r: PropertyRequestResponse }) {
 }
 
 /** Left column of the property-requests page — live from GET /property-requests.
- * Reads the filters set by RequestSearch from the URL (only the fields the public
- * endpoint supports: listingType, propertyTypeId via `type`, and state). */
+ * Reads the filters set by RequestSearch (and any shareable filter URL) from the
+ * query string and forwards every one the public endpoint supports: q, listingType,
+ * propertyTypeId (via `type`), state, city, bedrooms, minPrice and maxPrice. */
 export default function RequestResults() {
   const sp = useSearchParams();
-  const typeParam = sp.get("type");
-  const propertyTypeId = typeParam && !Number.isNaN(Number(typeParam)) ? Number(typeParam) : undefined;
+
+  // Parse a numeric query param, ignoring blank/non-numeric values.
+  const numParam = (key: string) => {
+    const raw = sp.get(key);
+    if (raw == null || raw.trim() === "" || Number.isNaN(Number(raw))) return undefined;
+    return Number(raw);
+  };
+  const propertyTypeId = numParam("type");
 
   const { data, isLoading, isError } = useGetPropertyRequestsQuery({
+    q: sp.get("q") ?? undefined,
     listingType: sp.get("listingType") ?? undefined,
     propertyTypeId,
     state: sp.get("state") ?? undefined,
+    city: sp.get("city") ?? undefined,
+    bedrooms: numParam("bedrooms"),
+    minPrice: numParam("minPrice"),
+    maxPrice: numParam("maxPrice"),
     size: PAGE_SIZE,
   });
 

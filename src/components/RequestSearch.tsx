@@ -9,9 +9,11 @@ import { useGetPropertyTypesQuery } from "@/services/referenceApi";
 /* Request search reuses the look of the hero search bar, but scoped to the
  * property-REQUESTS list: it stays on /property-requests and only exposes the
  * filters the public GET /property-requests endpoint actually supports —
- * listing type, property type and state. A typed location keyword is resolved to
- * the exact `state` filter (requests have no free-text keyword match), so we don't
- * surface controls that would silently do nothing (bedrooms / price / furnished). */
+ * listing type, property type and a free-text keyword. The typed keyword is sent
+ * as the backend's free-text `q` filter (matched over the request); when it also
+ * names a Nigerian state we add the exact `state` filter on top so a location
+ * search narrows reliably. We don't surface controls that would silently do
+ * nothing here (bedrooms / price / furnished). */
 
 const GRADIENT = "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)";
 /* Solid brand blue shown on the Search button while a search is in flight. */
@@ -50,21 +52,23 @@ export default function RequestSearch() {
     /* eslint-disable react-hooks/set-state-in-effect */
     setListingType(p.get("listingType") ?? "");
     setPropertyType(p.get("type") ?? "");
-    // Requests filter location by exact `state`, so show that in the keyword box.
-    setKeyword(p.get("state") ?? "");
+    // The keyword box maps to the free-text `q` filter; seed it from `q`
+    // (fall back to `state` for links that only carry a resolved state).
+    setKeyword(p.get("q") ?? p.get("state") ?? "");
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   // Build the /property-requests URL from the current values and navigate in place.
-  // A location keyword is resolved to the exact `state` filter (the only location
-  // filter requests support); anything that doesn't name a state simply doesn't
-  // narrow the list rather than being sent as a keyword the endpoint can't match.
+  // The typed keyword is sent as the free-text `q` filter (matched over the
+  // request); when it also names a Nigerian state we add the exact `state` filter
+  // on top so a location search narrows reliably.
   function handleSearch() {
     const params = new URLSearchParams();
     if (listingType) params.set("listingType", listingType);
     if (propertyType) params.set("type", propertyType);
     const kw = keyword.trim();
     if (kw) {
+      params.set("q", kw);
       const resolved = resolveLocationQuery(kw);
       if (resolved.state) params.set("state", resolved.state);
     }

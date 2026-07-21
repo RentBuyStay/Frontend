@@ -3,22 +3,69 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Navbar from "./Navbar";
+import { unwrapApiError } from "@/services/api";
+import {
+  AD_PLACEMENT_LABELS,
+  formatMoney,
+  useCreateAdvertisementMutation,
+  useGetAdvertisementRatesQuery,
+  usePayAdvertisementMutation,
+  useUploadCreativeMutation,
+  type AdPlacement,
+} from "@/services/advertisementApi";
 
-export type PlacementOption = {
+const labelStyle = {
+  fontSize: "14px",
+  lineHeight: "24px",
+  fontWeight: 500,
+  color: "#121212",
+  letterSpacing: "-0.02em",
+} as const;
+
+const inputStyle = {
+  padding: "8px 16px",
+  height: "48px",
+  fontSize: "14px",
+  lineHeight: "24px",
+  color: "#121212",
+  letterSpacing: "-0.02em",
+} as const;
+
+function TextField({
+  label,
+  required,
+  type = "text",
+  value,
+  onChange,
+  placeholder,
+  autoComplete,
+}: {
   label: string;
+  required?: boolean;
+  type?: string;
   value: string;
-};
-
-export const placementOptions: PlacementOption[] = [
-  { label: "Header Strip - 1429 x 168px (₦150,000/month)", value: "header-strip" },
-  { label: "Sidebar Ad - 300 x 600px (₦100,000/month)", value: "sidebar" },
-  { label: "Footer Banner - 1200 x 90px (₦80,000/month)", value: "footer" },
-  { label: "Middle Strip - 800 x 600px (₦120,000/month)", value: "middle-strip" },
-  { label: "Leader Banner - 600 x 300px (₦130,000/month)", value: "leader" },
-  { label: "Side Strip - 600 x 200px (₦110,000/month)", value: "side-strip" },
-  { label: "Email Notification Footer - 1920 x 1080px (₦200,000/month)", value: "email-footer" },
-  { label: "Newsletter Spotlight - 600 x 200px (₦110,000/month)", value: "newsletter" },
-];
+  onChange: (v: string) => void;
+  placeholder?: string;
+  autoComplete?: string;
+}) {
+  return (
+    <div className="flex-1 flex flex-col" style={{ gap: "8px" }}>
+      <label style={labelStyle}>
+        {label}
+        {required ? <span style={{ color: "#E30045" }}> *</span> : null}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        className="w-full bg-[#F6F6F6] rounded-[12px] outline-none placeholder:text-[#807E7E]"
+        style={inputStyle}
+      />
+    </div>
+  );
+}
 
 export default function PlaceBannerAdModal({
   open,
@@ -29,25 +76,54 @@ export default function PlaceBannerAdModal({
   initialPlacement?: string;
   onClose: () => void;
 }) {
-  const [placement, setPlacement] = useState<PlacementOption>(placementOptions[1]);
+  const { data: rates, isLoading: ratesLoading, isError: ratesError } =
+    useGetAdvertisementRatesQuery();
+  const [uploadCreative] = useUploadCreativeMutation();
+  const [createAdvertisement] = useCreateAdvertisementMutation();
+  const [payAdvertisement] = usePayAdvertisementMutation();
+
+  // The user's explicit dropdown choice (null until they pick one); the effective
+  // placement falls back to the clicked card, then the first live rate.
+  const [placementOverride, setPlacementOverride] = useState<AdPlacement | null>(null);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [advertiserName, setAdvertiserName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [targetUrl, setTargetUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [prevOpen, setPrevOpen] = useState(open);
+  const [seenInitial, setSeenInitial] = useState(initialPlacement);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const startDateRef = useRef<HTMLInputElement>(null);
   const endDateRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    setSubmitted(false);
-    if (initialPlacement) {
-      const match = placementOptions.find((p) => p.value === initialPlacement);
-      if (match) setPlacement(match);
+  // Reset transient state on (re)open or when a different card is chosen. Done
+  // during render (React's supported pattern) rather than in an effect.
+  if (prevOpen !== open) {
+    setPrevOpen(open);
+    if (open) {
+      setError(null);
+      setLoading(false);
     }
-  }, [open, initialPlacement]);
+  }
+  if (seenInitial !== initialPlacement) {
+    setSeenInitial(initialPlacement);
+    setPlacementOverride(null);
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const initialIsValid =
+    !!initialPlacement && !!rates?.some((r) => r.placement === initialPlacement);
+  const selectedPlacement: AdPlacement | null =
+    placementOverride ??
+    (initialIsValid ? (initialPlacement as AdPlacement) : rates?.[0]?.placement ?? null);
+  const selectedRate =
+    rates?.find((r) => r.placement === selectedPlacement) ?? null;
 
   useEffect(() => {
     if (!open) return;
@@ -71,59 +147,73 @@ export default function PlaceBannerAdModal({
     if (f) setFile(f);
   }
 
-  function close() {
-    setSubmitted(false);
-    onClose();
-  }
+  const placementButtonLabel = selectedRate
+    ? `${AD_PLACEMENT_LABELS[selectedRate.placement]} — ${formatMoney(
+        selectedRate.dailyRate,
+        selectedRate.currency
+      )}/day`
+    : ratesLoading
+      ? "Loading placements…"
+      : ratesError
+        ? "Couldn’t load placements"
+        : "Select a placement";
 
-  // Success state — Figma 769:82930: centered check illustration + message + full-width button
-  if (submitted) {
-    return (
-      <div
-        className="fixed inset-0 z-[10000] overflow-y-auto md:flex md:items-center md:justify-center md:p-4"
-        style={{ background: "rgba(0,0,0,0.5)" }}
-        onClick={close}
-      >
-        <div
-          className="bg-white w-full min-h-full md:min-h-0 md:max-w-[497px] md:rounded-[24px] md:max-h-[90vh] md:overflow-y-auto flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Mobile: full-screen page with the real site navbar (functional hamburger + drawer) */}
-          <div className="md:hidden shrink-0">
-            <Navbar variant="page" />
-          </div>
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-10" style={{ gap: "40px" }}>
-            <div className="flex flex-col items-center" style={{ gap: "24px" }}>
-              <Image src="/icons/payment-success.svg" alt="" width={113} height={113} />
-              <div className="flex flex-col items-center" style={{ gap: "8px" }}>
-                <h2 style={{ fontSize: "20px", lineHeight: "30px", fontWeight: 600, color: "#121212" }}>
-                  Payment Successful
-                </h2>
-                <p style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 400, color: "#807E7E" }}>
-                  Great! Your payment for banner ad placement on RentBuyStay platform is successful.
-                  You will be notified when your ad has been placed.
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={close}
-              className="w-full text-white rounded-[12px] hover:opacity-90 transition-opacity"
-              style={{
-                height: "48px",
-                padding: "8px 24px",
-                fontSize: "14px",
-                fontWeight: 500,
-                background: "linear-gradient(175deg, rgba(117,163,199,1) 0%, rgba(48,94,130,1) 100%)",
-                border: "1px solid rgba(120,158,187,0.5)",
-              }}
-            >
-              Okay, proceed
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  async function handleSubmit() {
+    setError(null);
+    if (!selectedPlacement) {
+      setError("Select a placement option.");
+      return;
+    }
+    if (!file) {
+      setError("Please upload a banner creative.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("Enter a valid advertiser email address.");
+      return;
+    }
+    if (!startDate || !endDate) {
+      setError("Select a start date and an end date.");
+      return;
+    }
+    if (startDate < today) {
+      setError("The start date cannot be in the past.");
+      return;
+    }
+    if (endDate < startDate) {
+      setError("The end date must be on or after the start date.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // 1) Upload the creative (multipart, field "file") to get its file id.
+      const form = new FormData();
+      form.append("file", file);
+      const creative = await uploadCreative(form).unwrap();
+
+      // 2) Create the advertisement (amount is computed server-side).
+      const ad = await createAdvertisement({
+        placement: selectedPlacement,
+        startDate,
+        endDate,
+        creativeFileId: creative.id,
+        advertiserEmail: email.trim(),
+        advertiserName: advertiserName.trim() || undefined,
+        advertiserPhone: phone.trim() || undefined,
+        targetUrl: targetUrl.trim() || undefined,
+      }).unwrap();
+
+      // 3) Start the checkout and 4) hand off to the payment provider.
+      const payment = await payAdvertisement(ad.id).unwrap();
+      window.location.href = payment.authorizationUrl;
+      // Leave `loading` true: the browser is navigating away.
+    } catch (e) {
+      setError(
+        unwrapApiError(e)?.message ?? "Something went wrong. Please try again."
+      );
+      setLoading(false);
+    }
   }
 
   return (
@@ -181,33 +271,24 @@ export default function PlaceBannerAdModal({
 
           {/* Placement Option */}
           <div className="flex flex-col" style={{ gap: "8px", marginTop: "40px" }}>
-            <label
-              style={{
-                fontSize: "14px",
-                lineHeight: "24px",
-                fontWeight: 500,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Placement Option
-            </label>
+            <label style={labelStyle}>Placement Option</label>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setPlacementOpen((s) => !s)}
-                className="flex items-center justify-between w-full bg-[#F6F6F6] rounded-[12px]"
+                disabled={!rates || rates.length === 0}
+                className="flex items-center justify-between w-full bg-[#F6F6F6] rounded-[12px] disabled:opacity-60"
                 style={{ padding: "8px 16px", height: "48px" }}
               >
                 <span
                   style={{
                     fontSize: "14px",
                     lineHeight: "24px",
-                    color: "#121212",
+                    color: selectedRate ? "#121212" : "#807E7E",
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  {placement.label}
+                  {placementButtonLabel}
                 </span>
                 <Image
                   src="/icons/arrow-down.svg"
@@ -220,17 +301,17 @@ export default function PlaceBannerAdModal({
                   }}
                 />
               </button>
-              {placementOpen && (
+              {placementOpen && rates && (
                 <div
-                  className="absolute left-0 right-0 mt-1 bg-white rounded-[12px] py-2"
+                  className="absolute left-0 right-0 mt-1 bg-white rounded-[12px] py-2 shadow-lg"
                   style={{ zIndex: 10 }}
                 >
-                  {placementOptions.map((opt) => (
+                  {rates.map((opt) => (
                     <button
-                      key={opt.value}
+                      key={opt.placement}
                       type="button"
                       onClick={() => {
-                        setPlacement(opt);
+                        setPlacementOverride(opt.placement);
                         setPlacementOpen(false);
                       }}
                       className="block w-full text-left px-4 py-2 hover:bg-[#F6F6F6] transition-colors"
@@ -241,7 +322,8 @@ export default function PlaceBannerAdModal({
                         letterSpacing: "-0.02em",
                       }}
                     >
-                      {opt.label}
+                      {AD_PLACEMENT_LABELS[opt.placement]} —{" "}
+                      {formatMoney(opt.dailyRate, opt.currency)}/day
                     </button>
                   ))}
                 </div>
@@ -252,17 +334,7 @@ export default function PlaceBannerAdModal({
           {/* Start date / End date */}
           <div className="flex flex-col md:flex-row" style={{ gap: "24px", marginTop: "24px" }}>
             <div className="flex-1 flex flex-col" style={{ gap: "8px" }}>
-              <label
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
-                  color: "#121212",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Start date
-              </label>
+              <label style={labelStyle}>Start date</label>
               <button
                 type="button"
                 onClick={() => startDateRef.current?.showPicker?.()}
@@ -286,6 +358,7 @@ export default function PlaceBannerAdModal({
                 <input
                   ref={startDateRef}
                   type="date"
+                  min={today}
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   className="sr-only"
@@ -294,17 +367,7 @@ export default function PlaceBannerAdModal({
               </button>
             </div>
             <div className="flex-1 flex flex-col" style={{ gap: "8px" }}>
-              <label
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "24px",
-                  fontWeight: 500,
-                  color: "#121212",
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                End date
-              </label>
+              <label style={labelStyle}>End date</label>
               <button
                 type="button"
                 onClick={() => endDateRef.current?.showPicker?.()}
@@ -328,6 +391,7 @@ export default function PlaceBannerAdModal({
                 <input
                   ref={endDateRef}
                   type="date"
+                  min={startDate || today}
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   className="sr-only"
@@ -339,17 +403,7 @@ export default function PlaceBannerAdModal({
 
           {/* Upload Banner */}
           <div className="flex flex-col" style={{ gap: "8px", marginTop: "24px" }}>
-            <label
-              style={{
-                fontSize: "14px",
-                lineHeight: "24px",
-                fontWeight: 500,
-                color: "#121212",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Upload Banner
-            </label>
+            <label style={labelStyle}>Upload Banner</label>
             <div
               onDragOver={(e) => {
                 e.preventDefault();
@@ -414,10 +468,64 @@ export default function PlaceBannerAdModal({
             </div>
           </div>
 
-          <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-end" style={{ gap: "16px", marginTop: "40px" }}>
+          {/* Advertiser details — the backend requires an email; the rest are optional. */}
+          <div className="flex flex-col" style={{ gap: "24px", marginTop: "24px" }}>
+            <TextField
+              label="Advertiser Email"
+              required
+              type="email"
+              value={email}
+              onChange={setEmail}
+              placeholder="you@company.com"
+              autoComplete="email"
+            />
+            <div className="flex flex-col md:flex-row" style={{ gap: "24px" }}>
+              <TextField
+                label="Advertiser Name"
+                value={advertiserName}
+                onChange={setAdvertiserName}
+                placeholder="Your brand or company name"
+                autoComplete="organization"
+              />
+              <TextField
+                label="Phone Number"
+                type="tel"
+                value={phone}
+                onChange={setPhone}
+                placeholder="+234 800 000 0000"
+                autoComplete="tel"
+              />
+            </div>
+            <TextField
+              label="Target URL"
+              type="url"
+              value={targetUrl}
+              onChange={setTargetUrl}
+              placeholder="https://your-landing-page.com"
+              autoComplete="url"
+            />
+          </div>
+
+          {error && (
+            <p
+              role="alert"
+              style={{
+                marginTop: "24px",
+                fontSize: "14px",
+                lineHeight: "20px",
+                color: "#E30045",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {error}
+            </p>
+          )}
+
+          <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-end" style={{ gap: "16px", marginTop: error ? "16px" : "40px" }}>
             <button
               type="button"
               onClick={onClose}
+              disabled={loading}
               style={{
                 padding: "8px 16px",
                 fontSize: "14px",
@@ -425,14 +533,15 @@ export default function PlaceBannerAdModal({
                 color: "#121212",
                 letterSpacing: "-0.02em",
               }}
-              className="w-full md:w-auto hover:opacity-70 transition-opacity"
+              className="w-full md:w-auto hover:opacity-70 transition-opacity disabled:opacity-40"
             >
               Cancel
             </button>
             <button
               type="button"
-              onClick={() => setSubmitted(true)}
-              className="w-full md:w-auto flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full md:w-auto flex items-center justify-center text-white rounded-[12px] hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed"
               style={{
                 height: "48px",
                 padding: "8px 24px",
@@ -444,7 +553,7 @@ export default function PlaceBannerAdModal({
                 letterSpacing: "-0.02em",
               }}
             >
-              Proceed to Payment
+              {loading ? "Processing…" : "Proceed to Payment"}
             </button>
           </div>
         </div>

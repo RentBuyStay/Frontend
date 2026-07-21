@@ -9,9 +9,15 @@ import type {
 } from "./types";
 
 export type RequestListParams = {
+  /** Free-text keyword matched by the backend over the request. */
+  q?: string;
   listingType?: string;
   propertyTypeId?: number;
   state?: string;
+  city?: string;
+  bedrooms?: number;
+  minPrice?: number;
+  maxPrice?: number;
   page?: number;
   size?: number;
 };
@@ -20,9 +26,14 @@ const toQuery = (p: RequestListParams = {}) => {
   const sp = new URLSearchParams();
   sp.set("page", String(p.page ?? 0));
   sp.set("size", String(p.size ?? 50));
+  if (p.q) sp.set("q", p.q);
   if (p.listingType) sp.set("listingType", p.listingType);
   if (p.propertyTypeId != null) sp.set("propertyTypeId", String(p.propertyTypeId));
   if (p.state) sp.set("state", p.state);
+  if (p.city) sp.set("city", p.city);
+  if (p.bedrooms != null) sp.set("bedrooms", String(p.bedrooms));
+  if (p.minPrice != null) sp.set("minPrice", String(p.minPrice));
+  if (p.maxPrice != null) sp.set("maxPrice", String(p.maxPrice));
   return sp.toString();
 };
 

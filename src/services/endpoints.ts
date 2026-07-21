@@ -95,5 +95,12 @@ export const endpoints = {
   newsletterSubscribe: "/newsletter/subscribe",
   contact: "/contact",
 
+  // Advertisements / banner ads (public — no auth)
+  advertisementRates: "/advertisements/rates",
+  advertisementCreative: "/advertisements/creative",
+  advertisements: "/advertisements",
+  advertisementPay: (id: string) => `/advertisements/${id}/pay`,
+  advertisementVerify: (reference: string) => `/advertisements/verify/${reference}`,
+
   // Add more resource paths here as you integrate them.
 } as const;

@@ -1,18 +1,32 @@
 import Footer from "@/components/Footer";
 import ListingHero from "@/components/ListingHero";
-import PlacementCards from "@/components/PlacementCards";
+import PlacementCards, { BannerAdPaymentReturn } from "@/components/PlacementCards";
 import ListPropertyCTA from "@/components/ListPropertyCTA";
 
 export const metadata = {
   title: "Place Banner Ad | RentBuyStay",
   description:
-    "Reach millions with a strategic media placement on RentBuyStay. Choose from 8 placement options tailored to your campaign.",
+    "Reach millions with a strategic media placement on RentBuyStay. Choose the placement that fits your campaign and pay by the day.",
 };
 
-export default function PlaceBannerAdPage() {
+export default async function PlaceBannerAdPage({
+  searchParams,
+}: {
+  // The payment provider returns here with ?reference= (or ?trxref=).
+  searchParams: Promise<{ reference?: string; trxref?: string }>;
+}) {
+  const { reference, trxref } = await searchParams;
+  const paymentReference = reference ?? trxref;
+
+  // Returning from checkout: verify the payment and show a truthful result
+  // instead of the marketing page.
+  if (paymentReference) {
+    return <BannerAdPaymentReturn reference={paymentReference} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      {/* HERO — Figma 769:81209: full-viewport image hero with navbar + heading + search at bottom
+      {/* HERO — full-viewport image hero with navbar + heading + search at bottom
           (same hero as the listing pages, with the banner-ad heading) */}
       <ListingHero
         image="/images/banner-ad-hero.png"
@@ -23,7 +37,7 @@ export default function PlaceBannerAdPage() {
         showSearch={false}
       />
 
-      {/* CARDS — Figma 769:81774: intro text + placement cards */}
+      {/* CARDS — intro text + placement cards */}
       <section className="bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-[80px] py-12 md:py-20">
           <p
