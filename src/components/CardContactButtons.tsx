@@ -1,14 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { config } from "@/lib/config";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 /**
- * Call + Message icon buttons for a property card. Always hand off to the
- * property in the dashboard app — auth lives there and the marketing site can't
- * see that session across domains, so the app decides: a signed-in user goes
- * straight through, a signed-out one is prompted to log in and returned. Lives
- * inside a card <Link>, so it stops the click from navigating to the detail page.
+ * Call + Message icon buttons for a property card. Routes through the shared
+ * auth helper (useAuthAction): hands the listing off to the dashboard app, which
+ * owns auth. Lives inside a card <Link>, so it stops the click from navigating to
+ * the detail page.
  */
 export default function CardContactButtons({
   propertyId,
@@ -20,10 +19,12 @@ export default function CardContactButtons({
   /** Push the buttons to the far right of the row (for full-width agent rows). */
   pushRight?: boolean;
 }) {
+  const { requireAuth } = useAuthAction();
+
   const contact = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    window.location.assign(`${config.appUrl}/dashboard/browse/${propertyId}`);
+    requireAuth(`/dashboard/browse/${propertyId}`);
   };
 
   return (

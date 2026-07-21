@@ -5,9 +5,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, ChevronDown } from "lucide-react";
-import LoginModal from "./LoginModal";
-import { appLoginUrl, appDashboardUrl } from "@/lib/config";
-import { useGetMeQuery } from "@/services/meApi";
+import { useAuthAction } from "@/lib/useAuthAction";
 
 type DropdownItem = { label: string; href: string; action?: "login" };
 type NavLink = { label: string; href: string; dropdown?: DropdownItem[] };
@@ -52,22 +50,12 @@ interface NavbarProps {
 
 export default function Navbar({ variant = "hero" }: NavbarProps) {
   const [open, setOpen] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  void showLogin;
-
-  // Shared auth cookie → the marketing site recognises a dashboard-app session.
-  const { data: me } = useGetMeQuery();
-  const isAuthed = !!me;
-
-  // Single login lives in the dashboard app; the shared auth cookie carries the
-  // session back to this site. Send login/get-started here (with a return URL).
-  const goToLogin = () => {
-    const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-    window.location.assign(appLoginUrl({ returnTo }));
-  };
-  const goToDashboard = () => window.location.assign(appDashboardUrl());
-  // Auth-gated CTAs: straight to the dashboard when signed in, else to login.
-  const authCta = () => (isAuthed ? goToDashboard() : goToLogin());
+  // All auth handoffs go through the shared helper — see useAuthAction.
+  const { isAuthed, requireAuth, goToLogin, openInApp } = useAuthAction();
+  const goToDashboard = () => openInApp("/dashboard");
+  // Auth-gated CTA (e.g. Post Property): straight into the dashboard app, which
+  // forwards a signed-in user and only prompts login when signed out.
+  const authCta = () => requireAuth("/dashboard");
 
   const renderDropdown = (link: NavLink) =>
     link.dropdown ? (
@@ -175,7 +163,6 @@ export default function Navbar({ variant = "hero" }: NavbarProps) {
 
   return (
     <>
-      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
       {header}
       <MobileDrawer open={open} onClose={() => setOpen(false)} onLogin={goToLogin} authed={isAuthed} onDashboard={goToDashboard} />
     </>

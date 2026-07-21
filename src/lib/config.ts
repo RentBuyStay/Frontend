@@ -18,9 +18,15 @@ function required(name: string, value: string | undefined): string {
 
 export const config = {
   apiBaseUrl: required("NEXT_PUBLIC_API_BASE_URL", process.env.NEXT_PUBLIC_API_BASE_URL),
-  // The logged-in dashboard app. Login and account actions redirect here; the
-  // shared auth cookie means the user is recognised on both sites.
+  // The logged-in dashboard app. Login and account actions redirect here.
   appUrl: (process.env.NEXT_PUBLIC_APP_URL ?? "https://rentbuystay-app.vercel.app").replace(/\/+$/, ""),
+  // Single sign-on. Set NEXT_PUBLIC_SSO_ENABLED=true ONLY when this site and the
+  // app share one parent domain (e.g. www./app.rentbuystay.com) AND the API
+  // cookie is scoped to `.rentbuystay.com` — then the session is shared and this
+  // site can trust its own /me. Left false (default), the two apps are on
+  // unrelated domains that can't share a session, so auth-gated actions always
+  // hand off to the app (which owns auth).
+  sso: (process.env.NEXT_PUBLIC_SSO_ENABLED ?? "false").trim().toLowerCase() === "true",
 } as const;
 
 /**
