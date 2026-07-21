@@ -21,17 +21,19 @@ export default function CardContactButtons({
 }) {
   const { requireAuth } = useAuthAction();
 
-  const contact = (e: React.MouseEvent) => {
+  // Deep-link the exact action so a card's Call dials and Message opens the chat
+  // in the app (same as the property-detail buttons), not a generic details page.
+  const contact = (action: "call" | "message") => (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    requireAuth(`/dashboard/browse/${propertyId}`);
+    requireAuth(`/dashboard/browse/${propertyId}?action=${action}`);
   };
 
   return (
     <div className={`flex items-center shrink-0 ${pushRight ? "ml-auto pl-3" : "ml-3"}`} style={{ gap: "14px" }}>
       <button
         type="button"
-        onClick={contact}
+        onClick={contact("call")}
         aria-label={`Call ${name}`}
         className="hover:opacity-70"
         style={{ background: "none", border: "none", padding: 0, width: "20px", height: "20px", cursor: "pointer" }}
@@ -40,7 +42,7 @@ export default function CardContactButtons({
       </button>
       <button
         type="button"
-        onClick={contact}
+        onClick={contact("message")}
         aria-label={`Message ${name}`}
         className="hover:opacity-70"
         style={{ background: "none", border: "none", padding: 0, width: "18px", height: "18px", cursor: "pointer" }}
