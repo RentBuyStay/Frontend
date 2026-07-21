@@ -1,15 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useGetMeQuery } from "@/services/meApi";
-import { config, appLoginUrl } from "@/lib/config";
+import { config } from "@/lib/config";
 
 /**
- * Call + Message icon buttons for a property card. Mirrors the app's saved-card
- * contact actions: signed-in users are taken to the property in the dashboard
- * app to call/message the lister; signed-out users go to the app login (with a
- * return URL) via the shared session. Lives inside a card <Link>, so it stops
- * the click from navigating to the detail page.
+ * Call + Message icon buttons for a property card. Always hand off to the
+ * property in the dashboard app — auth lives there and the marketing site can't
+ * see that session across domains, so the app decides: a signed-in user goes
+ * straight through, a signed-out one is prompted to log in and returned. Lives
+ * inside a card <Link>, so it stops the click from navigating to the detail page.
  */
 export default function CardContactButtons({
   propertyId,
@@ -21,18 +20,10 @@ export default function CardContactButtons({
   /** Push the buttons to the far right of the row (for full-width agent rows). */
   pushRight?: boolean;
 }) {
-  const { data: me } = useGetMeQuery();
-  const isAuthed = !!me;
-
   const contact = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isAuthed) {
-      window.location.assign(`${config.appUrl}/dashboard/browse/${propertyId}`);
-    } else {
-      const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-      window.location.assign(appLoginUrl({ returnTo }));
-    }
+    window.location.assign(`${config.appUrl}/dashboard/browse/${propertyId}`);
   };
 
   return (

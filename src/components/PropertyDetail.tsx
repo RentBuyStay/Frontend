@@ -14,7 +14,7 @@ import {
 import { useGetAgentsQuery } from "@/services/agentApi";
 import { useGetMeQuery } from "@/services/meApi";
 import { toPropertyCard } from "@/lib/propertyMap";
-import { config, appLoginUrl } from "@/lib/config";
+import { config } from "@/lib/config";
 import PropertyCard from "./PropertyCard";
 import { PropertyGallery } from "./PropertyGallery";
 import LoginModal from "./LoginModal";
@@ -95,15 +95,12 @@ export default function PropertyDetail({ id }: { id: string }) {
   const [saveProperty, { isLoading: saving }] = useSavePropertyMutation();
   const [unsaveProperty, { isLoading: unsaving }] = useUnsavePropertyMutation();
 
-  const goToLogin = () => {
-    const returnTo = typeof window !== "undefined" ? window.location.href : undefined;
-    window.location.assign(appLoginUrl({ returnTo }));
-  };
-  // Actions with no inline flow here (inspection/call/message/report) open the
-  // dashboard app's version of this listing when signed in.
+  // Auth lives in the dashboard app, and the marketing site can't see that
+  // session across domains — so always hand off to the app's version of this
+  // listing rather than pre-judging auth here. The app forwards a signed-in user
+  // straight through, and only prompts login (then returns) when truly signed out.
   const openInApp = (propId: string) => window.location.assign(`${config.appUrl}/dashboard/browse/${propId}`);
-  // Signed out → app login; signed in → continue in the dashboard app.
-  const requireLogin = () => { if (isAuthed && p) openInApp(p.id); else goToLogin(); };
+  const requireLogin = () => { if (p) openInApp(p.id); };
   useEffect(() => {
     if (!p) return;
     if (p.latitude != null && p.longitude != null) {
@@ -188,13 +185,13 @@ export default function PropertyDetail({ id }: { id: string }) {
     <div className="bg-white" style={{ width: "100%", border: "1px solid #F6F6F6", borderRadius: "20px", padding: "24px" }}>
       <h3 style={{ fontSize: "16px", lineHeight: "24px", fontWeight: 600, color: "#121212" }}>Interested in this Property?</h3>
       <div className="flex flex-col" style={{ gap: "24px", marginTop: "24px" }}>
-        <button onClick={() => (isAuthed ? openInApp(p.id) : goToLogin())} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
+        <button onClick={() => openInApp(p.id)} className="flex items-center justify-center text-white hover:opacity-90 transition-opacity" style={{ height: "56px", padding: "16px 24px", gap: "8px", background: "linear-gradient(175deg, #75A3C7 0%, #305E82 100%)", borderRadius: "12px" }}>
           <Image src="/icons/calendar-detail.svg" alt="" width={24} height={24} />
           <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500 }}>Request Inspection</span>
         </button>
         <button
           onClick={() => {
-            if (!isAuthed) { goToLogin(); return; }
+            if (!isAuthed) { openInApp(p.id); return; }
             if (saving || unsaving) return;
             if (isSaved) unsaveProperty(p.id);
             else saveProperty(p.id);
