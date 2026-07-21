@@ -191,7 +191,7 @@ export default function PropertyDetail({ id }: { id: string }) {
           disabled={saving || unsaving}
           style={{ height: "56px", padding: "16px 24px", gap: "8px", background: isSaved ? "rgba(48,94,130,0.06)" : "#FFFFFF", border: "1px solid #F6F6F6", borderRadius: "12px" }}
         >
-          <Image src="/icons/heart.svg" alt="" width={24} height={24} />
+          <Image src={isSaved ? "/icons/heart-filled.svg" : "/icons/heart.svg"} alt="" width={24} height={24} />
           <span style={{ fontSize: "14px", lineHeight: "24px", fontWeight: 500, color: "#121212" }}>{isSaved ? "Remove from Saved" : "Save for Later"}</span>
         </button>
       </div>
