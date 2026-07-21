@@ -259,33 +259,37 @@ export default function AboutPage() {
                   src: "/images/about-mi-1.png",
                   inner: { x: 9.04, y: 9.04 },
                   img: { x: -21.64, y: -5.09, w: 202.75, h: 149.64 },
-                  rotate: "rotate-[-8deg]",
+                  baseRotate: "-8deg",
+                  sway: "about-card-sway-a",
                   z: "z-[3]",
                 },
                 {
                   src: "/images/about-mi-2.png",
                   inner: { x: 11.26, y: 9.04 },
                   img: { x: -35.33, y: -6.04, w: 230.24, h: 150.01 },
-                  rotate: "rotate-[8deg]",
+                  baseRotate: "8deg",
+                  sway: "about-card-sway-b",
                   z: "z-[2]",
                 },
                 {
                   src: "/images/about-mi-3.png",
                   inner: { x: 9.04, y: 9.04 },
                   img: { x: -19.83, y: -3.53, w: 198.25, h: 145.14 },
-                  rotate: "rotate-[-8deg]",
+                  baseRotate: "-8deg",
+                  sway: "about-card-sway-a",
                   z: "z-[1]",
                 },
               ].map((card, i) => (
                 <div
                   key={i}
-                  className={`bg-white shrink-0 relative ${card.rotate} ${card.z} transition-all duration-300 ease-out shadow-[0_10px_30px_-8px_rgba(0,0,0,0.15)] hover:z-20 hover:-translate-y-1 hover:scale-[1.05] hover:shadow-[0_20px_45px_-10px_rgba(0,0,0,0.3)]`}
+                  className={`bg-white shrink-0 relative ${card.sway} ${card.z} transition-[transform,box-shadow] duration-300 ease-out shadow-[0_10px_30px_-8px_rgba(0,0,0,0.15)] hover:z-20 hover:-translate-y-1 hover:scale-[1.05] hover:shadow-[0_20px_45px_-10px_rgba(0,0,0,0.3)]`}
                   style={{
                     width: "179.6px",
                     height: "172.79px",
                     borderRadius: "24px",
                     marginLeft: i === 0 ? 0 : "-24px",
                     transformOrigin: "center center",
+                    rotate: card.baseRotate,
                   }}
                 >
                   <div

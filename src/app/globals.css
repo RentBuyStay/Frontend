@@ -237,3 +237,21 @@ body.drawer-open .site-shell {
     border-radius: 0;
   }
 }
+
+/* About-page image cluster — the design's two component variants swap the card
+   tilts (-8/+8/-8 ↔ +8/-8/+8), i.e. the three cards sway in opposite directions.
+   Reproduce that as a gentle continuous sway (Smart Animate loop). The `rotate`
+   property is used so it composes with the hover translate/scale (transform). */
+@keyframes about-card-sway-a {
+  0%, 100% { rotate: -8deg; }
+  50% { rotate: 8deg; }
+}
+@keyframes about-card-sway-b {
+  0%, 100% { rotate: 8deg; }
+  50% { rotate: -8deg; }
+}
+.about-card-sway-a { animation: about-card-sway-a 5s ease-in-out infinite; }
+.about-card-sway-b { animation: about-card-sway-b 5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .about-card-sway-a, .about-card-sway-b { animation: none; }
+}
